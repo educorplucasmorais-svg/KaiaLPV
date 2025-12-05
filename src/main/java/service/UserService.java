@@ -1,8 +1,9 @@
-package org.example;
+package service;
 
 // Adicione estes imports explicitamente se o IntelliJ não os fizer
-import org.example.User;
+import model.User;
 import org.example.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 

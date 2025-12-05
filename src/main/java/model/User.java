@@ -1,22 +1,18 @@
-package org.example.model;
+package model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor; // <--- GARANTIR ESTE IMPORT
+import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
-//@Entity // <-- COMENTE ESTA LINHA TEMPORARIAMENTE
+@Entity
 @Table(name = "users")
-// ...
 @Data
-@NoArgsConstructor // <--- CRÍTICO: NECESSÁRIO PARA SPRING CONVERTER JSON EM OBJETO
+@NoArgsConstructor
 @AllArgsConstructor
 public class User {
 
-
-    // Define a chave primária (Primary Key) da tabela
     @Id
-    // Configura a geração automática do ID pelo banco de dados (MySQL)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -27,8 +23,7 @@ public class User {
     private String email;
 
     @Column(nullable = false)
-    private String passwordHash; // Armazenaremos o hash da senha aqui
+    private String passwordHash;
 
-    // Opcional: Para controle de acesso
     private String role;
 }

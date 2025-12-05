@@ -1,12 +1,14 @@
-package org.example;
+package controller;
 
+import service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController // Deve ser uma classe de nível superior
-@RequestMapping("/api")
+@RestController
+@RequestMapping("/users")
+@CrossOrigin(origins = "*")
 public class UserController {
 
     private final UserService userService;
@@ -16,5 +18,5 @@ public class UserController {
         this.userService = userService;
     }
 
-    // ... (Métodos registerUser e checkStatus)
+    // ... (Métodos para registrar e validar usuários)
 }
