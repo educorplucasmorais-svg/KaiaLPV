@@ -42,9 +42,9 @@ Nenhuma necessária - usa localStorage localmente
 3. Selecione o repositório
 4. Adicione **variáveis de ambiente**:
    ```
-   SPRING_DATASOURCE_URL=jdbc:mysql://srv1099.hstgr.io:3306/u475858067_revela
-   SPRING_DATASOURCE_USERNAME=u475858067_revela
-   SPRING_DATASOURCE_PASSWORD=Admin_123456
+   SPRING_DATASOURCE_URL=jdbc:mysql://srv1079.hstgr.io:3306/u318705478_FonteClara?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
+   SPRING_DATASOURCE_USERNAME=u318705478_FonteClara
+   SPRING_DATASOURCE_PASSWORD=SiteClara2025
    SPRING_JPA_HIBERNATE_DDL_AUTO=update
    SPRING_JPA_SHOW_SQL=false
    ```
@@ -72,18 +72,19 @@ JAR gerado em: `target/fonte-da-juventude-2.0-0.0.1-SNAPSHOT.jar`
 
 ---
 
-##  CREDENCIAIS
+## 🔑 CREDENCIAIS
 
 ### Master Login:
 - **Email**: admin
 - **Senha**: admin
 
-### Banco de Dados (Hostinger):
-- **Host**: srv1099.hstgr.io
+### Banco de Dados (Hostinger - ATUALIZADO DEZ/2025):
+- **Host**: srv1079.hstgr.io
 - **Port**: 3306
-- **Database**: u475858067_revela
-- **Username**: u475858067_revela
-- **Password**: Admin_123456
+- **Database**: u318705478_FonteClara
+- **Username**: u318705478_FonteClara
+- **Password**: SiteClara2025
+- **Domínio**: dracybeleguedes.com.br
 
 ---
 
