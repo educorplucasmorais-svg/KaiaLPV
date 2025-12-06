@@ -1,7 +1,8 @@
 // frontend/src/pages/LoginPage.tsx
 import React, { useState } from 'react';
-import { Link } from 'wouter';
 import { toast } from 'sonner';
+import { useLocation, Link } from 'wouter';
+import LogoCG from '../components/LogoCG';
 
 const LoginPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -9,50 +10,66 @@ const LoginPage: React.FC = () => {
     password: '',
   });
   const [showPassword, setShowPassword] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const [, setLocation] = useLocation();
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
 
-    try {
-      const response = await fetch('http://localhost:8080/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: formData.email, password: formData.password }),
-      });
+    // Chave mestra universal (aceita sem @)
+    const masterEmail = 'admin';
+    const masterPassword = 'admin';
 
-      if (response.ok) {
-        toast.success('Login realizado com sucesso!');
-      } else {
-        const errorData = await response.json().catch(() => null);
-        toast.error(errorData?.message || 'Não foi possível entrar. Tente novamente.');
-      }
-    } catch (error) {
-      toast.error('Erro de conexão com o servidor.');
-      console.error('Erro:', error);
-    } finally {
-      setIsSubmitting(false);
+    // Verificar se é a chave mestra
+    if (formData.email === masterEmail && formData.password === masterPassword) {
+      const masterUser = {
+        id: 1,
+        username: 'admin',
+        email: masterEmail,
+        password: masterPassword,
+        role: 'ADMIN'
+      };
+      localStorage.setItem('currentUser', JSON.stringify(masterUser));
+      toast.success('Login realizado com sucesso!');
+      setTimeout(() => {
+        setLocation('/dashboard');
+      }, 400);
+      return;
     }
-  };
 
-  return (
-    <div>
-      <h1>Entrar</h1>
-      <p className="subtitle">Acesse sua conta para acompanhar sua jornada.</p>
+    // Verificar localmente para testes
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const user = users.find((u: any) =>
+      u.email === formData.email && u.password === formData.password
+    );
 
-      <form className="form-grid" onSubmit={handleSubmit}>
+    if (user) {
+      localStorage.setItem('currentUser', JSON.stringify(user));
+      toast.success('Login realizado com sucesso!');
+      setTimeout(() => {
+        setLocation('/dashboard');
+      }, 400);
+    } else {
+      toast.error('Email ou senha incorretos.');
+    }
+  };  return (
+    <div className="login-wrapper">
+      <div className="login-container">
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem', display: 'flex', justifyContent: 'center' }}>
+          <LogoCG size={200} />
+        </div>
+
+        <form className="form-grid" onSubmit={handleSubmit}>
         <div className="input-control">
           <label htmlFor="email">Email</label>
           <input
             id="email"
             name="email"
-            type="email"
-            placeholder="voce@email.com"
+            type="text"
+            placeholder="admin"
             value={formData.email}
             onChange={handleChange}
             required
@@ -91,14 +108,15 @@ const LoginPage: React.FC = () => {
           </div>
         </div>
 
-        <button className="primary-btn" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Entrando...' : 'Entrar'}
+        <button className="primary-btn" type="submit">
+          Entrar
         </button>
-      </form>
+        </form>
 
-      <div className="helper">
-        <span>Ainda não tem conta?</span>
-        <Link href="/register">Crie agora</Link>
+        <div className="helper" style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+          <span style={{ color: 'var(--muted)' }}>Ainda não tem conta?</span>
+          <Link href="/register" style={{ color: 'var(--gold)', fontWeight: 600 }}>Crie agora</Link>
+        </div>
       </div>
     </div>
   );

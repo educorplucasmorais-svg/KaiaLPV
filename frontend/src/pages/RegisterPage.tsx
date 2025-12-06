@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
-import { useLocation, Link } from "wouter"; // Para redirecionar após o sucesso e navegar
-import { toast } from 'sonner'; // Para notificações
+import { useLocation, Link } from "wouter";
+import { toast } from 'sonner';
+import LogoCG from '../components/LogoCG';
 
 const RegisterPage: React.FC = () => {
-  // Estado para armazenar os dados do formulário
   const [formData, setFormData] = useState({
     username: '',
     email: '',
-    passwordHash: '', // Nome da coluna no seu modelo Java
-    role: 'USER'      // Valor padrão
+    passwordHash: '',
+    role: 'USER'
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [, setLocation] = useLocation(); // Hook do Wouter
+  const [, setLocation] = useLocation();
 
   // Função para lidar com a mudança dos campos
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +19,7 @@ const RegisterPage: React.FC = () => {
   };
 
   // Função para lidar com o envio do formulário
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (formData.passwordHash.length < 6) {
@@ -28,40 +27,35 @@ const RegisterPage: React.FC = () => {
       return;
     }
 
-    setIsSubmitting(true);
-
-    // CRÍTICO: O Spring Boot espera o JSON exatamente como está no modelo User.java
-    try {
-      const response = await fetch('http://localhost:8080/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.status === 201) {
-        toast.success('Cadastro realizado com sucesso! Redirecionando...');
-        // Redireciona o usuário para a página de login
-        setTimeout(() => setLocation('/login'), 2000);
-      } else {
-        const errorData = await response.json();
-        toast.error(`Falha no cadastro: ${errorData.message || 'Erro desconhecido.'}`);
-      }
-    } catch (error) {
-      toast.error('Erro de conexão com o servidor Java.');
-      console.error('Erro:', error);
-    } finally {
-      setIsSubmitting(false);
+    // Salvar localmente para testes
+    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    
+    if (users.find((u: any) => u.email === formData.email)) {
+      toast.error('Email já cadastrado.');
+      return;
     }
+
+    users.push({
+      id: Date.now(),
+      username: formData.username,
+      email: formData.email,
+      password: formData.passwordHash,
+      role: 'USER'
+    });
+
+    localStorage.setItem('users', JSON.stringify(users));
+    toast.success('Cadastro realizado com sucesso!');
+    setTimeout(() => setLocation('/login'), 600);
   };
 
   return (
-    <div>
-      <h1>Criar conta</h1>
-      <p className="subtitle">Ganhe acesso à sua área personalizada e acompanhe a evolução.</p>
+    <div className="login-wrapper">
+      <div className="login-container">
+        <div style={{ textAlign: 'center', marginBottom: '2.5rem', display: 'flex', justifyContent: 'center' }}>
+          <LogoCG size={200} />
+        </div>
 
-      <form className="form-grid" onSubmit={handleSubmit}>
+        <form className="form-grid" onSubmit={handleSubmit}>
         <div className="input-control">
           <label htmlFor="username">Nome de usuário</label>
           <input
@@ -120,14 +114,15 @@ const RegisterPage: React.FC = () => {
           </div>
         </div>
         
-        <button className="primary-btn" type="submit" disabled={isSubmitting}>
-          {isSubmitting ? 'Cadastrando...' : 'Criar conta'}
+        <button className="primary-btn" type="submit">
+          Criar conta
         </button>
-      </form>
+        </form>
 
-      <div className="helper">
-        <span>Já tem uma conta?</span>
-        <Link href="/login">Fazer login</Link>
+        <div className="helper" style={{ marginTop: '1.5rem', borderTop: '1px solid var(--border)', paddingTop: '1.5rem' }}>
+          <span style={{ color: 'var(--muted)' }}>Já tem uma conta?</span>
+          <Link href="/login" style={{ color: 'var(--gold)', fontWeight: 600 }}>Fazer login</Link>
+        </div>
       </div>
     </div>
   );

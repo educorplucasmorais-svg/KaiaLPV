@@ -14,60 +14,40 @@ const PatientsPage: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '' });
   const [loading, setLoading] = useState(false);
 
-  const API_URL = 'http://localhost:8080/api/patients';
-
   useEffect(() => {
     fetchPatients();
   }, []);
 
-  const fetchPatients = async () => {
-    try {
-      setLoading(true);
-      const response = await fetch(API_URL);
-      if (response.ok) {
-        const data = await response.json();
-        setPatients(data);
-      } else {
-        toast.error('Erro ao carregar pacientes');
-      }
-    } catch (error) {
-      toast.error('Erro de conexão com servidor');
-      console.error(error);
-    } finally {
-      setLoading(false);
+  const fetchPatients = () => {
+    setLoading(true);
+    const stored = localStorage.getItem('patients');
+    if (stored) {
+      setPatients(JSON.parse(stored));
     }
+    setLoading(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email) {
       toast.error('Informe nome e email');
       return;
     }
 
-    try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: form.name,
-          email: form.email,
-          phone: form.phone || null,
-        }),
-      });
-
-      if (response.ok || response.status === 201) {
-        const newPatient = await response.json();
-        setPatients([newPatient, ...patients]);
-        setForm({ name: '', email: '', phone: '' });
-        toast.success('Paciente cadastrado com sucesso!');
-      } else {
-        toast.error('Erro ao cadastrar paciente');
-      }
-    } catch (error) {
-      toast.error('Erro de conexão com servidor');
-      console.error(error);
-    }
+    const stored = localStorage.getItem('patients');
+    const existing = stored ? JSON.parse(stored) : [];
+    const newPatient = {
+      id: Date.now(),
+      name: form.name,
+      email: form.email,
+      phone: form.phone || null,
+    };
+    
+    const updated = [...existing, newPatient];
+    localStorage.setItem('patients', JSON.stringify(updated));
+    setPatients(updated);
+    setForm({ name: '', email: '', phone: '' });
+    toast.success('Paciente cadastrado com sucesso!');
   };
 
   return (
