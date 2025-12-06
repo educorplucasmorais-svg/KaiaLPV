@@ -1,6 +1,15 @@
 # KaiaLPV
 Pagina de venda da Kaia
 
+## Clonar o Repositório
+
+Para clonar este repositório, execute os seguintes comandos:
+
+```bash
+git clone https://github.com/educorplucasmorais-svg/KaiaLPV.git
+cd KaiaLPV
+```
+
 ## Configuração Inicial do Repositório
 
 Para inicializar e configurar este repositório, execute os seguintes comandos:
@@ -10,8 +19,8 @@ git init
 git add .
 git commit -m "first commit"
 git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/SEU_REPOSITORIO.git
+git remote add origin https://github.com/educorplucasmorais-svg/KaiaLPV.git
 git push -u origin main
 ```
 
-> **Nota**: Substitua `SEU_USUARIO` pelo seu nome de usuário do GitHub e `SEU_REPOSITORIO` pelo nome do seu repositório.
+> **Nota**: Este repositório está configurado para https://github.com/educorplucasmorais-svg/KaiaLPV
