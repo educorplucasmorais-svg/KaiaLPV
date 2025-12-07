@@ -23,8 +23,17 @@ public class Plan {
     @Column(nullable = false)
     private Long patientId; // Referência ao paciente
 
-    @Column(nullable = false)
+    @Column(length = 500)
+    private String patientName; // Nome do paciente (para referência rápida)
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String goal; // Objetivo/observação do plano
+
+    @Column(columnDefinition = "TEXT")
+    private String treatments; // JSON array de tratamentos selecionados
+
+    @Column(columnDefinition = "TEXT")
+    private String essentialTreatments; // JSON array de tratamentos essenciais
 
     @Column(length = 50)
     private String status; // "Rascunho", "Emitido", "Revisão", "Concluído"

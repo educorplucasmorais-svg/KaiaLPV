@@ -2,10 +2,14 @@
 import { toast } from "sonner";
 import PageNav from '../components/PageNav';
 
+// URL do Backend (Railway)
+const API_URL = 'https://dracybeleguesdes.com.br';
+
 interface PlanRecord {
   id: number;
   planCode: string;
   patientId: number;
+  patientName?: string;
   treatments: string[];
   essentialTreatments?: string[];
   observations: string;
@@ -22,14 +26,44 @@ const DataPage: React.FC = () => {
     fetchRecords();
   }, []);
 
-  const fetchRecords = () => {
+  const fetchRecords = async () => {
     setLoading(true);
-    const stored = localStorage.getItem("plans");
-    if (stored) {
-      setRecords(JSON.parse(stored));
-      toast.success("Sincronizado!");
+    try {
+      // Buscar do banco de dados via API
+      const response = await fetch(`${API_URL}/plans`);
+      if (response.ok) {
+        const data = await response.json();
+        // Converter formato do backend para frontend
+        const formattedRecords = data.map((plan: any) => ({
+          id: plan.id,
+          planCode: plan.planCode,
+          patientId: plan.patientId,
+          patientName: plan.patientName || `Paciente ${plan.patientId}`,
+          treatments: plan.treatments ? JSON.parse(plan.treatments) : [],
+          essentialTreatments: plan.essentialTreatments ? JSON.parse(plan.essentialTreatments) : [],
+          observations: plan.goal,
+          status: plan.status,
+          fileName: plan.fileName,
+          createdAt: plan.createdAt,
+        }));
+        setRecords(formattedRecords);
+        // Atualizar localStorage para fallback
+        localStorage.setItem('plans', JSON.stringify(formattedRecords));
+        toast.success(`Sincronizado! ${formattedRecords.length} plano(s) do banco de dados.`);
+      } else {
+        throw new Error('Backend indisponível');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar planos:', error);
+      // Fallback para localStorage
+      const stored = localStorage.getItem("plans");
+      if (stored) {
+        setRecords(JSON.parse(stored));
+        toast.warning("Usando dados locais (backend indisponível)");
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const downloadPDF = (plan: PlanRecord) => {
@@ -277,7 +311,7 @@ const DataPage: React.FC = () => {
                 </div>
                 <div class="info-item">
                   <div class="info-label">ID do Paciente</div>
-                  <div class="info-value">Paciente #${plan.patientId}</div>
+                  <div class="info-value">${plan.patientName || `Paciente #${plan.patientId}`}</div>
                 </div>
                 <div class="info-item">
                   <div class="info-label">Status</div>
@@ -388,7 +422,7 @@ const DataPage: React.FC = () => {
             {records.map((item) => (
               <div key={item.id} className="table-row">
                 <span style={{ fontWeight: 600, color: "var(--gold)" }}>{item.planCode}</span>
-                <span>Paciente #{item.patientId}</span>
+                <span>{item.patientName || `Paciente #${item.patientId}`}</span>
                 <span className="truncate">{item.treatments?.length || 0} tratamento(s)</span>
                 <span className="truncate">{item.essentialTreatments?.length || 0} essencial(is)</span>
                 <span className="tag">{item.status || "Rascunho"}</span>

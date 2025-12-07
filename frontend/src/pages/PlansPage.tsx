@@ -141,13 +141,42 @@ const PlansPage: React.FC = () => {
     setShowDropdown(false);
   };
 
-  const fetchPlans = () => {
+  const fetchPlans = async () => {
     setLoading(true);
-    const stored = localStorage.getItem('plans');
-    if (stored) {
-      setPlans(JSON.parse(stored));
+    try {
+      // Buscar do banco de dados via API
+      const response = await fetch(`${API_URL}/plans`);
+      if (response.ok) {
+        const data = await response.json();
+        // Converter formato do backend para frontend
+        const formattedPlans = data.map((plan: any) => ({
+          id: plan.id,
+          planCode: plan.planCode,
+          patientId: plan.patientId,
+          patientName: plan.patientName || `Paciente ${plan.patientId}`,
+          treatments: plan.treatments ? JSON.parse(plan.treatments) : [],
+          essentialTreatments: plan.essentialTreatments ? JSON.parse(plan.essentialTreatments) : [],
+          observations: plan.goal,
+          status: plan.status,
+          fileName: plan.fileName,
+          createdAt: plan.createdAt,
+        }));
+        setPlans(formattedPlans);
+        // Atualizar localStorage para fallback
+        localStorage.setItem('plans', JSON.stringify(formattedPlans));
+      } else {
+        throw new Error('Backend indisponível');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar planos:', error);
+      // Fallback para localStorage
+      const stored = localStorage.getItem('plans');
+      if (stored) {
+        setPlans(JSON.parse(stored));
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const downloadPDF = (plan: Plan) => {
@@ -488,7 +517,7 @@ const PlansPage: React.FC = () => {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedPatient) {
       toast.error('Selecione um paciente');
@@ -499,29 +528,97 @@ const PlansPage: React.FC = () => {
       return;
     }
 
-    const stored = localStorage.getItem('plans');
-    const existing = stored ? JSON.parse(stored) : [];
+    setLoading(true);
     const planCode = `PL-${Date.now() % 10000}`;
+    
+    // Mapear IDs para nomes dos tratamentos
+    const treatmentNames = selectedTreatments.map(id => {
+      const treatment = treatments.find(t => t.id === id);
+      return treatment ? treatment.name : id;
+    });
+    
+    const essentialNames = essentialTreatments.map(id => {
+      const treatment = treatments.find(t => t.id === id);
+      return treatment ? treatment.name : id;
+    });
+
     const newPlan = {
-      id: Date.now(),
       planCode,
       patientId: selectedPatient.id,
       patientName: selectedPatient.name,
-      treatments: selectedTreatments,
-      essentialTreatments,
-      observations: form.observations,
+      goal: form.observations || 'Plano de tratamento',
+      treatments: JSON.stringify(treatmentNames),
+      essentialTreatments: JSON.stringify(essentialNames),
       status: 'Rascunho',
     };
-    
-    const updated = [newPlan, ...existing];
-    localStorage.setItem('plans', JSON.stringify(updated));
-    setPlans(updated);
-    setForm({ patientId: '', observations: '' });
-    setSelectedPatient(null);
-    setSearchTerm('');
-    setSelectedTreatments([]);
-    setEssentialTreatments([]);
-    toast.success('Plano registrado com sucesso!');
+
+    try {
+      // Salvar no banco de dados via API
+      const response = await fetch(`${API_URL}/plans`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newPlan),
+      });
+
+      if (response.ok) {
+        const savedPlan = await response.json();
+        
+        // Também salvar localmente para fallback
+        const localPlan = {
+          id: savedPlan.id,
+          planCode: savedPlan.planCode,
+          patientId: savedPlan.patientId,
+          patientName: selectedPatient.name,
+          treatments: treatmentNames,
+          essentialTreatments: essentialNames,
+          observations: form.observations,
+          status: savedPlan.status,
+          createdAt: savedPlan.createdAt,
+        };
+        
+        const stored = localStorage.getItem('plans');
+        const existing = stored ? JSON.parse(stored) : [];
+        const updated = [localPlan, ...existing];
+        localStorage.setItem('plans', JSON.stringify(updated));
+        setPlans(updated);
+        
+        toast.success('Plano salvo no banco de dados!');
+      } else {
+        throw new Error('Erro ao salvar no servidor');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar plano:', error);
+      
+      // Fallback: salvar apenas localmente
+      const localPlan = {
+        id: Date.now(),
+        planCode,
+        patientId: selectedPatient.id,
+        patientName: selectedPatient.name,
+        treatments: treatmentNames,
+        essentialTreatments: essentialNames,
+        observations: form.observations,
+        status: 'Rascunho',
+        createdAt: new Date().toISOString(),
+      };
+      
+      const stored = localStorage.getItem('plans');
+      const existing = stored ? JSON.parse(stored) : [];
+      const updated = [localPlan, ...existing];
+      localStorage.setItem('plans', JSON.stringify(updated));
+      setPlans(updated);
+      
+      toast.warning('Salvo localmente (backend indisponível)');
+    } finally {
+      setLoading(false);
+      setForm({ patientId: '', observations: '' });
+      setSelectedPatient(null);
+      setSearchTerm('');
+      setSelectedTreatments([]);
+      setEssentialTreatments([]);
+    }
   };
 
   return (
