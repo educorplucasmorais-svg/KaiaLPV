@@ -1,10 +1,10 @@
 ﻿# Railway.app configuration
 [build]
 builder = "NIXPACKS"
-buildCommand = "cd frontend && npm install && npm run build"
+buildCommand = "cd frontend && pnpm install --frozen-lockfile && pnpm run build"
 
 [deploy]
-startCommand = "cd frontend && npm run preview"
+startCommand = "cd frontend && pnpm run preview -- --host 0.0.0.0 --port ${PORT}"
 healthcheckPath = "/"
 healthcheckTimeout = 100
 restartPolicyType = "ON_FAILURE"

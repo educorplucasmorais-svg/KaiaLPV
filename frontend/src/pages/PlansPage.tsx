@@ -75,8 +75,12 @@ const PlansPage: React.FC = () => {
   };
 
   const downloadPDF = (plan: Plan) => {
-    const printWindow = window.open("", "", "height=1100,width=900");
-    if (printWindow) {
+    try {
+      const printWindow = window.open("", "", "height=1100,width=900");
+      if (!printWindow) {
+        toast.error("Por favor, permita pop-ups para baixar o PDF");
+        return;
+      }
       const essentials = plan.essentialTreatments || [];
       const halfIndex = Math.ceil(plan.treatments.length / 2);
       const col1 = plan.treatments.slice(0, halfIndex).map(t => {
@@ -102,8 +106,8 @@ const PlansPage: React.FC = () => {
                 margin: 0;
                 padding: 40px 50px;
                 font-family: "Cormorant Garamond", serif;
-                background-color: #e8e0d5;
-                color: #4a3f35;
+                background: linear-gradient(135deg, #1a1614 0%, #2d2420 100%);
+                color: #f5f5f5;
                 line-height: 1.7;
                 font-size: 14px;
               }
@@ -121,7 +125,7 @@ const PlansPage: React.FC = () => {
                 display: inline-block;
                 width: 80px;
                 height: 80px;
-                background: #9B8579;
+                background: linear-gradient(135deg, #d4af37 0%, #c9962e 100%);
                 border-radius: 50%;
                 text-align: center;
                 display: flex;
@@ -135,37 +139,39 @@ const PlansPage: React.FC = () => {
                 margin: 0 auto 15px;
                 box-shadow: 0 6px 20px rgba(155, 133, 121, 0.4);
               }
-              h1 { margin: 10px 0; font-family: "Cinzel", serif; color: #8b6f47; font-size: 32px; letter-spacing: 2px; }
-              .subtitle { margin: 5px 0; color: #8b6f47; font-size: 16px; font-weight: 600; }
-              .tagline { margin: 8px 0; color: #8b7355; font-size: 13px; font-style: italic; }
+              h1 { margin: 10px 0; font-family: "Cinzel", serif; color: #d4af37; font-size: 32px; letter-spacing: 2px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+              .subtitle { margin: 5px 0; color: #e8c77a; font-size: 16px; font-weight: 600; }
+              .tagline { margin: 8px 0; color: #c9a962; font-size: 13px; font-style: italic; }
               
               .content {
-                background: white;
+                background: linear-gradient(135deg, #2a2420 0%, #1f1b18 100%);
                 padding: 35px 40px;
                 border-radius: 10px;
                 border: 2px solid #d4af37;
                 margin-bottom: 30px;
-                box-shadow: 0 4px 12px rgba(139, 111, 71, 0.15);
+                box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25), inset 0 1px 1px rgba(255,255,255,0.05);
               }
               
               h2 { 
-                color: #8b6f47; 
+                color: #d4af37; 
                 font-family: "Cinzel", serif; 
                 margin: 0 0 25px; 
                 font-size: 20px; 
                 text-transform: uppercase;
                 letter-spacing: 1.5px;
-                border-bottom: 2px solid #e8e0d5;
+                border-bottom: 2px solid #d4af37;
                 padding-bottom: 10px;
+                font-weight: 700;
               }
               
               h3 { 
-                color: #8b6f47; 
+                color: #e8c77a; 
                 font-family: "Cinzel", serif; 
                 margin: 25px 0 12px; 
                 font-size: 16px;
                 text-transform: uppercase;
                 letter-spacing: 1px;
+                font-weight: 600;
               }
               
               .info-grid {
@@ -176,16 +182,17 @@ const PlansPage: React.FC = () => {
               }
               
               .info-item {
-                background: #f9f7f4;
+                background: rgba(212, 175, 55, 0.08);
                 padding: 12px 15px;
                 border-radius: 6px;
                 border-left: 3px solid #d4af37;
+                border: 1px solid rgba(212, 175, 55, 0.2);
               }
               
               .info-label {
                 font-size: 11px;
                 text-transform: uppercase;
-                color: #8b7355;
+                color: #c9a962;
                 font-weight: 600;
                 letter-spacing: 0.5px;
                 margin-bottom: 4px;
@@ -193,7 +200,7 @@ const PlansPage: React.FC = () => {
               
               .info-value {
                 font-size: 15px;
-                color: #4a3f35;
+                color: #f5f5f5;
                 font-weight: 600;
               }
               
@@ -212,11 +219,12 @@ const PlansPage: React.FC = () => {
               
               .treatments-columns li {
                 padding: 8px 0;
-                border-bottom: 1px solid #e8e0d5;
+                border-bottom: 1px solid rgba(212, 175, 55, 0.2);
                 font-size: 13px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
+                color: #e8e8e8;
               }
               
               .treatments-columns li:last-child {
@@ -224,11 +232,12 @@ const PlansPage: React.FC = () => {
               }
               
               .payment-section {
-                background: #f9f7f4;
+                background: rgba(212, 175, 55, 0.1);
                 padding: 25px;
                 border-radius: 8px;
                 margin: 25px 0;
                 border: 2px solid #d4af37;
+                box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
               }
               
               .payment-grid {
@@ -246,14 +255,14 @@ const PlansPage: React.FC = () => {
                 display: block;
                 font-size: 11px;
                 text-transform: uppercase;
-                color: #8b6f47;
+                color: #d4af37;
                 font-weight: 700;
                 letter-spacing: 0.5px;
                 margin-bottom: 8px;
               }
               
               .payment-field .fill-line {
-                border-bottom: 2px solid #4a3f35;
+                border-bottom: 2px solid #d4af37;
                 height: 25px;
                 position: relative;
               }
@@ -264,16 +273,17 @@ const PlansPage: React.FC = () => {
                 right: 0;
                 bottom: -18px;
                 font-size: 9px;
-                color: #8b7355;
+                color: #c9a962;
                 font-style: italic;
               }
               
               .observations {
-                background: #f9f7f4;
+                background: rgba(212, 175, 55, 0.08);
                 padding: 15px 20px;
                 border-radius: 6px;
                 margin: 20px 0;
                 border-left: 4px solid #d4af37;
+                border: 1px solid rgba(212, 175, 55, 0.2);
               }
               
               .footer {
@@ -282,7 +292,7 @@ const PlansPage: React.FC = () => {
                 padding-top: 20px;
                 margin-top: 35px;
                 font-size: 12px;
-                color: #8b7355;
+                color: #c9a962;
               }
               
               .footer p {
@@ -379,6 +389,10 @@ const PlansPage: React.FC = () => {
         </html>
       `);
       printWindow.document.close();
+      toast.success("PDF aberto para impressão!");
+    } catch (error) {
+      console.error("Erro ao gerar PDF:", error);
+      toast.error("Erro ao gerar o PDF. Tente novamente.");
     }
   };
 
