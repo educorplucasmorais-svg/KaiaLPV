@@ -1,0 +1,22 @@
+providers = ["node"]
+
+[phases.setup]
+# Ensure pnpm is available
+nixPkgs = ["nodejs-20_x", "corepack"]
+cmds = [
+  "corepack enable",
+  "corepack prepare pnpm@9.12.1 --activate"
+]
+
+[phases.install]
+cmds = [
+  "cd frontend && pnpm install --frozen-lockfile"
+]
+
+[phases.build]
+cmds = [
+  "cd frontend && pnpm run build"
+]
+
+[start]
+cmd = "cd frontend && pnpm run preview -- --host 0.0.0.0 --port ${PORT}"
