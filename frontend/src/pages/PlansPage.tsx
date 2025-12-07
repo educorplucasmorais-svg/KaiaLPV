@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
 
+// URL do Backend (Railway)
+const API_URL = 'https://dracybeleguesdes.com.br';
+
+interface Patient {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string;
+}
+
 interface Plan {
   id?: number;
   planCode: string;
   patientId: number;
+  patientName?: string;
   treatments: string[];
   essentialTreatments?: string[];
   observations: string;
@@ -56,14 +67,78 @@ const treatments: Treatment[] = [
 
 const PlansPage: React.FC = () => {
   const [plans, setPlans] = useState<Plan[]>([]);
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [filteredPatients, setFilteredPatients] = useState<Patient[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedPatient, setSelectedPatient] = useState<Patient | null>(null);
+  const [showDropdown, setShowDropdown] = useState(false);
   const [form, setForm] = useState({ patientId: '', observations: '' });
   const [selectedTreatments, setSelectedTreatments] = useState<string[]>([]);
   const [essentialTreatments, setEssentialTreatments] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingPatients, setLoadingPatients] = useState(false);
 
   useEffect(() => {
     fetchPlans();
+    fetchPatients();
   }, []);
+
+  // Buscar pacientes do backend
+  const fetchPatients = async () => {
+    setLoadingPatients(true);
+    try {
+      const response = await fetch(`${API_URL}/patients`);
+      if (response.ok) {
+        const data = await response.json();
+        setPatients(data);
+        setFilteredPatients(data);
+      } else {
+        // Fallback para localStorage se backend não disponível
+        const stored = localStorage.getItem('patients');
+        if (stored) {
+          const localPatients = JSON.parse(stored);
+          setPatients(localPatients);
+          setFilteredPatients(localPatients);
+        }
+        toast.error('Usando dados locais - backend indisponível');
+      }
+    } catch (error) {
+      console.error('Erro ao buscar pacientes:', error);
+      // Fallback para localStorage
+      const stored = localStorage.getItem('patients');
+      if (stored) {
+        const localPatients = JSON.parse(stored);
+        setPatients(localPatients);
+        setFilteredPatients(localPatients);
+      }
+    } finally {
+      setLoadingPatients(false);
+    }
+  };
+
+  // Filtrar pacientes por nome
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    if (term.length === 0) {
+      setFilteredPatients(patients);
+      setShowDropdown(false);
+    } else {
+      const filtered = patients.filter(p => 
+        p.name.toLowerCase().includes(term.toLowerCase()) ||
+        p.email.toLowerCase().includes(term.toLowerCase())
+      );
+      setFilteredPatients(filtered);
+      setShowDropdown(true);
+    }
+  };
+
+  // Selecionar paciente
+  const handleSelectPatient = (patient: Patient) => {
+    setSelectedPatient(patient);
+    setSearchTerm(patient.name);
+    setForm({ ...form, patientId: patient.id.toString() });
+    setShowDropdown(false);
+  };
 
   const fetchPlans = () => {
     setLoading(true);
@@ -414,8 +489,8 @@ const PlansPage: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.patientId) {
-      toast.error('Informe o ID do paciente');
+    if (!selectedPatient) {
+      toast.error('Selecione um paciente');
       return;
     }
     if (selectedTreatments.length === 0) {
@@ -429,7 +504,8 @@ const PlansPage: React.FC = () => {
     const newPlan = {
       id: Date.now(),
       planCode,
-      patientId: parseInt(form.patientId),
+      patientId: selectedPatient.id,
+      patientName: selectedPatient.name,
       treatments: selectedTreatments,
       essentialTreatments,
       observations: form.observations,
@@ -440,6 +516,8 @@ const PlansPage: React.FC = () => {
     localStorage.setItem('plans', JSON.stringify(updated));
     setPlans(updated);
     setForm({ patientId: '', observations: '' });
+    setSelectedPatient(null);
+    setSearchTerm('');
     setSelectedTreatments([]);
     setEssentialTreatments([]);
     toast.success('Plano registrado com sucesso!');
@@ -458,18 +536,108 @@ const PlansPage: React.FC = () => {
       <form className="surface form-grid" onSubmit={handleSubmit}>
         <div style={{ marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: '1.3rem', marginBottom: '0.5rem', color: 'var(--accent-strong)' }}>01. Seleção do Paciente</h2>
-          <div className="input-control">
-            <label htmlFor="patientId">ID do Paciente *</label>
+          <div className="input-control" style={{ position: 'relative' }}>
+            <label htmlFor="patientSearch">Buscar Paciente *</label>
             <input
-              id="patientId"
-              name="patientId"
-              type="number"
-              placeholder="Digite o ID do paciente"
-              value={form.patientId}
-              onChange={(e) => setForm({ ...form, patientId: e.target.value })}
-              required
+              id="patientSearch"
+              name="patientSearch"
+              type="text"
+              placeholder={loadingPatients ? "Carregando pacientes..." : "Digite o nome do paciente"}
+              value={searchTerm}
+              onChange={(e) => handleSearch(e.target.value)}
+              onFocus={() => searchTerm.length > 0 && setShowDropdown(true)}
+              disabled={loadingPatients}
+              autoComplete="off"
             />
+            
+            {/* Dropdown de pacientes */}
+            {showDropdown && filteredPatients.length > 0 && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                background: 'var(--panel)',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                maxHeight: '200px',
+                overflowY: 'auto',
+                zIndex: 100,
+                boxShadow: 'var(--shadow)'
+              }}>
+                {filteredPatients.map((patient) => (
+                  <div
+                    key={patient.id}
+                    onClick={() => handleSelectPatient(patient)}
+                    style={{
+                      padding: '12px 16px',
+                      cursor: 'pointer',
+                      borderBottom: '1px solid var(--border)',
+                      transition: 'background 0.2s'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(212, 175, 55, 0.1)'}
+                    onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                  >
+                    <div style={{ fontWeight: 600, color: 'var(--text)' }}>{patient.name}</div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--muted)' }}>{patient.email}</div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {showDropdown && filteredPatients.length === 0 && searchTerm.length > 0 && (
+              <div style={{
+                position: 'absolute',
+                top: '100%',
+                left: 0,
+                right: 0,
+                background: 'var(--panel)',
+                border: '1px solid var(--border)',
+                borderRadius: '4px',
+                padding: '12px 16px',
+                zIndex: 100,
+                color: 'var(--muted)'
+              }}>
+                Nenhum paciente encontrado
+              </div>
+            )}
           </div>
+
+          {/* Paciente selecionado */}
+          {selectedPatient && (
+            <div style={{
+              marginTop: '12px',
+              padding: '12px 16px',
+              background: 'rgba(212, 175, 55, 0.1)',
+              border: '1px solid var(--gold)',
+              borderRadius: '6px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center'
+            }}>
+              <div>
+                <span style={{ color: 'var(--muted)', fontSize: '0.85rem' }}>Paciente selecionado: </span>
+                <strong style={{ color: 'var(--gold)' }}>{selectedPatient.name}</strong>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setSelectedPatient(null);
+                  setSearchTerm('');
+                  setForm({ ...form, patientId: '' });
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: 'var(--muted)',
+                  cursor: 'pointer',
+                  fontSize: '1.2rem'
+                }}
+              >
+                ✕
+              </button>
+            </div>
+          )}
         </div>
 
         <div style={{ marginBottom: '1.5rem' }}>
