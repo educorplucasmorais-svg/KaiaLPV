@@ -472,6 +472,11 @@
   box-shadow: 0 4px 12px rgba(212, 175, 55, 0.15);
 }
 
+/* ===========================================
+   RESPONSIVE DESIGN - MOBILE FIRST
+   =========================================== */
+
+/* Tablet (768px e abaixo) */
 @media (max-width: 960px) {
   .layout {
     grid-template-columns: 1fr;
@@ -488,12 +493,224 @@
   .topbar {
     position: relative;
   }
+
+  .section-heading {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .quick-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .table-head,
+  .table-row {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .login-container {
+    padding: 40px 30px;
+    max-width: 100%;
+  }
 }
 
+/* Mobile (540px e abaixo) */
 @media (max-width: 540px) {
-  .app-shell { padding: 20px 16px 32px; }
-  .topbar { padding: 10px 14px; }
-  .layout { gap: 22px; }
+  .app-shell { 
+    padding: 12px 12px 24px; 
+  }
+  
+  .topbar { 
+    flex-direction: column;
+    gap: 12px;
+    padding: 12px;
+    align-items: flex-start;
+  }
+
+  .brand {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .top-links {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .ghost-link,
+  .pill-link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .layout { 
+    gap: 16px; 
+  }
+
+  .panel {
+    padding: 16px;
+    border-radius: 6px;
+  }
+
+  .section-heading {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .quick-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    width: 100%;
+  }
+
+  .chip-link {
+    justify-content: center;
+    padding: 10px 12px;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .card {
+    padding: 14px;
+  }
+
+  .card-value {
+    font-size: 1.4rem;
+  }
+
+  .surface {
+    padding: 14px;
+  }
+
+  .table-head {
+    display: none;
+  }
+
+  .table-row {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px;
+  }
+
+  .table-row span:first-child {
+    font-weight: 700;
+    color: var(--gold);
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  /* Login Page Mobile */
+  .login-wrapper {
+    padding: 0;
+  }
+
+  .login-container {
+    padding: 24px 16px;
+    border-radius: 8px;
+    border-width: 2px;
+  }
+
+  .login-container > div:first-child {
+    margin-bottom: 1.5rem !important;
+  }
+
+  .form-grid {
+    gap: 12px;
+  }
+
+  .input-control input {
+    padding: 10px 12px;
+    font-size: 16px; /* Evita zoom no iOS */
+  }
+
+  .primary-btn {
+    padding: 12px;
+    font-size: 0.9rem;
+  }
+
+  .helper {
+    flex-direction: column;
+    gap: 8px;
+    text-align: center;
+  }
+
+  .eyebrow {
+    font-size: 0.75rem;
+    padding: 6px 12px;
+  }
+
+  h1 {
+    font-size: 1.4rem !important;
+  }
+
+  h2 {
+    font-size: 1.1rem;
+  }
+
+  .subtitle {
+    font-size: 0.9rem;
+  }
+
+  /* Orbs menores no mobile */
+  .orb {
+    width: 200px;
+    height: 200px;
+  }
+
+  .orb-1 { top: -60px; left: -40px; }
+  .orb-2 { top: -30px; right: 5%; }
+  .orb-3 { bottom: -80px; left: 20%; }
+}
+
+/* Extra small (360px e abaixo) */
+@media (max-width: 360px) {
+  .app-shell {
+    padding: 8px 8px 20px;
+  }
+
+  .topbar {
+    padding: 10px;
+  }
+
+  .brand-title {
+    font-size: 0.9rem;
+  }
+
+  .brand-subtitle {
+    font-size: 0.75rem;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .chip-link {
+    font-size: 0.8rem;
+  }
+
+  .login-container {
+    padding: 20px 12px;
+  }
 }
 
 /* Login Page Styles */
