@@ -59,8 +59,8 @@ function App() {
             <nav className="top-links">
               {isLoggedIn ? (
                 <>
-                  <Link href="/dashboard" className="ghost-link">Dashboard</Link>
-                  <span className="ghost-link" style={{ cursor: 'default' }}>
+                  <Link href="/dashboard" className="ghost-link mobile-hide">Dashboard</Link>
+                  <span className="ghost-link mobile-hide" style={{ cursor: 'default' }}>
                     {currentUser?.username || currentUser?.email}
                   </span>
                   <button 
@@ -71,7 +71,12 @@ function App() {
                     Sair
                   </button>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <Link href="/login" className="ghost-link">Entrar</Link>
+                  <Link href="/register" className="pill-link">Criar Conta</Link>
+                </>
+              )}
             </nav>
           </header>
 
