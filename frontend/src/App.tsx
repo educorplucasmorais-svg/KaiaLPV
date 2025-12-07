@@ -49,10 +49,10 @@ function App() {
 
           <header className="topbar">
             <div className="brand">
-              <LogoFJ size={50} />
+              <LogoFJ size={45} />
               <div>
-                <p className="brand-title">Fonte da Juventude</p>
-                <p className="brand-subtitle">Dra. Cybele Ramos</p>
+                <p className="brand-title">Dra. Cybele Guedes</p>
+                <p className="brand-subtitle">Dermatologia</p>
               </div>
             </div>
 

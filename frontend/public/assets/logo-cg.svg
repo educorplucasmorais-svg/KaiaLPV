@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="cgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#C4B5AD;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#A89990;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Letra C -->
+  <path d="M45 100 
+           C45 55, 80 30, 115 30
+           C130 30, 145 35, 155 45
+           L145 60
+           C138 52, 128 47, 115 47
+           C90 47, 65 67, 65 100
+           C65 115, 72 128, 82 137
+           L70 152
+           C55 140, 45 122, 45 100Z" 
+        fill="#B8A99F"/>
+  
+  <!-- Letra G (entrelaçada) -->
+  <path d="M155 100
+           C155 145, 120 170, 85 170
+           C70 170, 55 165, 45 155
+           L55 140
+           C62 148, 72 153, 85 153
+           C110 153, 135 133, 135 100
+           C135 85, 128 72, 118 63
+           L130 48
+           C145 60, 155 78, 155 100Z
+           M135 100
+           L135 110
+           L105 110
+           L105 100
+           L135 100Z" 
+        fill="#B8A99F"/>
+</svg>
