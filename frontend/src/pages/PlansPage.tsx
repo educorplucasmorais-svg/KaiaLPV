@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import PageNav from '../components/PageNav';
 
 // URL do Backend (Railway)
 const API_URL = 'https://dracybeleguesdes.com.br';
@@ -824,6 +825,11 @@ const PlansPage: React.FC = () => {
           <p className="muted">Nenhum plano registrado ainda.</p>
         )}
       </div>
+
+      <PageNav 
+        prevPage={{ label: 'Pacientes', href: '/patients' }}
+        nextPage={{ label: 'Registros', href: '/data' }}
+      />
     </div>
   );
 };

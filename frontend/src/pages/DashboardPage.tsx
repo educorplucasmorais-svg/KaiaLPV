@@ -1,4 +1,5 @@
 import React from 'react';
+import PageNav from '../components/PageNav';
 
 const kpis = [
   { label: 'Pacientes ativos', value: '128', trend: '+8 esta semana' },
@@ -70,6 +71,10 @@ const DashboardPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      <PageNav 
+        nextPage={{ label: 'Pacientes', href: '/patients' }}
+      />
     </div>
   );
 };

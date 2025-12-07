@@ -1,5 +1,6 @@
 ﻿import React, { useState, useEffect } from "react";
 import { toast } from "sonner";
+import PageNav from '../components/PageNav';
 
 interface PlanRecord {
   id: number;
@@ -422,6 +423,11 @@ const DataPage: React.FC = () => {
           <p className="muted">Nenhum plano armazenado ainda.</p>
         )}
       </div>
+
+      <PageNav 
+        prevPage={{ label: 'Planos', href: '/plans' }}
+        nextPage={{ label: 'Configurações', href: '/settings' }}
+      />
     </div>
   );
 };

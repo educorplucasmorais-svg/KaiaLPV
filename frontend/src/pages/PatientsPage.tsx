@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
+import PageNav from '../components/PageNav';
 
 interface Patient {
   id?: number;
@@ -113,6 +114,11 @@ const PatientsPage: React.FC = () => {
           <p className="muted">Nenhum paciente cadastrado ainda.</p>
         )}
       </div>
+
+      <PageNav 
+        prevPage={{ label: 'Dashboard', href: '/dashboard' }}
+        nextPage={{ label: 'Planos', href: '/plans' }}
+      />
     </div>
   );
 };

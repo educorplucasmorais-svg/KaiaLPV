@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import PageNav from '../components/PageNav';
 
 const SettingsPage: React.FC = () => {
   const [settings, setSettings] = useState({
@@ -95,6 +96,11 @@ const SettingsPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      <PageNav 
+        prevPage={{ label: 'Registros', href: '/data' }}
+        nextPage={{ label: 'Dashboard', href: '/dashboard' }}
+      />
     </div>
   );
 };
