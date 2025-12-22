@@ -187,6 +187,11 @@
             font-weight: 500;
         }
 
+        .guarantee-centered {
+            justify-content: center;
+            margin-top: 20px;
+        }
+
         .stats {
             padding: 80px 0;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -785,7 +790,7 @@
                         <li><span class="check">✓</span> Relatório de Estilo de Trabalho</li>
                         <li><span class="check">✓</span> Suporte por Email</li>
                     </ul>
-                    <button class="pricing-btn secondary">Começar Agora</button>
+                    <button class="pricing-btn secondary" onclick="handleCheckout('me-conhecer', 'Me Conhecer')">Começar Agora</button>
                 </div>
                 <div class="pricing-card featured">
                     <div class="popular-badge">Mais Popular</div>
@@ -799,7 +804,7 @@
                         <li><span class="check">✓</span> Relatórios Mensais</li>
                         <li><span class="check">✓</span> Suporte Prioritário</li>
                     </ul>
-                    <button class="pricing-btn primary">Começar Agora</button>
+                    <button class="pricing-btn primary" onclick="handleCheckout('crescimento-saudavel', 'Crescimento Saudável')">Começar Agora</button>
                 </div>
                 <div class="pricing-card">
                     <h3>Conselho Bom</h3>
@@ -812,7 +817,7 @@
                         <li><span class="check">✓</span> Simulações de Cenários</li>
                         <li><span class="check">✓</span> Suporte VIP</li>
                     </ul>
-                    <button class="pricing-btn secondary">Começar Agora</button>
+                    <button class="pricing-btn secondary" onclick="handleCheckout('conselho-bom', 'Conselho Bom')">Começar Agora</button>
                 </div>
             </div>
         </div>
@@ -851,7 +856,7 @@
             <a href="#planos" class="btn-primary">
                 Começar Minha Evolução →
             </a>
-            <div class="guarantee" style="justify-content: center; margin-top: 20px;">
+            <div class="guarantee guarantee-centered">
                 ✓ 7 dias de garantia • Cancele quando quiser
             </div>
         </div>
@@ -862,5 +867,12 @@
             <p>© 2024 KAIA. Todos os direitos reservados.</p>
         </div>
     </footer>
+
+    <script>
+        function handleCheckout(planId, planName) {
+            alert('Redirecionando para checkout do plano: ' + planName);
+            // Integração com sistema de pagamento seria implementada aqui
+        }
+    </script>
 </body>
 </html>
