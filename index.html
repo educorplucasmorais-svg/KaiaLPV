@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAIA - Transforme Sua Carreira com IA</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,1026 +12,726 @@
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #0a1628;
-            color: #ffffff;
-            overflow-x: hidden;
-            position: relative;
-            min-height: 100vh;
+        :root {
+            --primary: #6366f1;
+            --primary-light: #818cf8;
+            --primary-dark: #4f46e5;
+            --accent: #22d3ee;
+            --bg-dark: #0f0f23;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --text: #ffffff;
+            --text-muted: #94a3b8;
+            --success: #10b981;
+            --warning: #f59e0b;
         }
 
-        /* Efeito de gradiente sutil e elegante */
-        body::before {
-            content: '';
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .bg-gradient {
             position: fixed;
             inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            
-            /* Gradiente radial suave para criar profundidade */
             background: 
-                radial-gradient(ellipse at 20% 0%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 100%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
-            
-            opacity: 1;
-        }
-
-        /* Linha de brilho sutil que desce lentamente */
-        body::after {
-            content: '';
-            position: fixed;
-            left: 0;
-            right: 0;
-            top: -30%;
-            height: 30%;
+                radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(34, 211, 238, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
             pointer-events: none;
-            z-index: 0;
-
-            background: linear-gradient(
-                to bottom,
-                rgba(59, 130, 246, 0) 0%,
-                rgba(59, 130, 246, 0.08) 40%,
-                rgba(59, 130, 246, 0.12) 50%,
-                rgba(59, 130, 246, 0.08) 60%,
-                rgba(59, 130, 246, 0) 100%
-            );
-            mix-blend-mode: screen;
-            opacity: 0.5;
-
-            animation: scanDown 8s linear infinite;
+            z-index: -1;
         }
 
-        @keyframes scanDown {
-            0% {
-                transform: translateY(-100%);
-            }
-            100% {
-                transform: translateY(450%);
-            }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        body.tv-disabled::before {
-            display: none !important;
-        }
-
-        body.tv-disabled::after {
-            display: none !important;
-        }
-
-        .tv-toggle {
-            display: none; /* Hidden since we now have a subtle, non-distracting effect */
-            position: fixed;
-            top: 100px;
-            right: 2rem;
-            z-index: 999;
-            background: rgba(59, 130, 246, 0.2);
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            padding: 0.8rem 1.2rem;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            color: #60a5fa;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-        }
-
-        .tv-toggle:hover {
-            background: rgba(59, 130, 246, 0.3);
-            border-color: rgba(59, 130, 246, 0.6);
-        }
-
-        @media (max-width: 768px) {
-            .tv-toggle {
-                top: 80px;
-                right: 1rem;
-                padding: 0.6rem 1rem;
-                font-size: 0.75rem;
-            }
-        }
-
-        /* Navigation */
         nav {
             position: fixed;
             top: 0;
-            width: 100%;
-            background: rgba(10, 22, 40, 0.92);
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 20px 0;
+            background: rgba(15, 15, 35, 0.8);
             backdrop-filter: blur(20px);
-            padding: 1.2rem 5%;
-            z-index: 1000;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .nav-content {
-            max-width: 1400px;
-            margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .logo-icon {
-            width: 60px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .logo-icon svg {
-            width: 100%;
-            height: 100%;
-            filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
-            animation: logoGlow 3s ease-in-out infinite;
-        }
-
-        @keyframes logoGlow {
-            0%, 100% {
-                filter: drop-shadow(0 0 20px rgba(59, 130, 246, 0.8));
-            }
-            50% {
-                filter: drop-shadow(0 0 30px rgba(59, 130, 246, 1));
-            }
-        }
-
-        .logo-text {
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
+            background-clip: text;
+            letter-spacing: -0.02em;
         }
 
-        .cta-nav {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+        .nav-cta {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 0.9rem 2.2rem;
-            border-radius: 50px;
+            padding: 12px 28px;
+            border-radius: 100px;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
+            font-size: 0.9rem;
             transition: all 0.3s ease;
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5);
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
         }
 
-        .cta-nav:hover {
+        .nav-cta:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 40px rgba(59, 130, 246, 0.8);
-            border-color: rgba(59, 130, 246, 0.6);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
         }
 
-        /* Hero Section */
         .hero {
-            padding: 180px 5% 120px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
             text-align: center;
-            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, rgba(10, 22, 40, 0.4) 40%, transparent 70%);
-            position: relative;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            color: #fbbf24;
+            padding: 10px 20px;
+            border-radius: 100px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            margin-bottom: 32px;
         }
 
         .hero h1 {
-            font-size: 4rem;
+            font-size: clamp(2.5rem, 6vw, 4rem);
             font-weight: 800;
             line-height: 1.1;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            margin-bottom: 24px;
+            letter-spacing: -0.03em;
+        }
+
+        .hero h1 .gradient {
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--accent) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: fadeInUp 0.8s ease;
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+            background-clip: text;
         }
 
-        .hero .subheadline {
-            font-size: 1.5rem;
-            color: #93c5fd;
-            margin-bottom: 2rem;
-            animation: fadeInUp 0.8s ease 0.2s backwards;
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.7;
         }
 
-        .hero .urgency {
-            display: inline-block;
-            background: rgba(239, 68, 68, 0.15);
-            border: 1px solid #ef4444;
-            padding: 0.8rem 1.5rem;
-            border-radius: 50px;
-            margin-bottom: 2rem;
-            font-weight: 600;
-            color: #fca5a5;
-            animation: pulse 2s infinite;
+        .cta-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
         }
 
-        .hero-cta {
-            display: inline-block;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
-            padding: 1.5rem 4rem;
-            border-radius: 50px;
+            padding: 18px 40px;
+            border-radius: 100px;
             text-decoration: none;
-            font-size: 1.3rem;
             font-weight: 700;
+            font-size: 1.1rem;
             transition: all 0.3s ease;
-            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.5);
-            animation: fadeInUp 0.8s ease 0.4s backwards;
-            border: 1px solid rgba(59, 130, 246, 0.3);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.4);
+            border: none;
+            cursor: pointer;
         }
 
-        .hero-cta:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(59, 130, 246, 0.7);
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(99, 102, 241, 0.5);
         }
 
-        .guarantee-badge {
-            margin-top: 2rem;
-            color: #34d399;
-            font-weight: 600;
-            animation: fadeInUp 0.8s ease 0.6s backwards;
+        .guarantee {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--success);
+            font-size: 0.9rem;
+            font-weight: 500;
         }
 
-        /* Authority Section */
-        .authority {
-            padding: 80px 5%;
-            background: rgba(59, 130, 246, 0.08);
-            border-top: 1px solid rgba(59, 130, 246, 0.2);
-            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
-        }
-
-        .authority-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .authority h2 {
-            font-size: 2.5rem;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .stats {
+            padding: 80px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item {
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
             text-align: center;
-            animation: fadeInUp 0.6s ease backwards;
         }
 
-        .stat-item:nth-child(1) { animation-delay: 0.1s; }
-        .stat-item:nth-child(2) { animation-delay: 0.2s; }
-        .stat-item:nth-child(3) { animation-delay: 0.3s; }
-        .stat-item:nth-child(4) { animation-delay: 0.4s; }
-
-        .stat-number {
-            font-size: 3.5rem;
+        .stat-item h3 {
+            font-size: 2.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
+            background-clip: text;
+            margin-bottom: 8px;
         }
 
-        .stat-label {
+        .stat-item p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        section {
+            padding: 100px 0;
+        }
+
+        .section-header {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto 60px;
+        }
+
+        .section-header h2 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+        }
+
+        .section-header p {
+            color: var(--text-muted);
             font-size: 1.1rem;
-            color: #93c5fd;
         }
 
-        /* Problem Section */
-        .problem {
-            padding: 100px 5%;
-            max-width: 1200px;
-            margin: 0 auto;
+        .problems {
+            background: rgba(239, 68, 68, 0.02);
         }
 
-        .problem h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .problem-list {
+        .problems-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
         }
 
-        .problem-item {
-            background: rgba(220, 38, 38, 0.1);
-            border: 1px solid rgba(220, 38, 38, 0.3);
-            padding: 2rem;
-            border-radius: 20px;
-            transition: all 0.4s ease;
-            animation: cardFloat 6s ease-in-out infinite;
+        .problem-card {
+            background: var(--bg-card);
+            border: 1px solid rgba(239, 68, 68, 0.15);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
         }
 
-        .problem-item:nth-child(1) { animation-delay: 0s; }
-        .problem-item:nth-child(2) { animation-delay: 0.5s; }
-        .problem-item:nth-child(3) { animation-delay: 1s; }
-        .problem-item:nth-child(4) { animation-delay: 1.5s; }
-        .problem-item:nth-child(5) { animation-delay: 2s; }
-        .problem-item:nth-child(6) { animation-delay: 2.5s; }
-
-        .problem-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(220, 38, 38, 0.5);
-            box-shadow: 0 10px 30px rgba(220, 38, 38, 0.3);
+        .problem-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
-        .problem-item h3 {
-            color: #ef4444;
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+        .problem-card h3 {
+            color: #f87171;
+            font-size: 1.1rem;
+            margin-bottom: 12px;
         }
 
-        /* Solution Section */
-        .solution {
-            padding: 100px 5%;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.12) 0%, transparent 70%);
-        }
-
-        .solution-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .solution h2 {
-            font-size: 3rem;
-            margin-bottom: 2rem;
-            text-align: center;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        .problem-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            gap: 24px;
         }
 
         .benefit-card {
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(99, 102, 241, 0.15);
             border-radius: 20px;
-            transition: all 0.4s ease;
-            animation: cardFloat 8s ease-in-out infinite;
+            padding: 32px;
+            transition: all 0.3s ease;
         }
 
-        .benefit-card:nth-child(1) { animation-delay: 0s; }
-        .benefit-card:nth-child(2) { animation-delay: 0.7s; }
-        .benefit-card:nth-child(3) { animation-delay: 1.4s; }
-        .benefit-card:nth-child(4) { animation-delay: 2.1s; }
-        .benefit-card:nth-child(5) { animation-delay: 2.8s; }
-        .benefit-card:nth-child(6) { animation-delay: 3.5s; }
-
         .benefit-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.35);
+            transform: translateY(-4px);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: 0 20px 40px rgba(99, 102, 241, 0.1);
         }
 
         .benefit-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            animation: iconPulse 2s ease-in-out infinite;
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
         }
 
         .benefit-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: #60a5fa;
+            font-size: 1.2rem;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
-        /* Results Section */
-        .results {
-            padding: 100px 5%;
-            background: rgba(16, 185, 129, 0.05);
+        .benefit-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
         }
 
-        .results-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .results h2 {
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            color: #34d399;
-        }
-
-        .results-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            text-align: left;
-        }
-
-        .result-item {
-            background: rgba(16, 185, 129, 0.1);
-            border: 1px solid rgba(16, 185, 129, 0.3);
-            padding: 2rem;
-            border-radius: 20px;
-            transition: all 0.4s ease;
-            animation: cardFloat 7s ease-in-out infinite;
-        }
-
-        .result-item:nth-child(odd) { animation-delay: 0s; }
-        .result-item:nth-child(even) { animation-delay: 1.75s; }
-
-        .result-item:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(16, 185, 129, 0.5);
-            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
-        }
-
-        .result-item::before {
-            content: "✔";
-            font-size: 2rem;
-            color: #34d399;
-            margin-right: 1rem;
-        }
-
-        /* Testimonials */
         .testimonials {
-            padding: 100px 5%;
-            background: rgba(59, 130, 246, 0.05);
-        }
-
-        .testimonials-content {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonials h2 {
-            font-size: 3rem;
-            margin-bottom: 3rem;
-            text-align: center;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            background: rgba(99, 102, 241, 0.02);
         }
 
         .testimonials-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
         }
 
         .testimonial-card {
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            padding: 2.5rem;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
             border-radius: 20px;
-            transition: all 0.4s ease;
-            animation: cardFloat 9s ease-in-out infinite;
+            padding: 32px;
+            transition: all 0.3s ease;
         }
 
-        .testimonial-card:nth-child(1) { animation-delay: 0s; }
-        .testimonial-card:nth-child(2) { animation-delay: 1.5s; }
-        .testimonial-card:nth-child(3) { animation-delay: 3s; }
-
         .testimonial-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+            border-color: rgba(99, 102, 241, 0.2);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .testimonial-text {
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1.5rem;
-            color: #e0e7ff;
+            font-size: 1.05rem;
+            line-height: 1.7;
+            margin-bottom: 24px;
+            color: #e2e8f0;
         }
 
         .testimonial-author {
             display: flex;
             align-items: center;
-            gap: 1rem;
+            gap: 14px;
         }
 
         .author-avatar {
-            width: 50px;
-            height: 50px;
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .author-info h4 {
-            font-size: 1.1rem;
-            margin-bottom: 0.3rem;
+            font-weight: 600;
+            font-size: 1rem;
         }
 
         .author-info p {
-            font-size: 0.9rem;
-            color: #93c5fd;
-        }
-
-        /* Pricing Section */
-        .pricing {
-            padding: 100px 5%;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
-        }
-
-        .pricing-content {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .pricing h2 {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .pricing-subtitle {
-            text-align: center;
-            font-size: 1.3rem;
-            color: #93c5fd;
-            margin-bottom: 4rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
         }
 
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            max-width: 1100px;
+            margin: 0 auto;
         }
 
         .pricing-card {
-            background: rgba(59, 130, 246, 0.12);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            border-radius: 30px;
-            padding: 3rem;
-            transition: all 0.4s ease;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 24px;
+            padding: 40px 32px;
+            transition: all 0.3s ease;
             position: relative;
-            overflow: hidden;
-            animation: cardFloat 10s ease-in-out infinite;
         }
 
-        .pricing-card:nth-child(1) { animation-delay: 0s; }
-        .pricing-card:nth-child(2) { animation-delay: 1.7s; }
-        .pricing-card:nth-child(3) { animation-delay: 3.4s; }
+        .pricing-card.featured {
+            border-color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+            transform: scale(1.02);
+        }
 
         .pricing-card:hover {
-            transform: translateY(-12px) scale(1.03);
-            border-color: rgba(59, 130, 246, 0.6);
-            box-shadow: 0 25px 70px rgba(59, 130, 246, 0.4);
+            transform: translateY(-8px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
         }
 
-        .pricing-card.popular {
-            border: 2px solid #3b82f6;
-            background: rgba(59, 130, 246, 0.18);
-            transform: scale(1.05);
-        }
-
-        .pricing-card.popular:hover {
-            transform: translateY(-12px) scale(1.08);
+        .pricing-card.featured:hover {
+            transform: scale(1.02) translateY(-8px);
         }
 
         .popular-badge {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            font-size: 0.8rem;
+            padding: 6px 20px;
+            border-radius: 100px;
+            font-size: 0.75rem;
             font-weight: 700;
             text-transform: uppercase;
-            animation: pulse 2s infinite;
+            letter-spacing: 0.05em;
         }
 
-        .plan-name {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #60a5fa;
+        .pricing-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: var(--primary-light);
         }
 
-        .plan-price {
+        .price {
             font-size: 3rem;
             font-weight: 800;
-            margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 8px;
         }
 
-        .plan-period {
-            color: #93c5fd;
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
+        .price span {
+            font-size: 1rem;
+            font-weight: 400;
+            color: var(--text-muted);
         }
 
-        .plan-features {
+        .pricing-features {
             list-style: none;
-            margin-bottom: 2rem;
+            margin: 32px 0;
         }
 
-        .plan-features li {
-            padding: 0.8rem 0;
-            border-bottom: 1px solid rgba(59, 130, 246, 0.15);
-            color: #e0e7ff;
+        .pricing-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.95rem;
+            color: #cbd5e1;
         }
 
-        .plan-features li::before {
-            content: "✔";
-            color: #34d399;
-            font-weight: 700;
-            margin-right: 0.8rem;
+        .pricing-features li:last-child {
+            border-bottom: none;
         }
 
-        .plan-cta {
+        .pricing-features .check {
+            color: var(--success);
+            font-weight: bold;
+        }
+
+        .pricing-btn {
             display: block;
             width: 100%;
-            padding: 1.2rem;
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 50%, #1d4ed8 100%);
-            color: white;
+            padding: 16px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
             text-align: center;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            cursor: pointer;
         }
 
-        .plan-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.6);
+        .pricing-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            box-shadow: 0 8px 24px rgba(99, 102, 241, 0.3);
         }
 
-        /* FAQ Section */
-        .faq {
-            padding: 100px 5%;
-            background: rgba(59, 130, 246, 0.05);
+        .pricing-btn.primary:hover {
+            box-shadow: 0 12px 32px rgba(99, 102, 241, 0.4);
         }
 
-        .faq-content {
-            max-width: 900px;
+        .pricing-btn.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .pricing-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .faq-list {
+            max-width: 700px;
             margin: 0 auto;
         }
 
-        .faq h2 {
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
         .faq-item {
-            background: rgba(59, 130, 246, 0.08);
-            border: 1px solid rgba(59, 130, 246, 0.25);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            transition: all 0.4s ease;
-            animation: cardFloat 8s ease-in-out infinite;
+            background: var(--bg-card);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 16px;
+            transition: all 0.3s ease;
         }
-
-        .faq-item:nth-child(odd) { animation-delay: 0s; }
-        .faq-item:nth-child(even) { animation-delay: 2s; }
 
         .faq-item:hover {
-            border-color: rgba(59, 130, 246, 0.5);
-            transform: translateX(10px);
-            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.25);
+            border-color: rgba(99, 102, 241, 0.2);
         }
 
         .faq-question {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #60a5fa;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: var(--primary-light);
         }
 
         .faq-answer {
-            color: #e0e7ff;
-            line-height: 1.8;
+            color: var(--text-muted);
+            line-height: 1.7;
         }
 
-        /* Final CTA */
         .final-cta {
-            padding: 100px 5%;
             text-align: center;
-            background: radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.2) 0%, transparent 70%);
+            padding: 120px 0;
+            background: linear-gradient(180deg, transparent 0%, rgba(99, 102, 241, 0.05) 100%);
         }
 
         .final-cta h2 {
-            font-size: 3.5rem;
-            margin-bottom: 2rem;
-            background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 50%, #2563eb 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
         }
 
         .final-cta p {
-            font-size: 1.5rem;
-            color: #93c5fd;
-            margin-bottom: 3rem;
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        /* Footer */
         footer {
-            padding: 3rem 5%;
+            padding: 40px 0;
             text-align: center;
-            border-top: 1px solid rgba(59, 130, 246, 0.15);
-            color: #93c5fd;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        /* Animations */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.7;
-            }
-        }
-
-        @keyframes cardFloat {
-            0%, 100% {
-                transform: translateY(0px);
-            }
-            50% {
-                transform: translateY(-3px);
-            }
-        }
-
-        @keyframes iconPulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.05);
-            }
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.2rem;
             }
 
-            .hero .subheadline {
-                font-size: 1.2rem;
+            .hero p {
+                font-size: 1.1rem;
             }
 
-            .pricing-card.popular {
-                transform: scale(1);
+            .btn-primary {
+                padding: 16px 32px;
+                font-size: 1rem;
             }
 
-            .stats-grid,
-            .problem-list,
-            .benefits-grid,
-            .results-list,
-            .testimonials-grid,
-            .pricing-grid {
-                grid-template-columns: 1fr;
+            section {
+                padding: 60px 0;
             }
 
-            .logo-text {
-                font-size: 1.5rem;
+            .section-header h2 {
+                font-size: 1.8rem;
             }
 
-            .logo-icon {
-                width: 45px;
-                height: 45px;
+            .pricing-card.featured {
+                transform: none;
+            }
+
+            .pricing-card.featured:hover {
+                transform: translateY(-8px);
+            }
+
+            .stats-grid {
+                gap: 30px;
+            }
+
+            .stat-item h3 {
+                font-size: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Navigation -->
+    <div class="bg-gradient"></div>
+
     <nav>
-        <div class="nav-content">
-            <div class="logo">
-                <div class="logo-icon">
-                    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Base circular -->
-                        <circle cx="50" cy="50" r="45" fill="#0a1628" stroke="#3b82f6" stroke-width="2"/>
-
-                        <!-- Anel externo brilhante -->
-                        <circle cx="50" cy="50" r="42" fill="none" stroke="url(#blueGradient)" stroke-width="1.5" opacity="0.6"/>
-
-                        <!-- Símbolo central (K estilizado) -->
-                        <path d="M 35 30 L 35 70 M 35 50 L 60 30 M 35 50 L 60 70" 
-                              stroke="#3b82f6" 
-                              stroke-width="5" 
-                              stroke-linecap="round" 
-                              stroke-linejoin="round"
-                              fill="none"/>
-
-                        <!-- Pontos de energia -->
-                        <circle cx="50" cy="25" r="3" fill="#60a5fa">
-                            <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="70" cy="40" r="2.5" fill="#60a5fa">
-                            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="70" cy="60" r="2.5" fill="#60a5fa">
-                            <animate attributeName="opacity" values="1;0.3;1" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-                        <circle cx="50" cy="75" r="3" fill="#60a5fa">
-                            <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
-                        </circle>
-
-                        <!-- Gradiente -->
-                        <defs>
-                            <linearGradient id="blueGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#60a5fa;stop-opacity:1" />
-                                <stop offset="50%" style="stop-color:#3b82f6;stop-opacity:1" />
-                                <stop offset="100%" style="stop-color:#2563eb;stop-opacity:1" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
-                </div>
-                <span class="logo-text">KAIA</span>
-            </div>
-            <a href="#planos" class="cta-nav">GARANTIR EVOLUÇÃO</a>
+        <div class="container nav-content">
+            <div class="logo">KAIA</div>
+            <a href="#planos" class="nav-cta">Começar Agora</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero">
-        <div class="urgency">🔥 Vagas Limitadas - Apenas 30 Vagas Restantes Este Mês</div>
-        <h1>Transforme Sua Carreira<br>Com Inteligência Artificial</h1>
-        <p class="subheadline">Descubra seu verdadeiro potencial e alcance seus objetivos profissionais com orientação personalizada por IA</p>
-        <a href="#planos" class="hero-cta">GARANTIR MINHA EVOLUÇÃO</a>
-        <p class="guarantee-badge">✔ Garantia de 7 dias ou seu dinheiro de volta</p>
+        <div class="container hero-content">
+            <div class="badge">
+                🔥 Últimas 30 vagas com desconto especial
+            </div>
+            <h1>
+                Transforme Sua Carreira<br>
+                <span class="gradient">Com Inteligência Artificial</span>
+            </h1>
+            <p>
+                Descubra seu verdadeiro potencial profissional com orientação personalizada por IA. Mapeamento de perfil, PDI inteligente e mentoria 24/7.
+            </p>
+            <div class="cta-group">
+                <a href="#planos" class="btn-primary">
+                    Quero Evoluir Agora →
+                </a>
+                <div class="guarantee">
+                    ✓ Garantia de 7 dias ou seu dinheiro de volta
+                </div>
+            </div>
+        </div>
     </section>
 
-    <!-- Toggle TV Effect -->
-    <button class="tv-toggle" onclick="toggleTVEffect()">✦ Desativar Efeito</button>
-
-    <!-- Authority Section -->
-    <section class="authority">
-        <div class="authority-content">
-            <h2>Resultados Comprovados</h2>
+    <section class="stats">
+        <div class="container">
             <div class="stats-grid">
                 <div class="stat-item">
-                    <div class="stat-number">12.847</div>
-                    <div class="stat-label">Profissionais Transformados</div>
+                    <h3>12.847</h3>
+                    <p>Profissionais transformados</p>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">4.9/5</div>
-                    <div class="stat-label">Avaliação Média</div>
+                    <h3>4.9/5</h3>
+                    <p>Avaliação média</p>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">87%</div>
-                    <div class="stat-label">Conseguiram Promoção em 6 Meses</div>
+                    <h3>87%</h3>
+                    <p>Conseguiram promoção</p>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">R$ 2.4k</div>
-                    <div class="stat-label">Aumento Médio Salarial</div>
+                    <h3>+R$2.4k</h3>
+                    <p>Aumento médio salarial</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Problem Section -->
-    <section class="problem">
-        <h2>Você Está Preso na Sua Carreira?</h2>
-        <div class="problem-list">
-            <div class="problem-item">
-                <h3>❌ Sem Direção Clara</h3>
-                <p>Você não sabe qual é o próximo passo na sua carreira e se sente perdido entre tantas opções.</p>
+    <section class="problems">
+        <div class="container">
+            <div class="section-header">
+                <h2>Você se identifica?</h2>
+                <p>Milhares de profissionais enfrentam esses mesmos desafios</p>
             </div>
-            <div class="problem-item">
-                <h3>❌ Falta de Autoconhecimento</h3>
-                <p>Você não conhece seus verdadeiros pontos fortes e fracos, desperdiçando seu potencial.</p>
-            </div>
-            <div class="problem-item">
-                <h3>❌ Metas Genéricas</h3>
-                <p>Suas metas são vagas e você nunca consegue alcançá-las de verdade.</p>
-            </div>
-            <div class="problem-item">
-                <h3>❌ Sem Mentoria Acessível</h3>
-                <p>Mentores de qualidade são caros e difíceis de encontrar, deixando você sem orientação.</p>
-            </div>
-            <div class="problem-item">
-                <h3>❌ Estagnação Profissional</h3>
-                <p>Você está no mesmo cargo há anos e não vê oportunidades de crescimento.</p>
-            </div>
-            <div class="problem-item">
-                <h3>❌ Falta de Tempo</h3>
-                <p>Sua rotina é corrida e você não tem tempo para investir em desenvolvimento pessoal.</p>
+            <div class="problems-grid">
+                <div class="problem-card">
+                    <h3>❌ Sem direção clara</h3>
+                    <p>Não sabe qual é o próximo passo na sua carreira e se sente perdido entre tantas opções.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>❌ Falta autoconhecimento</h3>
+                    <p>Não conhece seus verdadeiros pontos fortes e fracos, desperdiçando seu potencial.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>❌ Metas genéricas</h3>
+                    <p>Suas metas são vagas e você nunca consegue alcançá-las de verdade.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>❌ Estagnação profissional</h3>
+                    <p>Está no mesmo cargo há anos e não vê oportunidades de crescimento.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Solution Section -->
-    <section class="solution">
-        <div class="solution-content">
-            <h2>A Solução: KAIA</h2>
-            <p style="text-align: center; font-size: 1.3rem; color: #e0e7ff; margin-bottom: 3rem;">
-                Uma plataforma de desenvolvimento de carreira alimentada por IA que oferece orientação personalizada, 24/7, para você alcançar seus objetivos profissionais.
-            </p>
+    <section class="benefits">
+        <div class="container">
+            <div class="section-header">
+                <h2>O que você recebe</h2>
+                <p>Tudo que você precisa para acelerar sua carreira</p>
+            </div>
             <div class="benefits-grid">
                 <div class="benefit-card">
                     <div class="benefit-icon">👤</div>
-                    <h3>Mapeamento de Perfil Completo</h3>
-                    <p>Descubra suas competências, valores e estilo de trabalho através de análises profundas de inteligência comportamental.</p>
+                    <h3>Mapeamento de Perfil</h3>
+                    <p>Descubra suas competências, valores e estilo de trabalho através de análises comportamentais profundas.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">📋</div>
-                    <h3>PDI Estruturado</h3>
-                    <p>Receba um Plano de Desenvolvimento Individual personalizado com ações práticas, mensuráveis e focadas em resultados.</p>
+                    <h3>PDI Inteligente</h3>
+                    <p>Plano de Desenvolvimento Individual personalizado com ações práticas e mensuráveis.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">💡</div>
-                    <h3>Consultoria Estratégica</h3>
-                    <p>Tenha acesso a orientações especializadas que te guiam através de cada etapa do seu desenvolvimento profissional.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-icon">🎓</div>
-                    <h3>Gestão de Objetivos</h3>
-                    <p>Defina, acompanhe e alcance seus objetivos profissionais com um sistema estruturado de follow-up.</p>
+                    <h3>Mentoria 24/7</h3>
+                    <p>Orientações estratégicas disponíveis a qualquer hora para guiar suas decisões.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">📊</div>
-                    <h3>Análises de Evolução</h3>
-                    <p>Visualize seu progresso com relatórios detalhados e insights sobre seu desenvolvimento contínuo.</p>
+                    <h3>Análise de Evolução</h3>
+                    <p>Relatórios detalhados e insights sobre seu progresso contínuo.</p>
+                </div>
+                <div class="benefit-card">
+                    <div class="benefit-icon">🎯</div>
+                    <h3>Gestão de Objetivos</h3>
+                    <p>Sistema estruturado de acompanhamento para você alcançar suas metas.</p>
                 </div>
                 <div class="benefit-card">
                     <div class="benefit-icon">⚡</div>
                     <h3>Aceleração de Carreira</h3>
-                    <p>Receba recomendações estratégicas e oportunidades alinhadas ao seu perfil e aspirações profissionais.</p>
+                    <p>Recomendações estratégicas e oportunidades alinhadas ao seu perfil.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Results Section -->
-    <section class="results">
-        <div class="results-content">
-            <h2>Depois do KAIA, Você Será Capaz de:</h2>
-            <div class="results-list">
-                <div class="result-item">Mapear seus pontos fortes, fraquezas e potencial real com precisão</div>
-                <div class="result-item">Construir um plano de carreira claro e estruturado</div>
-                <div class="result-item">Alinhar seus objetivos pessoais com sua estratégia profissional</div>
-                <div class="result-item">Tomar decisões de carreira baseadas em dados e autoconhecimento</div>
-                <div class="result-item">Negociar promoções e aumentos salariais com confiança</div>
-                <div class="result-item">Desenvolver habilidades críticas de liderança e gestão</div>
-                <div class="result-item">Construir uma reputação profissional sólida no mercado</div>
-                <div class="result-item">Alcançar equilíbrio entre ambição e bem-estar pessoal</div>
-                <div class="result-item">Acelerar seu crescimento profissional em até 3 vezes</div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonials -->
     <section class="testimonials">
-        <div class="testimonials-content">
-            <h2>O Que Nossos Usuários Dizem</h2>
+        <div class="container">
+            <div class="section-header">
+                <h2>O que dizem nossos usuários</h2>
+                <p>Histórias reais de quem transformou sua carreira</p>
+            </div>
             <div class="testimonials-grid">
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Em 3 meses usando o KAIA, consegui a promoção que esperava há 2 anos. O PDI personalizado me mostrou exatamente o que eu precisava desenvolver."</p>
+                    <p class="testimonial-text">
+                        "Em 3 meses usando o KAIA, consegui a promoção que esperava há 2 anos. O PDI personalizado me mostrou exatamente o que eu precisava desenvolver."
+                    </p>
                     <div class="testimonial-author">
                         <div class="author-avatar">MC</div>
                         <div class="author-info">
@@ -1041,7 +741,9 @@
                     </div>
                 </div>
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"O mentor IA é incrível! Sempre que tenho uma dúvida sobre minha carreira, recebo orientações práticas e personalizadas. Melhor investimento que já fiz."</p>
+                    <p class="testimonial-text">
+                        "O mentor IA é incrível! Sempre que tenho uma dúvida sobre minha carreira, recebo orientações práticas e personalizadas. Melhor investimento que já fiz."
+                    </p>
                     <div class="testimonial-author">
                         <div class="author-avatar">RS</div>
                         <div class="author-info">
@@ -1051,7 +753,9 @@
                     </div>
                 </div>
                 <div class="testimonial-card">
-                    <p class="testimonial-text">"Finalmente entendi meu perfil profissional e onde posso brilhar. O KAIA me ajudou a mudar de área e hoje estou muito mais realizada."</p>
+                    <p class="testimonial-text">
+                        "Finalmente entendi meu perfil profissional e onde posso brilhar. O KAIA me ajudou a mudar de área e hoje estou muito mais realizada."
+                    </p>
                     <div class="testimonial-author">
                         <div class="author-avatar">JA</div>
                         <div class="author-info">
@@ -1064,146 +768,99 @@
         </div>
     </section>
 
-    <!-- Pricing Section -->
     <section id="planos" class="pricing">
-        <div class="pricing-content">
-            <h2>Escolha Seu Plano</h2>
-            <p class="pricing-subtitle">Invista no seu futuro profissional hoje</p>
+        <div class="container">
+            <div class="section-header">
+                <h2>Escolha seu plano</h2>
+                <p>Invista no seu futuro profissional</p>
+            </div>
             <div class="pricing-grid">
-                <!-- Plan 1 -->
                 <div class="pricing-card">
-                    <h3 class="plan-name">Me Conhecer</h3>
-                    <div class="plan-price">R$ 49,90</div>
-                    <p class="plan-period">por mês</p>
-                    <ul class="plan-features">
-                        <li>Mapeamento de Perfil Completo</li>
-                        <li>Análise de Competências</li>
-                        <li>Identificação de Valores</li>
-                        <li>Relatório de Estilo de Trabalho</li>
-                        <li>Suporte por Email</li>
+                    <h3>Me Conhecer</h3>
+                    <div class="price">R$49<span>,90/mês</span></div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Mapeamento de Perfil Completo</li>
+                        <li><span class="check">✓</span> Análise de Competências</li>
+                        <li><span class="check">✓</span> Identificação de Valores</li>
+                        <li><span class="check">✓</span> Relatório de Estilo de Trabalho</li>
+                        <li><span class="check">✓</span> Suporte por Email</li>
                     </ul>
-                    <button class="plan-cta" onclick="handleCheckout('me-conhecer', 'Me Conhecer')">GARANTIR MINHA EVOLUÇÃO</button>
+                    <button class="pricing-btn secondary">Começar Agora</button>
                 </div>
-
-                <!-- Plan 2 - Popular -->
-                <div class="pricing-card popular">
-                    <span class="popular-badge">MAIS POPULAR</span>
-                    <h3 class="plan-name">Crescimento Saudável</h3>
-                    <div class="plan-price">R$ 89,90</div>
-                    <p class="plan-period">por mês</p>
-                    <ul class="plan-features">
-                        <li>Tudo do plano Me Conhecer</li>
-                        <li>PDI Inteligente Personalizado</li>
-                        <li>Gestão de Metas SMART</li>
-                        <li>Acompanhamento de Progresso</li>
-                        <li>Relatórios Mensais</li>
-                        <li>Suporte Prioritário</li>
+                <div class="pricing-card featured">
+                    <div class="popular-badge">Mais Popular</div>
+                    <h3>Crescimento Saudável</h3>
+                    <div class="price">R$89<span>,90/mês</span></div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Tudo do plano anterior</li>
+                        <li><span class="check">✓</span> PDI Inteligente Personalizado</li>
+                        <li><span class="check">✓</span> Gestão de Metas SMART</li>
+                        <li><span class="check">✓</span> Acompanhamento de Progresso</li>
+                        <li><span class="check">✓</span> Relatórios Mensais</li>
+                        <li><span class="check">✓</span> Suporte Prioritário</li>
                     </ul>
-                    <button class="plan-cta" onclick="handleCheckout('crescimento-saudavel', 'Crescimento Saudável')">GARANTIR MINHA EVOLUÇÃO</button>
+                    <button class="pricing-btn primary">Começar Agora</button>
                 </div>
-
-                <!-- Plan 3 -->
                 <div class="pricing-card">
-                    <h3 class="plan-name">Conselho Bom</h3>
-                    <div class="plan-price">R$ 109,90</div>
-                    <p class="plan-period">por mês</p>
-                    <ul class="plan-features">
-                        <li>Tudo do plano Crescimento Saudável</li>
-                        <li>Mentor IA 24/7 Ilimitado</li>
-                        <li>Conteúdo Personalizado</li>
-                        <li>Análises Preditivas de Carreira</li>
-                        <li>Simulações de Cenários</li>
-                        <li>Suporte VIP com Resposta em 1h</li>
+                    <h3>Conselho Bom</h3>
+                    <div class="price">R$109<span>,90/mês</span></div>
+                    <ul class="pricing-features">
+                        <li><span class="check">✓</span> Tudo do plano anterior</li>
+                        <li><span class="check">✓</span> Mentor IA 24/7 Ilimitado</li>
+                        <li><span class="check">✓</span> Conteúdo Personalizado</li>
+                        <li><span class="check">✓</span> Análises Preditivas</li>
+                        <li><span class="check">✓</span> Simulações de Cenários</li>
+                        <li><span class="check">✓</span> Suporte VIP</li>
                     </ul>
-                    <button class="plan-cta" onclick="handleCheckout('conselho-bom', 'Conselho Bom')">GARANTIR MINHA EVOLUÇÃO</button>
+                    <button class="pricing-btn secondary">Começar Agora</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
     <section class="faq">
-        <div class="faq-content">
-            <h2>Perguntas Frequentes</h2>
-
-            <div class="faq-item">
-                <h3 class="faq-question">Como funciona a garantia de 7 dias?</h3>
-                <p class="faq-answer">Se você não estiver satisfeito com o KAIA nos primeiros 7 dias, basta nos enviar um email e devolveremos 100% do seu investimento, sem perguntas.</p>
+        <div class="container">
+            <div class="section-header">
+                <h2>Perguntas Frequentes</h2>
             </div>
-
-            <div class="faq-item">
-                <h3 class="faq-question">O KAIA funciona para qualquer área profissional?</h3>
-                <p class="faq-answer">Sim! Nossa IA foi treinada com dados de mais de 200 áreas profissionais diferentes, desde tecnologia até saúde, educação, finanças e muito mais.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3 class="faq-question">Posso cancelar a qualquer momento?</h3>
-                <p class="faq-answer">Sim, você pode cancelar sua assinatura a qualquer momento, sem multas ou taxas adicionais. Seu acesso continuará até o final do período pago.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3 class="faq-question">Quanto tempo leva para ver resultados?</h3>
-                <p class="faq-answer">A maioria dos nossos usuários reporta insights valiosos já na primeira semana. Resultados concretos como promoções geralmente aparecem entre 3-6 meses de uso consistente.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3 class="faq-question">O mentor IA realmente funciona?</h3>
-                <p class="faq-answer">Sim! Nosso mentor IA utiliza modelos de linguagem avançados treinados especificamente para orientação de carreira, combinando conhecimento de milhares de especialistas em RH e desenvolvimento profissional.</p>
-            </div>
-
-            <div class="faq-item">
-                <h3 class="faq-question">Posso mudar de plano depois?</h3>
-                <p class="faq-answer">Claro! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças entram em vigor no próximo ciclo de cobrança.</p>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <h3 class="faq-question">Como funciona a garantia de 7 dias?</h3>
+                    <p class="faq-answer">Se você não estiver satisfeito nos primeiros 7 dias, basta nos enviar um email e devolvemos 100% do seu investimento, sem perguntas.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">O KAIA funciona para qualquer área?</h3>
+                    <p class="faq-answer">Sim! Nossa IA foi treinada com dados de mais de 200 áreas profissionais diferentes.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Posso cancelar a qualquer momento?</h3>
+                    <p class="faq-answer">Sim, você pode cancelar sua assinatura quando quiser, sem multas ou taxas adicionais.</p>
+                </div>
+                <div class="faq-item">
+                    <h3 class="faq-question">Quanto tempo para ver resultados?</h3>
+                    <p class="faq-answer">A maioria dos usuários reporta insights valiosos já na primeira semana. Resultados concretos geralmente aparecem entre 3-6 meses.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Final CTA -->
     <section class="final-cta">
-        <h2>Pronto Para Transformar<br>Sua Carreira?</h2>
-        <p>Junte-se a mais de 12.000 profissionais que já estão acelerando suas carreiras com KAIA</p>
-        <a href="#planos" class="hero-cta">GARANTIR MINHA EVOLUÇÃO AGORA</a>
-        <p class="guarantee-badge">✔ Garantia de 7 dias • Cancele quando quiser • Suporte em português</p>
+        <div class="container">
+            <h2>Pronto para transformar sua carreira?</h2>
+            <p>Junte-se a mais de 12.000 profissionais que já estão evoluindo com KAIA</p>
+            <a href="#planos" class="btn-primary">
+                Começar Minha Evolução →
+            </a>
+            <div class="guarantee" style="justify-content: center; margin-top: 20px;">
+                ✓ 7 dias de garantia • Cancele quando quiser
+            </div>
+        </div>
     </section>
 
-    <!-- Footer -->
     <footer>
-        <p>© 2024 KAIA. Todos os direitos reservados.</p>
-        <p style="margin-top: 1rem;">Transformando carreiras com inteligência artificial.</p>
+        <div class="container">
+            <p>© 2024 KAIA. Todos os direitos reservados.</p>
+        </div>
     </footer>
-
-    <!-- Stripe Integration -->
-    <script src="../stripe-integration.js"></script>
-
-    <script>
-        // Toggle TV Effect
-        function toggleTVEffect() {
-            const body = document.body;
-            const btn = document.querySelector('.tv-toggle');
-            
-            if (body.classList.contains('tv-disabled')) {
-                body.classList.remove('tv-disabled');
-                btn.textContent = '✦ Desativar Efeito';
-                localStorage.setItem('tv-effect', 'enabled');
-            } else {
-                body.classList.add('tv-disabled');
-                btn.textContent = '✦ Ativar Efeito';
-                localStorage.setItem('tv-effect', 'disabled');
-            }
-        }
-
-        // Load saved preference
-        window.addEventListener('load', function() {
-            const saved = localStorage.getItem('tv-effect');
-            if (saved === 'disabled') {
-                document.body.classList.add('tv-disabled');
-                document.querySelector('.tv-toggle').textContent = '✦ Ativar Efeito';
-            }
-        });
-    </script>
 </body>
 </html>
-
-
-
-
