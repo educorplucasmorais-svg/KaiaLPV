@@ -15,8 +15,9 @@
         :root {
             --primary: #2563eb;
             --primary-light: #3b82f6;
-            --bg: #ffffff;
-            --bg-alt: #f8fafc;
+            --bg: #f8faff;
+            --bg-alt: #f0f5ff;
+            --bg-section: #ffffff;
             --text: #1e293b;
             --text-muted: #64748b;
             --border: #e2e8f0;
@@ -30,7 +31,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg);
+            background: linear-gradient(180deg, var(--bg) 0%, #eef4ff 50%, var(--bg) 100%);
             color: var(--text);
             line-height: 1.6;
         }
@@ -87,7 +88,7 @@
         .hero {
             padding: 140px 0 100px;
             text-align: center;
-            background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+            background: linear-gradient(180deg, #f8faff 0%, #eef4ff 50%, #f8faff 100%);
         }
 
         .badge {
@@ -207,7 +208,7 @@
 
         /* Problems */
         .problems {
-            background: var(--bg-alt);
+            background: linear-gradient(180deg, #f0f5ff 0%, #f8faff 100%);
         }
 
         .problems-grid {
@@ -217,7 +218,7 @@
         }
 
         .problem-card {
-            background: var(--bg);
+            background: #ffffff;
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 24px;
@@ -289,7 +290,7 @@
 
         /* Testimonials */
         .testimonials {
-            background: var(--bg-alt);
+            background: linear-gradient(180deg, #f8faff 0%, #eef4ff 50%, #f8faff 100%);
         }
 
         .testimonials-grid {
@@ -299,7 +300,7 @@
         }
 
         .testimonial-card {
-            background: var(--bg);
+            background: #ffffff;
             border: 1px solid var(--border);
             border-radius: 12px;
             padding: 28px;
@@ -491,7 +492,7 @@
         .final-cta {
             text-align: center;
             padding: 100px 0;
-            background: var(--bg-alt);
+            background: linear-gradient(180deg, #f0f5ff 0%, #e8f0ff 50%, #f0f5ff 100%);
         }
 
         .final-cta h2 {
