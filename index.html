@@ -15,12 +15,12 @@
         :root {
             --primary: #2563eb;
             --primary-light: #3b82f6;
-            --bg: #f8faff;
-            --bg-alt: #f0f5ff;
-            --bg-section: #ffffff;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
+            --bg: #0f172a;
+            --bg-alt: #1e293b;
+            --bg-section: #1e293b;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: #3b82f6;
             --success: #10b981;
             --danger: #ef4444;
         }
@@ -31,7 +31,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(180deg, var(--bg) 0%, #eef4ff 50%, var(--bg) 100%);
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
             color: var(--text);
             line-height: 1.6;
         }
@@ -50,9 +50,9 @@
             right: 0;
             z-index: 100;
             padding: 16px 0;
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(15, 23, 42, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .nav-content {
@@ -64,7 +64,7 @@
         .logo {
             font-size: 1.5rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--primary-light);
             letter-spacing: -0.02em;
         }
 
@@ -88,20 +88,21 @@
         .hero {
             padding: 140px 0 100px;
             text-align: center;
-            background: linear-gradient(180deg, #f8faff 0%, #eef4ff 50%, #f8faff 100%);
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
         }
 
         .badge {
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: #fef3c7;
-            color: #92400e;
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
             padding: 8px 16px;
             border-radius: 100px;
             font-size: 0.85rem;
             font-weight: 500;
             margin-bottom: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
 
         .hero h1 {
@@ -114,7 +115,7 @@
         }
 
         .hero h1 .highlight {
-            color: var(--primary);
+            color: var(--primary-light);
         }
 
         .hero p {
@@ -143,7 +144,7 @@
         .btn-primary:hover {
             background: var(--primary-light);
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
 
         .guarantee {
@@ -161,7 +162,7 @@
         .stats {
             padding: 60px 0;
             background: var(--bg);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
 
         .stats-grid {
@@ -174,7 +175,7 @@
         .stat-item h3 {
             font-size: 2.5rem;
             font-weight: 800;
-            color: var(--primary);
+            color: var(--primary-light);
             margin-bottom: 4px;
         }
 
@@ -208,7 +209,7 @@
 
         /* Problems */
         .problems {
-            background: linear-gradient(180deg, #f0f5ff 0%, #f8faff 100%);
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         }
 
         .problems-grid {
@@ -218,20 +219,20 @@
         }
 
         .problem-card {
-            background: #ffffff;
-            border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary);
             border-radius: 12px;
             padding: 24px;
             transition: all 0.2s ease;
         }
 
         .problem-card:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
             transform: translateY(-2px);
         }
 
         .problem-card h3 {
-            color: var(--danger);
+            color: #f87171;
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 8px;
@@ -251,22 +252,22 @@
         }
 
         .benefit-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary);
             border-radius: 12px;
             padding: 28px;
             transition: all 0.2s ease;
         }
 
         .benefit-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
             transform: translateY(-2px);
         }
 
         .benefit-icon {
             width: 48px;
             height: 48px;
-            background: #eff6ff;
+            background: rgba(59, 130, 246, 0.2);
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -290,7 +291,7 @@
 
         /* Testimonials */
         .testimonials {
-            background: linear-gradient(180deg, #f8faff 0%, #eef4ff 50%, #f8faff 100%);
+            background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
         }
 
         .testimonials-grid {
@@ -300,8 +301,8 @@
         }
 
         .testimonial-card {
-            background: #ffffff;
-            border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary);
             border-radius: 12px;
             padding: 28px;
         }
@@ -347,15 +348,15 @@
         /* Pricing */
         .pricing-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: 1fr;
             gap: 24px;
-            max-width: 1000px;
+            max-width: 500px;
             margin: 0 auto;
         }
 
         .pricing-card {
-            background: var(--bg);
-            border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary);
             border-radius: 16px;
             padding: 32px;
             position: relative;
@@ -363,11 +364,12 @@
         }
 
         .pricing-card:hover {
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.3);
         }
 
         .pricing-card.featured {
-            border: 2px solid var(--primary);
+            border: 3px solid var(--primary-light);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
         }
 
         .popular-badge {
@@ -449,16 +451,17 @@
 
         .pricing-btn.primary:hover {
             background: var(--primary-light);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
         }
 
         .pricing-btn.secondary {
-            background: var(--bg-alt);
-            color: var(--text);
-            border: 1px solid var(--border);
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary-light);
+            border: 1px solid var(--primary);
         }
 
         .pricing-btn.secondary:hover {
-            background: var(--border);
+            background: rgba(59, 130, 246, 0.2);
         }
 
         /* FAQ */
@@ -468,8 +471,8 @@
         }
 
         .faq-item {
-            background: var(--bg);
-            border: 1px solid var(--border);
+            background: rgba(30, 41, 59, 0.8);
+            border: 2px solid var(--primary);
             border-radius: 12px;
             padding: 24px;
             margin-bottom: 12px;
@@ -479,7 +482,7 @@
             font-size: 1rem;
             font-weight: 600;
             margin-bottom: 8px;
-            color: var(--text);
+            color: var(--primary-light);
         }
 
         .faq-answer {
@@ -492,7 +495,7 @@
         .final-cta {
             text-align: center;
             padding: 100px 0;
-            background: linear-gradient(180deg, #f0f5ff 0%, #e8f0ff 50%, #f0f5ff 100%);
+            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
         }
 
         .final-cta h2 {
@@ -512,9 +515,10 @@
         footer {
             padding: 32px 0;
             text-align: center;
-            border-top: 1px solid var(--border);
+            border-top: 1px solid rgba(59, 130, 246, 0.2);
             color: var(--text-muted);
             font-size: 0.9rem;
+            background: var(--bg);
         }
 
         /* Responsive */
@@ -709,48 +713,23 @@
     <section id="planos" class="pricing">
         <div class="container">
             <div class="section-header">
-                <h2>Escolha seu plano</h2>
-                <p>Invista no seu futuro profissional</p>
+                <h2>Nosso Plano</h2>
+                <p>Invista no seu autoconhecimento profissional</p>
             </div>
             <div class="pricing-grid">
-                <div class="pricing-card">
-                    <h3>Me Conhecer</h3>
-                    <div class="price">R$49<span>,90/mês</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> Mapeamento de Perfil Completo</li>
-                        <li><span class="check">✓</span> Análise de Competências</li>
-                        <li><span class="check">✓</span> Identificação de Valores</li>
-                        <li><span class="check">✓</span> Relatório de Estilo de Trabalho</li>
-                        <li><span class="check">✓</span> Suporte por Email</li>
-                    </ul>
-                    <button class="pricing-btn secondary" onclick="handleCheckout('me-conhecer', 'Me Conhecer')">Começar Agora</button>
-                </div>
                 <div class="pricing-card featured">
-                    <div class="popular-badge">Mais Popular</div>
-                    <h3>Crescimento Saudável</h3>
-                    <div class="price">R$89<span>,90/mês</span></div>
+                    <div class="popular-badge">Plano Completo</div>
+                    <h3>Autoconhecimento Total</h3>
+                    <div class="price">R$149<span>,90/mês</span></div>
                     <ul class="pricing-features">
-                        <li><span class="check">✓</span> Tudo do plano anterior</li>
-                        <li><span class="check">✓</span> PDI Inteligente Personalizado</li>
-                        <li><span class="check">✓</span> Gestão de Metas SMART</li>
-                        <li><span class="check">✓</span> Acompanhamento de Progresso</li>
-                        <li><span class="check">✓</span> Relatórios Mensais</li>
+                        <li><span class="check">✓</span> <strong>QP</strong> - Questionário de Personalidade</li>
+                        <li><span class="check">✓</span> <strong>SABOTADORES</strong> - Identificação de Padrões Limitantes</li>
+                        <li><span class="check">✓</span> <strong>DISC</strong> - Perfil Comportamental Completo</li>
+                        <li><span class="check">✓</span> Relatório Detalhado de Resultados</li>
+                        <li><span class="check">✓</span> Plano de Desenvolvimento Individual</li>
                         <li><span class="check">✓</span> Suporte Prioritário</li>
                     </ul>
-                    <button class="pricing-btn primary" onclick="handleCheckout('crescimento-saudavel', 'Crescimento Saudável')">Começar Agora</button>
-                </div>
-                <div class="pricing-card">
-                    <h3>Conselho Bom</h3>
-                    <div class="price">R$109<span>,90/mês</span></div>
-                    <ul class="pricing-features">
-                        <li><span class="check">✓</span> Tudo do plano anterior</li>
-                        <li><span class="check">✓</span> Mentor IA 24/7 Ilimitado</li>
-                        <li><span class="check">✓</span> Conteúdo Personalizado</li>
-                        <li><span class="check">✓</span> Análises Preditivas</li>
-                        <li><span class="check">✓</span> Simulações de Cenários</li>
-                        <li><span class="check">✓</span> Suporte VIP</li>
-                    </ul>
-                    <button class="pricing-btn secondary" onclick="handleCheckout('conselho-bom', 'Conselho Bom')">Começar Agora</button>
+                    <button class="pricing-btn primary" onclick="handleCheckout('autoconhecimento-total', 'Autoconhecimento Total')">Começar Agora</button>
                 </div>
             </div>
         </div>
