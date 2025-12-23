@@ -92,13 +92,55 @@
         .problem-icon { width: 48px; height: 48px; background: rgba(239, 68, 68, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.4rem; }
         .problem-card h3 { color: var(--text); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
         .problem-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
-        .benefits { background: linear-gradient(180deg, #0a1a2e 0%, #081526 100%); }
-        .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .benefit-card { background: rgba(15, 34, 56, 0.6); border: 1px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; transition: all 0.3s ease; }
-        .benefit-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.3); transform: translateY(-4px); border-color: var(--primary); }
-        .benefit-icon { width: 72px; height: 72px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary-light); border: 1px solid rgba(59, 130, 246, 0.3); }
-        .benefit-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+        .benefits { background: linear-gradient(180deg, #0a1a2e 0%, #081526 100%); overflow: hidden; }
+        .carousel-container { position: relative; width: 100%; overflow: hidden; padding: 20px 0; }
+        .carousel-track { display: flex; gap: 32px; animation: carouselScroll 25s linear infinite; width: max-content; }
+        .carousel-track:hover { animation-play-state: paused; }
+        @keyframes carouselScroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .benefit-card { 
+            flex-shrink: 0; width: 320px; 
+            background: linear-gradient(145deg, rgba(15, 34, 56, 0.9) 0%, rgba(10, 26, 46, 0.95) 100%); 
+            border: 2px solid var(--border); border-radius: 20px; padding: 36px 32px; text-align: center; 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            position: relative; overflow: hidden;
+        }
+        .benefit-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent), var(--primary));
+            background-size: 200% 100%;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .benefit-card:hover { 
+            box-shadow: 0 20px 50px rgba(37,99,235,0.35); 
+            transform: translateY(-8px) scale(1.02); 
+            border-color: var(--primary); 
+        }
+        .benefit-icon { 
+            width: 80px; height: 80px; 
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.4) 0%, rgba(139, 92, 246, 0.4) 100%); 
+            border-radius: 24px; display: flex; align-items: center; justify-content: center; 
+            margin: 0 auto 24px; color: var(--primary-light); 
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            box-shadow: 0 8px 24px rgba(37,99,235,0.2);
+            transition: all 0.4s ease;
+        }
+        .benefit-card:hover .benefit-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 12px 32px rgba(37,99,235,0.4);
+        }
+        .benefit-card h3 { font-size: 1.25rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
         .benefit-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+        .carousel-indicators { display: flex; justify-content: center; gap: 8px; margin-top: 24px; }
+        .carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s ease; }
+        .carousel-dot.active { width: 24px; border-radius: 4px; background: var(--primary); }
         .testimonials { background: linear-gradient(180deg, #081526 0%, #061120 100%); }
         .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
         .testimonial-card { background: rgba(15, 34, 56, 0.6); border: 1px solid var(--border); border-radius: 16px; padding: 36px; transition: all 0.3s ease; }
@@ -222,13 +264,31 @@
     </div></section>
     <section class="benefits"><div class="container">
         <div class="section-header"><h2>O que você recebe</h2><p>Tudo que você precisa para acelerar sua carreira de forma inteligente</p></div>
-        <div class="benefits-grid">
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Mapeamento de Perfil</h3><p>Descubra suas competências, valores e estilo de trabalho.</p></div>
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><h3>PDI Inteligente</h3><p>Plano de Desenvolvimento Individual personalizado.</p></div>
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><h3>Mentoria 24/7</h3><p>Orientações estratégicas disponíveis a qualquer hora.</p></div>
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div><h3>Análise de Evolução</h3><p>Relatórios detalhados sobre seu progresso.</p></div>
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div><h3>Gestão de Objetivos</h3><p>Sistema estruturado para alcançar suas metas.</p></div>
-            <div class="benefit-card"><div class="benefit-icon"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div><h3>Aceleração de Carreira</h3><p>Recomendações estratégicas para seu perfil.</p></div>
+        <div class="carousel-container">
+            <div class="carousel-track">
+                <!-- First set of cards -->
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Mapeamento de Perfil</h3><p>Descubra suas competências, valores e estilo de trabalho único.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><h3>PDI Inteligente</h3><p>Plano de Desenvolvimento Individual personalizado com IA.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><h3>Mentoria 24/7</h3><p>Orientações estratégicas disponíveis a qualquer hora do dia.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div><h3>Análise de Evolução</h3><p>Relatórios detalhados e insights sobre seu progresso.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div><h3>Gestão de Objetivos</h3><p>Sistema estruturado para alcançar suas metas com precisão.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div><h3>Aceleração de Carreira</h3><p>Recomendações estratégicas personalizadas para seu perfil.</p></div>
+                <!-- Duplicate for infinite scroll effect -->
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg></div><h3>Mapeamento de Perfil</h3><p>Descubra suas competências, valores e estilo de trabalho único.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg></div><h3>PDI Inteligente</h3><p>Plano de Desenvolvimento Individual personalizado com IA.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg></div><h3>Mentoria 24/7</h3><p>Orientações estratégicas disponíveis a qualquer hora do dia.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg></div><h3>Análise de Evolução</h3><p>Relatórios detalhados e insights sobre seu progresso.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg></div><h3>Gestão de Objetivos</h3><p>Sistema estruturado para alcançar suas metas com precisão.</p></div>
+                <div class="benefit-card"><div class="benefit-icon"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg></div><h3>Aceleração de Carreira</h3><p>Recomendações estratégicas personalizadas para seu perfil.</p></div>
+            </div>
+        </div>
+        <div class="carousel-indicators">
+            <div class="carousel-dot active"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
+            <div class="carousel-dot"></div>
         </div>
     </div></section>
     <section class="testimonials"><div class="container">
