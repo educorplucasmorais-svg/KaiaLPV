@@ -11,12 +11,12 @@
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
             --primary-light: #3b82f6;
-            --bg: #ffffff;
-            --bg-alt: #f8fafc;
-            --bg-section: #f1f5f9;
-            --text: #1e293b;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
+            --bg: #0a1628;
+            --bg-alt: #0d1d30;
+            --bg-section: #0f2238;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(59, 130, 246, 0.3);
             --success: #10b981;
             --accent: #8b5cf6;
         }
@@ -30,11 +30,12 @@
         .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
         nav {
             position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            padding: 16px 0; background: rgba(255,255,255,0.98);
+            padding: 16px 0; background: rgba(10,22,40,0.95);
             backdrop-filter: blur(10px); border-bottom: 1px solid var(--border);
         }
         .nav-content { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-size: 1.6rem; font-weight: 800; color: var(--primary); letter-spacing: -0.03em; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.6rem; font-weight: 800; color: var(--primary); letter-spacing: -0.03em; }
+        .logo-icon { width: 48px; height: 48px; }
         .nav-cta {
             background: var(--primary); color: white; padding: 12px 28px;
             border-radius: 8px; text-decoration: none; font-weight: 600;
@@ -42,13 +43,14 @@
             box-shadow: 0 2px 8px rgba(37,99,235,0.3);
         }
         .nav-cta:hover { background: var(--primary-dark); transform: translateY(-1px); }
-        .hero { padding: 160px 0 100px; background: linear-gradient(180deg, #f8fafc 0%, #fff 100%); }
+        .hero { padding: 160px 0 100px; background: linear-gradient(180deg, #0d1d30 0%, #0a1628 100%); }
         .hero-content { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
         .hero-text { max-width: 560px; }
         .hero-badge {
-            display: inline-block; background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
-            color: var(--primary); padding: 8px 16px; border-radius: 100px;
+            display: inline-block; background: rgba(59, 130, 246, 0.2);
+            color: var(--primary-light); padding: 8px 16px; border-radius: 100px;
             font-size: 0.85rem; font-weight: 600; margin-bottom: 24px;
+            border: 1px solid rgba(59, 130, 246, 0.3);
         }
         .hero h1 { font-size: 3.2rem; font-weight: 800; line-height: 1.15; color: var(--text); margin-bottom: 24px; letter-spacing: -0.03em; }
         .hero h1 span { color: var(--primary); }
@@ -75,7 +77,7 @@
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
         }
         .hero-visual-text { font-size: 4rem; font-weight: 800; color: white; letter-spacing: -0.03em; text-shadow: 0 4px 20px rgba(0,0,0,0.2); }
-        .stats { padding: 60px 0; background: var(--bg); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .stats { padding: 60px 0; background: linear-gradient(180deg, #0a1628 0%, #0c1e33 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: center; }
         .stat-item h3 { font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; letter-spacing: -0.02em; }
         .stat-item p { color: var(--text-muted); font-size: 0.95rem; font-weight: 500; }
@@ -83,32 +85,32 @@
         .section-header { text-align: center; margin-bottom: 60px; max-width: 700px; margin-left: auto; margin-right: auto; }
         .section-header h2 { font-size: 2.4rem; font-weight: 800; margin-bottom: 16px; color: var(--text); letter-spacing: -0.02em; }
         .section-header p { font-size: 1.15rem; color: var(--text-muted); line-height: 1.7; }
-        .problems { background: var(--bg-alt); }
+        .problems { background: linear-gradient(180deg, #0c1e33 0%, #0a1a2e 100%); }
         .problems-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
-        .problem-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: all 0.3s ease; }
-        .problem-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .problem-icon { width: 48px; height: 48px; background: #fef2f2; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.4rem; }
+        .problem-card { background: rgba(15, 34, 56, 0.8); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: all 0.3s ease; }
+        .problem-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,0.3); transform: translateY(-2px); border-color: var(--primary); }
+        .problem-icon { width: 48px; height: 48px; background: rgba(239, 68, 68, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.4rem; }
         .problem-card h3 { color: var(--text); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
         .problem-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
-        .benefits { background: var(--bg); }
+        .benefits { background: linear-gradient(180deg, #0a1a2e 0%, #081526 100%); }
         .benefits-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .benefit-card { background: var(--bg-alt); border: 1px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; transition: all 0.3s ease; }
-        .benefit-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); transform: translateY(-4px); border-color: var(--primary); }
-        .benefit-icon { width: 72px; height: 72px; background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary); }
+        .benefit-card { background: rgba(15, 34, 56, 0.6); border: 1px solid var(--border); border-radius: 16px; padding: 36px; text-align: center; transition: all 0.3s ease; }
+        .benefit-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.3); transform: translateY(-4px); border-color: var(--primary); }
+        .benefit-icon { width: 72px; height: 72px; background: linear-gradient(135deg, rgba(37, 99, 235, 0.3) 0%, rgba(139, 92, 246, 0.3) 100%); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; color: var(--primary-light); border: 1px solid rgba(59, 130, 246, 0.3); }
         .benefit-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
         .benefit-card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
-        .testimonials { background: var(--bg-alt); }
+        .testimonials { background: linear-gradient(180deg, #081526 0%, #061120 100%); }
         .testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; }
-        .testimonial-card { background: white; border: 1px solid var(--border); border-radius: 16px; padding: 36px; transition: all 0.3s ease; }
-        .testimonial-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+        .testimonial-card { background: rgba(15, 34, 56, 0.6); border: 1px solid var(--border); border-radius: 16px; padding: 36px; transition: all 0.3s ease; }
+        .testimonial-card:hover { box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: var(--primary); }
         .testimonial-quote { font-size: 2rem; color: var(--primary); margin-bottom: 16px; }
         .testimonial-text { font-size: 1rem; line-height: 1.8; margin-bottom: 24px; color: var(--text); font-style: italic; }
         .testimonial-author { display: flex; align-items: center; gap: 16px; }
         .author-avatar { width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; }
         .author-info h4 { font-weight: 700; font-size: 1rem; color: var(--text); margin-bottom: 2px; }
         .author-info p { color: var(--text-muted); font-size: 0.9rem; }
-        .pricing { background: var(--bg); }
-        .pricing-card { max-width: 480px; margin: 0 auto; background: white; border: 2px solid var(--primary); border-radius: 24px; padding: 48px; text-align: center; box-shadow: 0 16px 60px rgba(37,99,235,0.15); position: relative; }
+        .pricing { background: linear-gradient(180deg, #061120 0%, #050d1a 100%); }
+        .pricing-card { max-width: 480px; margin: 0 auto; background: rgba(15, 34, 56, 0.8); border: 2px solid var(--primary); border-radius: 24px; padding: 48px; text-align: center; box-shadow: 0 16px 60px rgba(37,99,235,0.25); position: relative; }
         .pricing-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--primary); color: white; padding: 8px 24px; border-radius: 100px; font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
         .pricing-card h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
         .pricing-price { font-size: 3.5rem; font-weight: 800; color: var(--primary); margin-bottom: 8px; letter-spacing: -0.03em; }
@@ -116,21 +118,21 @@
         .pricing-features { list-style: none; margin: 32px 0; text-align: left; }
         .pricing-features li { padding: 14px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 12px; color: var(--text); font-size: 1rem; }
         .pricing-features li:last-child { border-bottom: none; }
-        .pricing-features .check { width: 24px; height: 24px; background: #dcfce7; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--success); font-weight: 700; flex-shrink: 0; }
+        .pricing-features .check { width: 24px; height: 24px; background: rgba(16, 185, 129, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--success); font-weight: 700; flex-shrink: 0; }
         .pricing-btn { display: block; width: 100%; background: var(--primary); color: white; padding: 18px 32px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.2s ease; border: none; cursor: pointer; box-shadow: 0 4px 16px rgba(37,99,235,0.35); }
         .pricing-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(37,99,235,0.45); }
-        .faq { background: var(--bg-alt); }
+        .faq { background: linear-gradient(180deg, #050d1a 0%, #030810 100%); }
         .faq-list { max-width: 720px; margin: 0 auto; }
-        .faq-item { background: white; border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 16px; transition: all 0.3s ease; }
-        .faq-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.06); }
+        .faq-item { background: rgba(15, 34, 56, 0.6); border: 1px solid var(--border); border-radius: 12px; padding: 28px 32px; margin-bottom: 16px; transition: all 0.3s ease; }
+        .faq-item:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.2); border-color: var(--primary); }
         .faq-question { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
         .faq-answer { color: var(--text-muted); line-height: 1.7; font-size: 1rem; }
-        .final-cta { text-align: center; padding: 100px 0; background: linear-gradient(180deg, #f8fafc 0%, #fff 100%); }
+        .final-cta { text-align: center; padding: 100px 0; background: linear-gradient(180deg, #030810 0%, #020508 100%); }
         .final-cta h2 { font-size: 2.6rem; font-weight: 800; margin-bottom: 20px; color: var(--text); letter-spacing: -0.02em; }
         .final-cta p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 32px; max-width: 600px; margin-left: auto; margin-right: auto; }
         .final-cta .hero-cta { display: inline-flex; }
         .final-cta .hero-guarantee { margin-top: 16px; }
-        footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; background: var(--bg); }
+        footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; background: #020508; }
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-text { max-width: 100%; }
@@ -150,7 +152,31 @@
     </style>
 </head>
 <body>
-    <nav><div class="container nav-content"><div class="logo">KAIA</div><a href="#planos" class="nav-cta">Quero Começar</a></div></nav>
+    <nav><div class="container nav-content"><div class="logo"><svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Geometric logo with fused shapes - static but dynamic appearance -->
+        <defs>
+            <linearGradient id="logoGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#3b82f6"/>
+                <stop offset="100%" style="stop-color:#1d4ed8"/>
+            </linearGradient>
+            <linearGradient id="logoGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#60a5fa"/>
+                <stop offset="100%" style="stop-color:#2563eb"/>
+            </linearGradient>
+        </defs>
+        <!-- Central hexagon -->
+        <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" fill="url(#logoGrad1)" opacity="0.9"/>
+        <!-- Overlapping triangle 1 -->
+        <polygon points="24,8 38,32 10,32" fill="url(#logoGrad2)" opacity="0.7"/>
+        <!-- Inner diamond -->
+        <polygon points="24,12 36,24 24,36 12,24" fill="#60a5fa" opacity="0.6"/>
+        <!-- Central circle -->
+        <circle cx="24" cy="24" r="8" fill="#93c5fd" opacity="0.8"/>
+        <!-- Accent lines -->
+        <line x1="24" y1="4" x2="24" y2="16" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
+        <line x1="6" y1="14" x2="16" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
+        <line x1="42" y1="14" x2="32" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
+    </svg>KAIA</div><a href="#planos" class="nav-cta">Quero Começar</a></div></nav>
     <section class="hero"><div class="container"><div class="hero-content">
         <div class="hero-text">
             <div class="hero-badge">🚀 Mais de 12.000 profissionais transformados</div>
@@ -159,7 +185,25 @@
             <a href="#planos" class="hero-cta">Quero Evoluir Agora →</a>
             <p class="hero-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
         </div>
-        <div class="hero-image"><div class="hero-visual"><span class="hero-visual-text">KAIA</span></div></div>
+        <div class="hero-image"><div class="hero-visual"><svg width="160" height="160" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="heroGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#60a5fa"/>
+                    <stop offset="100%" style="stop-color:#3b82f6"/>
+                </linearGradient>
+                <linearGradient id="heroGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" style="stop-color:#93c5fd"/>
+                    <stop offset="100%" style="stop-color:#60a5fa"/>
+                </linearGradient>
+            </defs>
+            <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" fill="url(#heroGrad1)" opacity="0.9"/>
+            <polygon points="24,8 38,32 10,32" fill="url(#heroGrad2)" opacity="0.7"/>
+            <polygon points="24,12 36,24 24,36 12,24" fill="#93c5fd" opacity="0.6"/>
+            <circle cx="24" cy="24" r="8" fill="#dbeafe" opacity="0.9"/>
+            <line x1="24" y1="4" x2="24" y2="16" stroke="white" stroke-width="1.5" opacity="0.6"/>
+            <line x1="6" y1="14" x2="16" y2="20" stroke="white" stroke-width="1.5" opacity="0.6"/>
+            <line x1="42" y1="14" x2="32" y2="20" stroke="white" stroke-width="1.5" opacity="0.6"/>
+        </svg></div></div>
     </div></div></section>
     <section class="stats"><div class="container"><div class="stats-grid">
         <div class="stat-item"><h3>12.847</h3><p>Profissionais transformados</p></div>
