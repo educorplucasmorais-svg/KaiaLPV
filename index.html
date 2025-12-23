@@ -23,6 +23,13 @@
             --border: #3b82f6;
             --success: #10b981;
             --danger: #ef4444;
+            
+            /* Ocean depth colors - light to dark */
+            --ocean-surface: #1e3a5f;
+            --ocean-shallow: #162d4d;
+            --ocean-mid: #0f243d;
+            --ocean-deep: #0a1a2e;
+            --ocean-abyss: #050d1a;
         }
 
         html {
@@ -31,18 +38,10 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(-45deg, #0f172a, #1e3a5f, #0d2847, #1e293b, #0f172a);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            background: var(--ocean-abyss);
             color: var(--text);
             line-height: 1.6;
             min-height: 100vh;
-        }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
 
         .container {
@@ -93,11 +92,23 @@
             transform: translateY(-1px);
         }
 
-        /* Hero */
+        /* Hero - Ocean Surface (Lightest) */
         .hero {
             padding: 140px 0 100px;
             text-align: center;
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(180deg, #2a4a6f 0%, #1e3a5f 50%, #162d4d 100%);
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(180deg, rgba(59, 130, 246, 0.15) 0%, transparent 100%);
+            pointer-events: none;
         }
 
         .badge {
@@ -167,10 +178,10 @@
             font-weight: 500;
         }
 
-        /* Stats */
+        /* Stats - Shallow Water */
         .stats {
             padding: 60px 0;
-            background: var(--bg);
+            background: linear-gradient(180deg, #162d4d 0%, #0f243d 100%);
             border-bottom: 1px solid rgba(59, 130, 246, 0.2);
         }
 
@@ -216,9 +227,9 @@
             font-size: 1.1rem;
         }
 
-        /* Problems */
+        /* Problems - Mid Water */
         .problems {
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(180deg, #0f243d 0%, #0c1e33 100%);
         }
 
         .problems-grid {
@@ -253,7 +264,11 @@
             line-height: 1.6;
         }
 
-        /* Benefits */
+        /* Benefits - Deeper Water */
+        .benefits {
+            background: linear-gradient(180deg, #0c1e33 0%, #0a1a2e 100%);
+        }
+
         .benefits-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -299,9 +314,9 @@
             line-height: 1.6;
         }
 
-        /* Testimonials */
+        /* Testimonials - Deep Water */
         .testimonials {
-            background: linear-gradient(180deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background: linear-gradient(180deg, #0a1a2e 0%, #081526 100%);
         }
 
         .testimonials-grid {
@@ -355,7 +370,11 @@
             font-size: 0.85rem;
         }
 
-        /* Pricing */
+        /* Pricing - Very Deep */
+        .pricing {
+            background: linear-gradient(180deg, #081526 0%, #061120 100%);
+        }
+
         .pricing-grid {
             display: grid;
             grid-template-columns: 1fr;
@@ -474,7 +493,11 @@
             background: rgba(59, 130, 246, 0.2);
         }
 
-        /* FAQ */
+        /* FAQ - Deep Ocean */
+        .faq {
+            background: linear-gradient(180deg, #061120 0%, #050d1a 100%);
+        }
+
         .faq-list {
             max-width: 700px;
             margin: 0 auto;
@@ -501,11 +524,23 @@
             font-size: 0.95rem;
         }
 
-        /* Final CTA */
+        /* Final CTA - Abyss (Darkest) */
         .final-cta {
             text-align: center;
             padding: 100px 0;
-            background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
+            background: linear-gradient(180deg, #050d1a 0%, #030810 100%);
+            position: relative;
+        }
+
+        .final-cta::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+            pointer-events: none;
         }
 
         .final-cta h2 {
@@ -521,14 +556,14 @@
             margin-bottom: 32px;
         }
 
-        /* Footer */
+        /* Footer - Ocean Floor (Deepest) */
         footer {
             padding: 32px 0;
             text-align: center;
             border-top: 1px solid rgba(59, 130, 246, 0.2);
             color: var(--text-muted);
             font-size: 0.9rem;
-            background: var(--bg);
+            background: #020508;
         }
 
         /* Responsive */
