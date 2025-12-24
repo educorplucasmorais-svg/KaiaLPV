@@ -20,17 +20,14 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Serve KAIA landing page image
-app.get('/image_18.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'image_18.png.jpg'));
+// Serve KAIA landing page at /app as well
+app.get('/app', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// Serve frontend React app at /app path
-app.use('/app', express.static(path.join(__dirname, 'frontend/dist')));
-
-// Catch-all for SPA routing (for /app/* routes)
-app.get('/app/{*path}', (req, res) => {
-  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+// Serve KAIA landing page image (file is .jpg but referenced as .png in HTML)
+app.get('/image_18.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'image_18.png.jpg'));
 });
 
 // MySQL Connection Pool
