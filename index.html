@@ -104,36 +104,79 @@
         .problem-card h3 { color: var(--text); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
         .problem-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
         
-        /* Quiz Styles */
-        .quiz-container { max-width: 700px; margin: 0 auto; background: rgba(15, 34, 56, 0.9); border: 2px solid var(--border); border-radius: 24px; padding: 48px; box-shadow: 0 16px 60px rgba(0,0,0,0.3); }
-        .quiz-progress { height: 6px; background: rgba(59, 130, 246, 0.2); border-radius: 3px; margin-bottom: 32px; overflow: hidden; }
-        .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; transition: width 0.4s ease; }
+        /* Quiz Styles - Complete Assessment */
+        .quiz-container { max-width: 800px; margin: 0 auto; background: rgba(15, 34, 56, 0.9); border: 2px solid var(--border); border-radius: 24px; padding: 48px; box-shadow: 0 16px 60px rgba(0,0,0,0.3); }
+        .quiz-progress { height: 8px; background: rgba(59, 130, 246, 0.2); border-radius: 4px; margin-bottom: 32px; overflow: hidden; }
+        .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 4px; transition: width 0.4s ease; }
+        .quiz-category-badge { display: inline-block; background: rgba(139, 92, 246, 0.3); color: var(--accent); padding: 6px 16px; border-radius: 100px; font-size: 0.8rem; font-weight: 600; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
         .quiz-step { display: none; text-align: center; animation: fadeIn 0.4s ease; }
         .quiz-step.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .quiz-question-number { color: var(--primary-light); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
-        .quiz-question { font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 32px; line-height: 1.4; }
-        .quiz-options { display: flex; flex-direction: column; gap: 16px; }
-        .quiz-option { background: rgba(10, 26, 46, 0.8); border: 2px solid var(--border); border-radius: 16px; padding: 20px 28px; font-size: 1.1rem; color: var(--text); cursor: pointer; transition: all 0.3s ease; font-weight: 500; text-align: left; display: flex; align-items: center; gap: 12px; }
+        .quiz-question { font-size: 1.4rem; font-weight: 700; color: var(--text); margin-bottom: 32px; line-height: 1.4; }
+        .quiz-options { display: flex; flex-direction: column; gap: 14px; }
+        .quiz-option { background: rgba(10, 26, 46, 0.8); border: 2px solid var(--border); border-radius: 16px; padding: 18px 24px; font-size: 1rem; color: var(--text); cursor: pointer; transition: all 0.3s ease; font-weight: 500; text-align: left; display: flex; align-items: center; gap: 12px; }
         .quiz-option:hover { border-color: var(--primary); background: rgba(37, 99, 235, 0.15); transform: translateX(8px); box-shadow: 0 4px 20px rgba(37,99,235,0.2); }
         .quiz-option.selected { border-color: var(--primary); background: rgba(37, 99, 235, 0.25); }
-        .quiz-results { animation: fadeIn 0.5s ease; }
-        .quiz-results-header { text-align: center; margin-bottom: 36px; }
-        .quiz-score-circle { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: white; box-shadow: 0 8px 30px rgba(37,99,235,0.4); }
-        .quiz-results-header h3 { font-size: 1.6rem; color: var(--text); }
-        .quiz-analysis h4 { color: var(--primary-light); font-size: 1.1rem; margin-bottom: 24px; text-align: center; }
-        .analysis-section { display: flex; flex-direction: column; gap: 24px; margin-bottom: 36px; }
-        .analysis-wrong, .analysis-right { background: rgba(10, 26, 46, 0.6); border-radius: 16px; padding: 24px; display: flex; gap: 16px; }
-        .analysis-wrong { border: 1px solid rgba(239, 68, 68, 0.3); }
-        .analysis-right { border: 1px solid rgba(16, 185, 129, 0.3); }
-        .analysis-icon { font-size: 2rem; flex-shrink: 0; }
-        .analysis-content h5 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
-        .analysis-wrong h5 { color: #f87171; }
-        .analysis-right h5 { color: var(--success); }
-        .analysis-content ul { list-style: none; }
-        .analysis-content li { color: var(--text-muted); font-size: 0.95rem; padding: 6px 0; padding-left: 16px; position: relative; }
-        .analysis-content li::before { content: '•'; position: absolute; left: 0; color: var(--text-muted); }
-        .quiz-cta-box { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(139, 92, 246, 0.2)); border: 2px solid var(--primary); border-radius: 20px; padding: 32px; text-align: center; }
+        
+        /* Report Preview Styles */
+        .report-preview { animation: fadeIn 0.5s ease; }
+        .report-header { text-align: center; margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .report-header h3 { font-size: 1.8rem; color: var(--text); margin-bottom: 8px; }
+        .report-header p { color: var(--text-muted); }
+        
+        /* DISC Chart */
+        .disc-section { margin-bottom: 40px; }
+        .disc-section h4 { color: var(--primary-light); font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .disc-chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+        .disc-bar { background: rgba(10, 26, 46, 0.6); border-radius: 12px; padding: 20px 16px; text-align: center; border: 1px solid var(--border); }
+        .disc-bar-label { font-weight: 700; font-size: 1.1rem; color: var(--text); margin-bottom: 12px; }
+        .disc-bar-visual { height: 120px; background: rgba(59, 130, 246, 0.1); border-radius: 8px; position: relative; overflow: hidden; margin-bottom: 12px; }
+        .disc-bar-fill { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(180deg, var(--primary), var(--accent)); border-radius: 8px; transition: height 1s ease; }
+        .disc-bar-value { font-size: 1.4rem; font-weight: 800; color: var(--primary); }
+        .disc-bar.dominant .disc-bar-fill { background: linear-gradient(180deg, #f59e0b, #d97706); }
+        .disc-bar.dominant .disc-bar-value { color: #f59e0b; }
+        
+        /* Sabotadores Section */
+        .sabotadores-section { margin-bottom: 40px; }
+        .sabotadores-section h4 { color: var(--primary-light); font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .sabotador-item { display: flex; align-items: center; gap: 16px; padding: 16px; background: rgba(10, 26, 46, 0.6); border-radius: 12px; margin-bottom: 12px; border: 1px solid var(--border); }
+        .sabotador-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(239, 68, 68, 0.2); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .sabotador-info { flex: 1; }
+        .sabotador-name { font-weight: 700; color: var(--text); margin-bottom: 4px; }
+        .sabotador-desc { font-size: 0.85rem; color: var(--text-muted); }
+        .sabotador-bar { width: 100px; height: 8px; background: rgba(239, 68, 68, 0.2); border-radius: 4px; overflow: hidden; }
+        .sabotador-bar-fill { height: 100%; background: linear-gradient(90deg, #ef4444, #dc2626); border-radius: 4px; transition: width 1s ease; }
+        .sabotador-score { font-weight: 700; color: #f87171; margin-left: 8px; min-width: 35px; }
+        
+        /* QP Section */
+        .qp-section { margin-bottom: 40px; }
+        .qp-section h4 { color: var(--primary-light); font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .qp-gauge { display: flex; justify-content: center; margin-bottom: 24px; }
+        .qp-circle { width: 180px; height: 180px; border-radius: 50%; background: conic-gradient(var(--success) 0deg, var(--success) calc(var(--qp-value) * 3.6deg), rgba(16, 185, 129, 0.2) calc(var(--qp-value) * 3.6deg), rgba(16, 185, 129, 0.2) 360deg); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3); position: relative; }
+        .qp-circle::before { content: ''; position: absolute; width: 140px; height: 140px; background: rgba(15, 34, 56, 0.95); border-radius: 50%; }
+        .qp-value { position: relative; z-index: 1; text-align: center; }
+        .qp-value span { font-size: 2.5rem; font-weight: 800; color: var(--success); display: block; }
+        .qp-value small { font-size: 0.9rem; color: var(--text-muted); }
+        .qp-description { text-align: center; color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+        
+        /* Locked/Blur Content */
+        .report-locked { position: relative; }
+        .report-locked::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(180deg, transparent 0%, rgba(10, 22, 40, 0.85) 30%, rgba(10, 22, 40, 0.98) 100%); backdrop-filter: blur(4px); border-radius: 12px; pointer-events: none; }
+        .locked-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 40px 24px; text-align: center; z-index: 10; }
+        .locked-icon { width: 64px; height: 64px; background: rgba(37, 99, 235, 0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 2rem; }
+        .locked-title { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+        .locked-desc { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 20px; }
+        
+        /* Profile Description */
+        .profile-section { margin-bottom: 40px; }
+        .profile-section h4 { color: var(--primary-light); font-size: 1.2rem; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+        .profile-card { background: rgba(10, 26, 46, 0.6); border-radius: 16px; padding: 24px; border: 1px solid var(--border); }
+        .profile-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 12px; }
+        .profile-text { color: var(--text-muted); line-height: 1.8; font-size: 0.95rem; }
+        .profile-text.blurred { filter: blur(5px); user-select: none; }
+        
+        .quiz-cta-box { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(139, 92, 246, 0.2)); border: 2px solid var(--primary); border-radius: 20px; padding: 32px; text-align: center; margin-top: 32px; }
         .quiz-cta-text { font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: 20px; }
         .quiz-cta-btn { display: inline-block; background: var(--primary); color: white; padding: 18px 36px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
         .quiz-cta-btn:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(37,99,235,0.5); }
@@ -280,8 +323,12 @@
                     Eu vou cuidar de você como uma semente! 🌱<br>
                     Vamos germinar e nós vamos crescer juntas.
                 </div>
-                <!-- Avatar SVG: Mulher negra, corpo cheio, olhar marcante, boca marcante (inspiração Alcione) -->
-                <svg width="320" height="380" viewBox="0 0 320 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <!-- Avatar Image - Replace with your image_18.png -->
+                <!-- To use your image: save image_18.png in the same folder as index.html and uncomment the img tag below -->
+                <!-- <img src="./image_18.png" alt="KAIA Avatar - Uma mulher sorrindo" style="width: 280px; height: auto; border-radius: 20px; margin-top: 10px;"> -->
+                
+                <!-- Fallback SVG Avatar (will be replaced by image_18.png) -->
+                <svg width="320" height="380" viewBox="0 0 320 380" fill="none" xmlns="http://www.w3.org/2000/svg" id="avatarSvg">
                     <defs>
                         <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
                             <stop offset="0%" style="stop-color:#8B5A2B"/>
@@ -389,94 +436,228 @@
         <div class="stat-item"><h3>+R$2.4k</h3><p>Aumento médio salarial</p></div>
     </div></div></section>
     <section class="problems"><div class="container">
-        <div class="section-header"><h2>Você se identifica?</h2><p>Responda este mini quiz rápido e descubra como a KAIA pode ajudá-lo</p></div>
+        <div class="section-header"><h2>Descubra Seu Perfil</h2><p>Responda 9 perguntas rápidas e receba uma prévia do seu mapeamento comportamental</p></div>
         
-        <!-- Mini Quiz Container -->
+        <!-- Mini Quiz Container - Complete Assessment -->
         <div class="quiz-container" id="quizContainer">
             <!-- Quiz Questions -->
             <div class="quiz-questions" id="quizQuestions">
                 <div class="quiz-progress">
                     <div class="quiz-progress-bar" id="progressBar" style="width: 0%"></div>
                 </div>
+                
+                <!-- DISC Questions (3) -->
                 <div class="quiz-step active" data-step="1">
-                    <div class="quiz-question-number">Pergunta 1 de 4</div>
-                    <h3 class="quiz-question">Você sabe exatamente qual é o próximo passo da sua carreira?</h3>
+                    <span class="quiz-category-badge">Perfil Comportamental</span>
+                    <div class="quiz-question-number">Pergunta 1 de 9</div>
+                    <h3 class="quiz-question">Em um projeto em equipe, você geralmente prefere:</h3>
                     <div class="quiz-options">
-                        <button class="quiz-option" data-answer="no" data-question="1">😕 Não tenho certeza</button>
-                        <button class="quiz-option" data-answer="yes" data-question="1">✨ Sim, tenho clareza</button>
+                        <button class="quiz-option" data-disc="D" data-question="1">🎯 Liderar e tomar decisões rápidas</button>
+                        <button class="quiz-option" data-disc="I" data-question="1">💬 Motivar e engajar as pessoas</button>
+                        <button class="quiz-option" data-disc="S" data-question="1">🤝 Apoiar e manter a harmonia</button>
+                        <button class="quiz-option" data-disc="C" data-question="1">📊 Analisar dados e garantir qualidade</button>
                     </div>
                 </div>
+                
                 <div class="quiz-step" data-step="2">
-                    <div class="quiz-question-number">Pergunta 2 de 4</div>
-                    <h3 class="quiz-question">Você conhece seus pontos fortes e fracos profissionais?</h3>
+                    <span class="quiz-category-badge">Perfil Comportamental</span>
+                    <div class="quiz-question-number">Pergunta 2 de 9</div>
+                    <h3 class="quiz-question">Quando enfrenta um conflito no trabalho, você tende a:</h3>
                     <div class="quiz-options">
-                        <button class="quiz-option" data-answer="no" data-question="2">🤔 Mais ou menos</button>
-                        <button class="quiz-option" data-answer="yes" data-question="2">💪 Conheço muito bem</button>
+                        <button class="quiz-option" data-disc="D" data-question="2">⚡ Resolver diretamente, sem rodeios</button>
+                        <button class="quiz-option" data-disc="I" data-question="2">😊 Usar humor e carisma para acalmar</button>
+                        <button class="quiz-option" data-disc="S" data-question="2">🕊️ Buscar compromisso e evitar confronto</button>
+                        <button class="quiz-option" data-disc="C" data-question="2">🔍 Analisar fatos antes de agir</button>
                     </div>
                 </div>
+                
                 <div class="quiz-step" data-step="3">
-                    <div class="quiz-question-number">Pergunta 3 de 4</div>
-                    <h3 class="quiz-question">Suas metas profissionais são específicas e mensuráveis?</h3>
+                    <span class="quiz-category-badge">Perfil Comportamental</span>
+                    <div class="quiz-question-number">Pergunta 3 de 9</div>
+                    <h3 class="quiz-question">O que mais te motiva no ambiente de trabalho?</h3>
                     <div class="quiz-options">
-                        <button class="quiz-option" data-answer="no" data-question="3">📝 São meio vagas</button>
-                        <button class="quiz-option" data-answer="yes" data-question="3">🎯 Muito claras</button>
+                        <button class="quiz-option" data-disc="D" data-question="3">🏆 Resultados e conquistas</button>
+                        <button class="quiz-option" data-disc="I" data-question="3">🌟 Reconhecimento e interação social</button>
+                        <button class="quiz-option" data-disc="S" data-question="3">🏠 Estabilidade e ambiente seguro</button>
+                        <button class="quiz-option" data-disc="C" data-question="3">✅ Precisão e trabalho bem feito</button>
                     </div>
                 </div>
+                
+                <!-- Sabotadores Questions (3) -->
                 <div class="quiz-step" data-step="4">
-                    <div class="quiz-question-number">Pergunta 4 de 4</div>
-                    <h3 class="quiz-question">Você sente que sua carreira está evoluindo?</h3>
+                    <span class="quiz-category-badge">Padrões Mentais</span>
+                    <div class="quiz-question-number">Pergunta 4 de 9</div>
+                    <h3 class="quiz-question">Quando algo dá errado, seu primeiro pensamento é:</h3>
                     <div class="quiz-options">
-                        <button class="quiz-option" data-answer="no" data-question="4">😔 Estou estagnado</button>
-                        <button class="quiz-option" data-answer="yes" data-question="4">🚀 Sim, estou crescendo</button>
+                        <button class="quiz-option" data-sab="critico" data-question="4">😠 "Eu deveria ter feito melhor"</button>
+                        <button class="quiz-option" data-sab="vitima" data-question="4">😢 "Por que isso sempre acontece comigo?"</button>
+                        <button class="quiz-option" data-sab="controlador" data-question="4">😤 "Se eu tivesse controlado tudo..."</button>
+                        <button class="quiz-option" data-sab="inquieto" data-question="4">😰 "Preciso resolver isso agora!"</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-step" data-step="5">
+                    <span class="quiz-category-badge">Padrões Mentais</span>
+                    <div class="quiz-question-number">Pergunta 5 de 9</div>
+                    <h3 class="quiz-question">Em situações de pressão, você costuma:</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-sab="hiper-realizador" data-question="5">🏃 Trabalhar mais e mais horas</button>
+                        <button class="quiz-option" data-sab="prestativo" data-question="5">🤲 Ajudar os outros antes de você</button>
+                        <button class="quiz-option" data-sab="evitador" data-question="5">🙈 Procrastinar ou fugir do problema</button>
+                        <button class="quiz-option" data-sab="hiper-racional" data-question="5">🧠 Analisar friamente sem emoção</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-step" data-step="6">
+                    <span class="quiz-category-badge">Padrões Mentais</span>
+                    <div class="quiz-question-number">Pergunta 6 de 9</div>
+                    <h3 class="quiz-question">Qual pensamento te acompanha com frequência?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-sab="insistente" data-question="6">🔄 "Preciso fazer tudo perfeito"</button>
+                        <button class="quiz-option" data-sab="hiper-vigilante" data-question="6">⚠️ "Algo ruim pode acontecer"</button>
+                        <button class="quiz-option" data-sab="critico" data-question="6">🪞 "Não sou bom o suficiente"</button>
+                        <button class="quiz-option" data-sab="inquieto" data-question="6">🔥 "Preciso de mais emoção/desafio"</button>
+                    </div>
+                </div>
+                
+                <!-- QP Questions (3) -->
+                <div class="quiz-step" data-step="7">
+                    <span class="quiz-category-badge">Quociente Positivo</span>
+                    <div class="quiz-question-number">Pergunta 7 de 9</div>
+                    <h3 class="quiz-question">Quando recebe feedback negativo, você:</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-qp="3" data-question="7">💪 Aceita e usa para melhorar</button>
+                        <button class="quiz-option" data-qp="2" data-question="7">🤔 Fica pensativo mas processa</button>
+                        <button class="quiz-option" data-qp="1" data-question="7">😟 Fica abalado por um tempo</button>
+                        <button class="quiz-option" data-qp="0" data-question="7">😔 Leva para o lado pessoal</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-step" data-step="8">
+                    <span class="quiz-category-badge">Quociente Positivo</span>
+                    <div class="quiz-question-number">Pergunta 8 de 9</div>
+                    <h3 class="quiz-question">Diante de um grande desafio, você pensa:</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-qp="3" data-question="8">🚀 "Oportunidade de crescer!"</button>
+                        <button class="quiz-option" data-qp="2" data-question="8">💡 "Vou encontrar uma solução"</button>
+                        <button class="quiz-option" data-qp="1" data-question="8">😰 "Isso vai ser difícil..."</button>
+                        <button class="quiz-option" data-qp="0" data-question="8">😓 "Não sei se consigo"</button>
+                    </div>
+                </div>
+                
+                <div class="quiz-step" data-step="9">
+                    <span class="quiz-category-badge">Quociente Positivo</span>
+                    <div class="quiz-question-number">Pergunta 9 de 9</div>
+                    <h3 class="quiz-question">No dia a dia, com que frequência você se sente grato?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-qp="3" data-question="9">✨ Frequentemente, é meu hábito</button>
+                        <button class="quiz-option" data-qp="2" data-question="9">🙂 Às vezes, quando lembro</button>
+                        <button class="quiz-option" data-qp="1" data-question="9">😐 Raramente paro pra pensar</button>
+                        <button class="quiz-option" data-qp="0" data-question="9">😔 Foco mais nos problemas</button>
                     </div>
                 </div>
             </div>
             
-            <!-- Quiz Results -->
-            <div class="quiz-results" id="quizResults" style="display: none;">
-                <div class="quiz-results-header">
-                    <div class="quiz-score-circle" id="scoreCircle">
-                        <span id="scoreNumber">0</span>/4
-                    </div>
-                    <h3 id="resultTitle">Sua análise está pronta!</h3>
+            <!-- Report Preview -->
+            <div class="report-preview" id="reportPreview" style="display: none;">
+                <div class="report-header">
+                    <h3>📊 Prévia do Seu Relatório</h3>
+                    <p>Baseado nas suas respostas, identificamos seu perfil inicial</p>
                 </div>
                 
-                <div class="quiz-analysis">
-                    <h4>🔍 A Visão da KAIA sobre sua carreira:</h4>
-                    
-                    <div class="analysis-section">
-                        <div class="analysis-wrong">
-                            <div class="analysis-icon">❌</div>
-                            <div class="analysis-content">
-                                <h5>O que muitos fazem ERRADO:</h5>
-                                <ul>
-                                    <li>Esperar que as oportunidades apareçam sozinhas</li>
-                                    <li>Ignorar o autoconhecimento profissional</li>
-                                    <li>Criar metas vagas sem um plano de ação</li>
-                                    <li>Não investir no próprio desenvolvimento</li>
-                                </ul>
-                            </div>
+                <!-- DISC Chart -->
+                <div class="disc-section">
+                    <h4>📈 Perfil DISC</h4>
+                    <div class="disc-chart">
+                        <div class="disc-bar" id="discD">
+                            <div class="disc-bar-label">D</div>
+                            <div class="disc-bar-visual"><div class="disc-bar-fill" style="height: 0%"></div></div>
+                            <div class="disc-bar-value">0%</div>
                         </div>
-                        
-                        <div class="analysis-right">
-                            <div class="analysis-icon">✅</div>
-                            <div class="analysis-content">
-                                <h5>O que a KAIA faz por você:</h5>
-                                <ul>
-                                    <li>Mapeia seu perfil com QP, SABOTADORES e DISC</li>
-                                    <li>Identifica seus pontos fortes e padrões limitantes</li>
-                                    <li>Cria um PDI personalizado com metas claras</li>
-                                    <li>Acompanha sua evolução com mentoria 24/7</li>
-                                </ul>
+                        <div class="disc-bar" id="discI">
+                            <div class="disc-bar-label">I</div>
+                            <div class="disc-bar-visual"><div class="disc-bar-fill" style="height: 0%"></div></div>
+                            <div class="disc-bar-value">0%</div>
+                        </div>
+                        <div class="disc-bar" id="discS">
+                            <div class="disc-bar-label">S</div>
+                            <div class="disc-bar-visual"><div class="disc-bar-fill" style="height: 0%"></div></div>
+                            <div class="disc-bar-value">0%</div>
+                        </div>
+                        <div class="disc-bar" id="discC">
+                            <div class="disc-bar-label">C</div>
+                            <div class="disc-bar-visual"><div class="disc-bar-fill" style="height: 0%"></div></div>
+                            <div class="disc-bar-value">0%</div>
+                        </div>
+                    </div>
+                    <p id="discDescription" style="text-align: center; color: var(--text-muted); font-size: 0.95rem;"></p>
+                </div>
+                
+                <!-- QP Gauge -->
+                <div class="qp-section">
+                    <h4>🎯 Quociente Positivo (QP)</h4>
+                    <div class="qp-gauge">
+                        <div class="qp-circle" id="qpCircle" style="--qp-value: 0">
+                            <div class="qp-value">
+                                <span id="qpValue">0</span>
+                                <small>de 100</small>
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="quiz-cta-box">
-                        <p class="quiz-cta-text">Transforme essas dificuldades em crescimento real!</p>
-                        <a href="#planos" class="quiz-cta-btn">Quero Minha Transformação por R$59,90 →</a>
-                        <p class="quiz-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
+                    <p class="qp-description" id="qpDescription"></p>
+                </div>
+                
+                <!-- Sabotadores - Locked -->
+                <div class="sabotadores-section report-locked">
+                    <h4>🧠 Seus Sabotadores Identificados</h4>
+                    <div id="sabotadoresList">
+                        <div class="sabotador-item">
+                            <div class="sabotador-icon">🔒</div>
+                            <div class="sabotador-info">
+                                <div class="sabotador-name">Sabotador Principal</div>
+                                <div class="sabotador-desc">Desbloqueie para ver a descrição completa</div>
+                            </div>
+                            <div class="sabotador-bar"><div class="sabotador-bar-fill" style="width: 85%"></div></div>
+                            <span class="sabotador-score">??</span>
+                        </div>
+                        <div class="sabotador-item">
+                            <div class="sabotador-icon">🔒</div>
+                            <div class="sabotador-info">
+                                <div class="sabotador-name">Sabotador Secundário</div>
+                                <div class="sabotador-desc">Desbloqueie para ver a descrição completa</div>
+                            </div>
+                            <div class="sabotador-bar"><div class="sabotador-bar-fill" style="width: 65%"></div></div>
+                            <span class="sabotador-score">??</span>
+                        </div>
                     </div>
+                    <div class="locked-overlay">
+                        <div class="locked-icon">🔐</div>
+                        <div class="locked-title">Análise Completa Bloqueada</div>
+                        <div class="locked-desc">Desbloqueie para ver todos os 10 sabotadores e suas pontuações</div>
+                    </div>
+                </div>
+                
+                <!-- Profile Description - Locked -->
+                <div class="profile-section report-locked">
+                    <h4>📝 Análise Detalhada do Seu Perfil</h4>
+                    <div class="profile-card">
+                        <div class="profile-title" id="profileTitle">Seu Perfil Comportamental</div>
+                        <p class="profile-text blurred" id="profileText">
+                            Você possui um perfil único que combina características de liderança com sensibilidade interpessoal. Sua tendência natural é buscar resultados enquanto mantém relacionamentos harmoniosos. No entanto, seu sabotador principal pode estar limitando seu potencial de crescimento ao criar padrões de pensamento que geram estresse desnecessário. A análise completa revelará estratégias específicas para superar esses bloqueios e maximizar seus pontos fortes naturais. Seu QP indica oportunidades significativas de desenvolvimento da mentalidade positiva, o que pode acelerar drasticamente sua evolução profissional.
+                        </p>
+                    </div>
+                    <div class="locked-overlay">
+                        <div class="locked-icon">🔐</div>
+                        <div class="locked-title">Descrição Completa Bloqueada</div>
+                        <div class="locked-desc">Desbloqueie para ver análise detalhada e recomendações personalizadas</div>
+                    </div>
+                </div>
+                
+                <!-- CTA -->
+                <div class="quiz-cta-box">
+                    <p class="quiz-cta-text">🔓 Desbloqueie seu relatório completo com análise detalhada!</p>
+                    <a href="#planos" class="quiz-cta-btn">Desbloquear por R$59,90 →</a>
+                    <p class="quiz-guarantee">✓ Relatório completo + PDI personalizado + Mentoria 24/7</p>
                 </div>
             </div>
         </div>
@@ -553,22 +734,56 @@
     <footer><div class="container"><p>© 2024 KAIA. Todos os direitos reservados.</p></div></footer>
     
     <script>
-        // Quiz Logic
-        const quizAnswers = {};
+        // Complete Assessment Quiz Logic
+        const quizData = {
+            disc: { D: 0, I: 0, S: 0, C: 0 },
+            sabotadores: {},
+            qp: 0
+        };
         let currentStep = 1;
-        const totalSteps = 4;
+        const totalSteps = 9;
+        
+        // DISC Descriptions
+        const discDescriptions = {
+            D: 'Você tem um perfil Dominante (D): focado em resultados, decisivo e direto. Você prefere liderar e tomar decisões rápidas.',
+            I: 'Você tem um perfil Influente (I): comunicativo, entusiasta e otimista. Você motiva os outros e cria um ambiente positivo.',
+            S: 'Você tem um perfil Estável (S): paciente, leal e bom ouvinte. Você valoriza harmonia e relacionamentos duradouros.',
+            C: 'Você tem um perfil Consciente (C): analítico, preciso e sistemático. Você preza pela qualidade e atenção aos detalhes.'
+        };
+        
+        // Sabotadores Info
+        const sabotadoresInfo = {
+            'critico': { name: 'Crítico', icon: '⚖️', desc: 'Encontra defeitos em si mesmo e nos outros' },
+            'vitima': { name: 'Vítima', icon: '😢', desc: 'Foca em sentimentos negativos para ganhar atenção' },
+            'controlador': { name: 'Controlador', icon: '🎮', desc: 'Necessidade de estar no controle de tudo' },
+            'inquieto': { name: 'Inquieto', icon: '🔥', desc: 'Busca constante por mais atividade e emoção' },
+            'hiper-realizador': { name: 'Hiper-Realizador', icon: '🏃', desc: 'Valida-se através de conquistas e realizações' },
+            'prestativo': { name: 'Prestativo', icon: '🤲', desc: 'Busca aceitação ajudando os outros' },
+            'evitador': { name: 'Evitador', icon: '🙈', desc: 'Foge de tarefas difíceis ou conflitos' },
+            'hiper-racional': { name: 'Hiper-Racional', icon: '🧠', desc: 'Processa tudo de forma puramente racional' },
+            'insistente': { name: 'Insistente', icon: '🔄', desc: 'Necessidade de perfeição e ordem' },
+            'hiper-vigilante': { name: 'Hiper-Vigilante', icon: '⚠️', desc: 'Ansiedade contínua sobre perigos potenciais' }
+        };
         
         document.querySelectorAll('.quiz-option').forEach(option => {
             option.addEventListener('click', function() {
                 const question = this.dataset.question;
-                const answer = this.dataset.answer;
-                
-                // Store answer
-                quizAnswers[question] = answer;
                 
                 // Mark as selected
                 this.parentElement.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
+                
+                // Store answer based on type
+                if (this.dataset.disc) {
+                    quizData.disc[this.dataset.disc]++;
+                }
+                if (this.dataset.sab) {
+                    const sab = this.dataset.sab;
+                    quizData.sabotadores[sab] = (quizData.sabotadores[sab] || 0) + 1;
+                }
+                if (this.dataset.qp) {
+                    quizData.qp += parseInt(this.dataset.qp);
+                }
                 
                 // Move to next step after a short delay
                 setTimeout(() => {
@@ -576,7 +791,7 @@
                         currentStep++;
                         showStep(currentStep);
                     } else {
-                        showResults();
+                        showReport();
                     }
                 }, 400);
             });
@@ -586,33 +801,70 @@
             // Hide all steps
             document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
             // Show current step
-            document.querySelector(`.quiz-step[data-step="${step}"]`).classList.add('active');
+            const stepEl = document.querySelector(`.quiz-step[data-step="${step}"]`);
+            if (stepEl) stepEl.classList.add('active');
             // Update progress bar
             document.getElementById('progressBar').style.width = ((step - 1) / totalSteps * 100) + '%';
         }
         
-        function showResults() {
-            // Calculate score (count "yes" answers)
-            const yesCount = Object.values(quizAnswers).filter(a => a === 'yes').length;
-            
-            // Hide questions, show results
+        function showReport() {
+            // Hide questions, show report
             document.getElementById('quizQuestions').style.display = 'none';
-            document.getElementById('quizResults').style.display = 'block';
+            document.getElementById('reportPreview').style.display = 'block';
             
-            // Update score display
-            document.getElementById('scoreNumber').textContent = yesCount;
+            // Calculate DISC percentages
+            const discTotal = Object.values(quizData.disc).reduce((a, b) => a + b, 0);
+            const discPercentages = {};
+            let dominantDisc = 'D';
+            let maxDisc = 0;
             
-            // Update result title based on score
-            const titles = {
-                0: 'Você precisa muito da KAIA!',
-                1: 'A KAIA pode transformar sua carreira!',
-                2: 'Bom início, mas você pode ir muito além!',
-                3: 'Você está no caminho certo!',
-                4: 'Excelente! Potencialize ainda mais!'
+            ['D', 'I', 'S', 'C'].forEach(type => {
+                const percentage = discTotal > 0 ? Math.round((quizData.disc[type] / discTotal) * 100) : 25;
+                discPercentages[type] = percentage;
+                
+                // Update UI
+                const bar = document.getElementById('disc' + type);
+                bar.querySelector('.disc-bar-fill').style.height = percentage + '%';
+                bar.querySelector('.disc-bar-value').textContent = percentage + '%';
+                
+                if (quizData.disc[type] > maxDisc) {
+                    maxDisc = quizData.disc[type];
+                    dominantDisc = type;
+                }
+            });
+            
+            // Mark dominant DISC
+            document.getElementById('disc' + dominantDisc).classList.add('dominant');
+            document.getElementById('discDescription').textContent = discDescriptions[dominantDisc];
+            
+            // Calculate QP (0-9 max, scale to 0-100)
+            const qpValue = Math.round((quizData.qp / 9) * 100);
+            document.getElementById('qpCircle').style.setProperty('--qp-value', qpValue);
+            document.getElementById('qpValue').textContent = qpValue;
+            
+            // QP Description
+            let qpDesc = '';
+            if (qpValue >= 75) {
+                qpDesc = 'Excelente! Você tem uma mentalidade positiva forte. Seu QP indica alta resiliência e capacidade de transformar desafios em oportunidades.';
+            } else if (qpValue >= 50) {
+                qpDesc = 'Bom nível! Você tem potencial para desenvolver ainda mais sua mentalidade positiva. Com as técnicas certas, pode aumentar significativamente seu QP.';
+            } else if (qpValue >= 25) {
+                qpDesc = 'Há oportunidades de crescimento. Seus sabotadores podem estar impactando seu QP. O mapeamento completo revelará estratégias para evolução.';
+            } else {
+                qpDesc = 'Seu QP indica que sabotadores estão tendo impacto significativo. A boa notícia: com as técnicas certas, é possível transformar isso rapidamente.';
+            }
+            document.getElementById('qpDescription').textContent = qpDesc;
+            
+            // Update profile title based on dominant DISC
+            const profileTitles = {
+                D: 'Líder Orientado a Resultados',
+                I: 'Comunicador Inspirador',
+                S: 'Colaborador Harmonioso',
+                C: 'Analista Meticuloso'
             };
-            document.getElementById('resultTitle').textContent = titles[yesCount];
+            document.getElementById('profileTitle').textContent = 'Seu Perfil: ' + profileTitles[dominantDisc];
             
-            // Update progress bar to 100%
+            // Animate progress bar to 100%
             document.getElementById('progressBar').style.width = '100%';
         }
     </script>
