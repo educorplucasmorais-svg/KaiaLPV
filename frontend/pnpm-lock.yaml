@@ -18,8 +18,8 @@ importers:
         specifier: ^2.0.7
         version: 2.0.7(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       wouter:
-        specifier: ^3.8.0
-        version: 3.8.0(react@19.2.0)
+        specifier: ^3.9.0
+        version: 3.9.0(react@19.2.0)
     devDependencies:
       '@eslint/js':
         specifier: ^9.39.1
@@ -1086,8 +1086,8 @@ packages:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
 
-  wouter@3.8.0:
-    resolution: {integrity: sha512-oFQKbZVQxaXGXSuUg++FETTORSKQUur1Q+tvIlVm9TjPt+bpzS/IkRy2mXdSuqTjJ/PorSPxbRz4UwWsICes1Q==}
+  wouter@3.9.0:
+    resolution: {integrity: sha512-sF/od/PIgqEQBQcrN7a2x3MX6MQE6nW0ygCfy9hQuUkuB28wEZuu/6M5GyqkrrEu9M6jxdkgE12yDFsQMKos4Q==}
     peerDependencies:
       react: '>=16.8.0'
 
@@ -2059,7 +2059,7 @@ snapshots:
 
   word-wrap@1.2.5: {}
 
-  wouter@3.8.0(react@19.2.0):
+  wouter@3.9.0(react@19.2.0):
     dependencies:
       mitt: 3.0.1
       react: 19.2.0
