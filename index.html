@@ -92,6 +92,41 @@
         .problem-icon { width: 48px; height: 48px; background: rgba(239, 68, 68, 0.2); border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; font-size: 1.4rem; }
         .problem-card h3 { color: var(--text); font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; }
         .problem-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; }
+        
+        /* Quiz Styles */
+        .quiz-container { max-width: 700px; margin: 0 auto; background: rgba(15, 34, 56, 0.9); border: 2px solid var(--border); border-radius: 24px; padding: 48px; box-shadow: 0 16px 60px rgba(0,0,0,0.3); }
+        .quiz-progress { height: 6px; background: rgba(59, 130, 246, 0.2); border-radius: 3px; margin-bottom: 32px; overflow: hidden; }
+        .quiz-progress-bar { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 3px; transition: width 0.4s ease; }
+        .quiz-step { display: none; text-align: center; animation: fadeIn 0.4s ease; }
+        .quiz-step.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .quiz-question-number { color: var(--primary-light); font-size: 0.9rem; font-weight: 600; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .quiz-question { font-size: 1.5rem; font-weight: 700; color: var(--text); margin-bottom: 32px; line-height: 1.4; }
+        .quiz-options { display: flex; flex-direction: column; gap: 16px; }
+        .quiz-option { background: rgba(10, 26, 46, 0.8); border: 2px solid var(--border); border-radius: 16px; padding: 20px 28px; font-size: 1.1rem; color: var(--text); cursor: pointer; transition: all 0.3s ease; font-weight: 500; text-align: left; display: flex; align-items: center; gap: 12px; }
+        .quiz-option:hover { border-color: var(--primary); background: rgba(37, 99, 235, 0.15); transform: translateX(8px); box-shadow: 0 4px 20px rgba(37,99,235,0.2); }
+        .quiz-option.selected { border-color: var(--primary); background: rgba(37, 99, 235, 0.25); }
+        .quiz-results { animation: fadeIn 0.5s ease; }
+        .quiz-results-header { text-align: center; margin-bottom: 36px; }
+        .quiz-score-circle { width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--accent)); margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; font-weight: 800; color: white; box-shadow: 0 8px 30px rgba(37,99,235,0.4); }
+        .quiz-results-header h3 { font-size: 1.6rem; color: var(--text); }
+        .quiz-analysis h4 { color: var(--primary-light); font-size: 1.1rem; margin-bottom: 24px; text-align: center; }
+        .analysis-section { display: flex; flex-direction: column; gap: 24px; margin-bottom: 36px; }
+        .analysis-wrong, .analysis-right { background: rgba(10, 26, 46, 0.6); border-radius: 16px; padding: 24px; display: flex; gap: 16px; }
+        .analysis-wrong { border: 1px solid rgba(239, 68, 68, 0.3); }
+        .analysis-right { border: 1px solid rgba(16, 185, 129, 0.3); }
+        .analysis-icon { font-size: 2rem; flex-shrink: 0; }
+        .analysis-content h5 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; color: var(--text); }
+        .analysis-wrong h5 { color: #f87171; }
+        .analysis-right h5 { color: var(--success); }
+        .analysis-content ul { list-style: none; }
+        .analysis-content li { color: var(--text-muted); font-size: 0.95rem; padding: 6px 0; padding-left: 16px; position: relative; }
+        .analysis-content li::before { content: '•'; position: absolute; left: 0; color: var(--text-muted); }
+        .quiz-cta-box { background: linear-gradient(135deg, rgba(37, 99, 235, 0.2), rgba(139, 92, 246, 0.2)); border: 2px solid var(--primary); border-radius: 20px; padding: 32px; text-align: center; }
+        .quiz-cta-text { font-size: 1.2rem; font-weight: 600; color: var(--text); margin-bottom: 20px; }
+        .quiz-cta-btn { display: inline-block; background: var(--primary); color: white; padding: 18px 36px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 1.1rem; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(37,99,235,0.4); }
+        .quiz-cta-btn:hover { background: var(--primary-dark); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(37,99,235,0.5); }
+        .quiz-guarantee { color: var(--success); font-size: 0.9rem; margin-top: 16px; font-weight: 500; }
         .benefits { background: linear-gradient(180deg, #0a1a2e 0%, #081526 100%); overflow: hidden; }
         .carousel-container { position: relative; width: 100%; overflow: hidden; padding: 20px 0; }
         .carousel-track { display: flex; gap: 32px; animation: carouselScroll 25s linear infinite; width: max-content; }
@@ -254,12 +289,96 @@
         <div class="stat-item"><h3>+R$2.4k</h3><p>Aumento médio salarial</p></div>
     </div></div></section>
     <section class="problems"><div class="container">
-        <div class="section-header"><h2>Você se identifica?</h2><p>Milhares de profissionais enfrentam esses mesmos desafios todos os dias</p></div>
-        <div class="problems-grid">
-            <div class="problem-card"><div class="problem-icon">🎯</div><h3>Sem direção clara</h3><p>Não sabe qual é o próximo passo na sua carreira e se sente perdido entre tantas opções.</p></div>
-            <div class="problem-card"><div class="problem-icon">🔍</div><h3>Falta autoconhecimento</h3><p>Não conhece seus verdadeiros pontos fortes e fracos, desperdiçando seu potencial.</p></div>
-            <div class="problem-card"><div class="problem-icon">📋</div><h3>Metas genéricas</h3><p>Suas metas são vagas e você nunca consegue alcançá-las de verdade.</p></div>
-            <div class="problem-card"><div class="problem-icon">📈</div><h3>Estagnação profissional</h3><p>Está no mesmo cargo há anos e não vê oportunidades de crescimento.</p></div>
+        <div class="section-header"><h2>Você se identifica?</h2><p>Responda este mini quiz rápido e descubra como a KAIA pode ajudá-lo</p></div>
+        
+        <!-- Mini Quiz Container -->
+        <div class="quiz-container" id="quizContainer">
+            <!-- Quiz Questions -->
+            <div class="quiz-questions" id="quizQuestions">
+                <div class="quiz-progress">
+                    <div class="quiz-progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+                <div class="quiz-step active" data-step="1">
+                    <div class="quiz-question-number">Pergunta 1 de 4</div>
+                    <h3 class="quiz-question">Você sabe exatamente qual é o próximo passo da sua carreira?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="no" data-question="1">😕 Não tenho certeza</button>
+                        <button class="quiz-option" data-answer="yes" data-question="1">✨ Sim, tenho clareza</button>
+                    </div>
+                </div>
+                <div class="quiz-step" data-step="2">
+                    <div class="quiz-question-number">Pergunta 2 de 4</div>
+                    <h3 class="quiz-question">Você conhece seus pontos fortes e fracos profissionais?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="no" data-question="2">🤔 Mais ou menos</button>
+                        <button class="quiz-option" data-answer="yes" data-question="2">💪 Conheço muito bem</button>
+                    </div>
+                </div>
+                <div class="quiz-step" data-step="3">
+                    <div class="quiz-question-number">Pergunta 3 de 4</div>
+                    <h3 class="quiz-question">Suas metas profissionais são específicas e mensuráveis?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="no" data-question="3">📝 São meio vagas</button>
+                        <button class="quiz-option" data-answer="yes" data-question="3">🎯 Muito claras</button>
+                    </div>
+                </div>
+                <div class="quiz-step" data-step="4">
+                    <div class="quiz-question-number">Pergunta 4 de 4</div>
+                    <h3 class="quiz-question">Você sente que sua carreira está evoluindo?</h3>
+                    <div class="quiz-options">
+                        <button class="quiz-option" data-answer="no" data-question="4">😔 Estou estagnado</button>
+                        <button class="quiz-option" data-answer="yes" data-question="4">🚀 Sim, estou crescendo</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz Results -->
+            <div class="quiz-results" id="quizResults" style="display: none;">
+                <div class="quiz-results-header">
+                    <div class="quiz-score-circle" id="scoreCircle">
+                        <span id="scoreNumber">0</span>/4
+                    </div>
+                    <h3 id="resultTitle">Sua análise está pronta!</h3>
+                </div>
+                
+                <div class="quiz-analysis">
+                    <h4>🔍 A Visão da KAIA sobre sua carreira:</h4>
+                    
+                    <div class="analysis-section">
+                        <div class="analysis-wrong">
+                            <div class="analysis-icon">❌</div>
+                            <div class="analysis-content">
+                                <h5>O que muitos fazem ERRADO:</h5>
+                                <ul>
+                                    <li>Esperar que as oportunidades apareçam sozinhas</li>
+                                    <li>Ignorar o autoconhecimento profissional</li>
+                                    <li>Criar metas vagas sem um plano de ação</li>
+                                    <li>Não investir no próprio desenvolvimento</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="analysis-right">
+                            <div class="analysis-icon">✅</div>
+                            <div class="analysis-content">
+                                <h5>O que a KAIA faz por você:</h5>
+                                <ul>
+                                    <li>Mapeia seu perfil com QP, SABOTADORES e DISC</li>
+                                    <li>Identifica seus pontos fortes e padrões limitantes</li>
+                                    <li>Cria um PDI personalizado com metas claras</li>
+                                    <li>Acompanha sua evolução com mentoria 24/7</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-cta-box">
+                        <p class="quiz-cta-text">Transforme essas dificuldades em crescimento real!</p>
+                        <a href="#planos" class="quiz-cta-btn">Quero Minha Transformação por R$59,90 →</a>
+                        <p class="quiz-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div></section>
     <section class="benefits"><div class="container">
@@ -332,5 +451,70 @@
         <p class="hero-guarantee">✓ 7 dias de garantia • Cancele quando quiser</p>
     </div></section>
     <footer><div class="container"><p>© 2024 KAIA. Todos os direitos reservados.</p></div></footer>
+    
+    <script>
+        // Quiz Logic
+        const quizAnswers = {};
+        let currentStep = 1;
+        const totalSteps = 4;
+        
+        document.querySelectorAll('.quiz-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const question = this.dataset.question;
+                const answer = this.dataset.answer;
+                
+                // Store answer
+                quizAnswers[question] = answer;
+                
+                // Mark as selected
+                this.parentElement.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+                
+                // Move to next step after a short delay
+                setTimeout(() => {
+                    if (currentStep < totalSteps) {
+                        currentStep++;
+                        showStep(currentStep);
+                    } else {
+                        showResults();
+                    }
+                }, 400);
+            });
+        });
+        
+        function showStep(step) {
+            // Hide all steps
+            document.querySelectorAll('.quiz-step').forEach(s => s.classList.remove('active'));
+            // Show current step
+            document.querySelector(`.quiz-step[data-step="${step}"]`).classList.add('active');
+            // Update progress bar
+            document.getElementById('progressBar').style.width = ((step - 1) / totalSteps * 100) + '%';
+        }
+        
+        function showResults() {
+            // Calculate score (count "yes" answers)
+            const yesCount = Object.values(quizAnswers).filter(a => a === 'yes').length;
+            
+            // Hide questions, show results
+            document.getElementById('quizQuestions').style.display = 'none';
+            document.getElementById('quizResults').style.display = 'block';
+            
+            // Update score display
+            document.getElementById('scoreNumber').textContent = yesCount;
+            
+            // Update result title based on score
+            const titles = {
+                0: 'Você precisa muito da KAIA!',
+                1: 'A KAIA pode transformar sua carreira!',
+                2: 'Bom início, mas você pode ir muito além!',
+                3: 'Você está no caminho certo!',
+                4: 'Excelente! Potencialize ainda mais!'
+            };
+            document.getElementById('resultTitle').textContent = titles[yesCount];
+            
+            // Update progress bar to 100%
+            document.getElementById('progressBar').style.width = '100%';
+        }
+    </script>
 </body>
 </html>
