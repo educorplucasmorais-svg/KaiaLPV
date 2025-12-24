@@ -66,16 +66,27 @@
         .hero-guarantee { margin-top: 16px; color: var(--success); font-size: 0.9rem; font-weight: 500; }
         .hero-image { display: flex; justify-content: center; align-items: center; }
         .hero-visual {
-            width: 100%; max-width: 480px; height: 400px;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
-            border-radius: 24px; display: flex; align-items: center; justify-content: center;
+            width: 100%; max-width: 480px; height: 480px;
+            background: linear-gradient(180deg, #87ceeb 0%, #60a5fa 50%, #3b82f6 100%);
+            border-radius: 24px; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
             box-shadow: 0 20px 60px rgba(37,99,235,0.3); position: relative; overflow: hidden;
+            padding-bottom: 20px;
         }
         .hero-visual::before {
-            content: ''; position: absolute; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.3) 0%, transparent 40%);
         }
+        .avatar-container { position: relative; z-index: 2; display: flex; flex-direction: column; align-items: center; }
+        .avatar-speech {
+            background: white; color: #1e293b; padding: 16px 24px; border-radius: 20px; 
+            max-width: 380px; text-align: center; font-size: 1rem; font-weight: 500; line-height: 1.5;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15); margin-bottom: -10px; position: relative; z-index: 3;
+        }
+        .avatar-speech::after {
+            content: ''; position: absolute; bottom: -12px; left: 50%; transform: translateX(-50%);
+            border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 15px solid white;
+        }
+        .avatar-speech strong { color: #2563eb; }
         .hero-visual-text { font-size: 4rem; font-weight: 800; color: white; letter-spacing: -0.03em; text-shadow: 0 4px 20px rgba(0,0,0,0.2); }
         .stats { padding: 60px 0; background: linear-gradient(180deg, #0a1628 0%, #0c1e33 100%); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
         .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; text-align: center; }
@@ -262,25 +273,114 @@
             <a href="#planos" class="hero-cta">Quero Evoluir Agora →</a>
             <p class="hero-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
         </div>
-        <div class="hero-image"><div class="hero-visual"><svg width="160" height="160" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="heroGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style="stop-color:#60a5fa"/>
-                    <stop offset="100%" style="stop-color:#3b82f6"/>
-                </linearGradient>
-                <linearGradient id="heroGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" style="stop-color:#93c5fd"/>
-                    <stop offset="100%" style="stop-color:#60a5fa"/>
-                </linearGradient>
-            </defs>
-            <polygon points="24,4 42,14 42,34 24,44 6,34 6,14" fill="url(#heroGrad1)" opacity="0.9"/>
-            <polygon points="24,8 38,32 10,32" fill="url(#heroGrad2)" opacity="0.7"/>
-            <polygon points="24,12 36,24 24,36 12,24" fill="#93c5fd" opacity="0.6"/>
-            <circle cx="24" cy="24" r="8" fill="#dbeafe" opacity="0.9"/>
-            <line x1="24" y1="4" x2="24" y2="16" stroke="white" stroke-width="1.5" opacity="0.6"/>
-            <line x1="6" y1="14" x2="16" y2="20" stroke="white" stroke-width="1.5" opacity="0.6"/>
-            <line x1="42" y1="14" x2="32" y2="20" stroke="white" stroke-width="1.5" opacity="0.6"/>
-        </svg></div></div>
+        <div class="hero-image"><div class="hero-visual">
+            <div class="avatar-container">
+                <div class="avatar-speech">
+                    <strong>Bem-vinda à KAIA!</strong><br>
+                    Eu vou cuidar de você como uma semente! 🌱<br>
+                    Vamos germinar e nós vamos crescer juntas.
+                </div>
+                <!-- Avatar SVG: Mulher negra, corpo cheio, olhar marcante, boca marcante (inspiração Alcione) -->
+                <svg width="320" height="380" viewBox="0 0 320 380" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#8B5A2B"/>
+                            <stop offset="50%" style="stop-color:#7A4A1E"/>
+                            <stop offset="100%" style="stop-color:#6B3D15"/>
+                        </linearGradient>
+                        <linearGradient id="dressGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#ffffff"/>
+                            <stop offset="100%" style="stop-color:#f0f0f0"/>
+                        </linearGradient>
+                        <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#2a1810"/>
+                            <stop offset="100%" style="stop-color:#1a0f08"/>
+                        </linearGradient>
+                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                            <feOffset dx="0" dy="2"/>
+                            <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+                            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/>
+                            <feBlend in="SourceGraphic" in2="effect1_dropShadow"/>
+                        </filter>
+                    </defs>
+                    
+                    <!-- Corpo/Vestido Branco - Curvas generosas -->
+                    <path d="M100,380 L100,280 Q100,230 130,200 Q145,185 160,180 Q180,175 160,180 Q175,185 190,200 Q220,230 220,280 L220,380 Z" fill="url(#dressGrad)" filter="url(#glow)"/>
+                    <!-- Ombros largos -->
+                    <ellipse cx="160" cy="175" rx="75" ry="25" fill="url(#dressGrad)"/>
+                    <!-- Decote V elegante -->
+                    <path d="M105,175 L160,210 L215,175" stroke="#e8e8e8" stroke-width="2" fill="none"/>
+                    
+                    <!-- Pescoço -->
+                    <ellipse cx="160" cy="155" rx="22" ry="30" fill="url(#skinGrad)"/>
+                    
+                    <!-- Rosto - Formato mais redondo/cheio -->
+                    <ellipse cx="160" cy="100" rx="58" ry="65" fill="url(#skinGrad)"/>
+                    
+                    <!-- Cabelo volumoso estilo afro/cacheado -->
+                    <ellipse cx="160" cy="75" rx="70" ry="55" fill="url(#hairGrad)"/>
+                    <circle cx="100" cy="85" r="28" fill="url(#hairGrad)"/>
+                    <circle cx="220" cy="85" r="28" fill="url(#hairGrad)"/>
+                    <circle cx="115" cy="55" r="22" fill="url(#hairGrad)"/>
+                    <circle cx="205" cy="55" r="22" fill="url(#hairGrad)"/>
+                    <circle cx="160" cy="35" r="25" fill="url(#hairGrad)"/>
+                    <circle cx="130" cy="40" r="18" fill="url(#hairGrad)"/>
+                    <circle cx="190" cy="40" r="18" fill="url(#hairGrad)"/>
+                    
+                    <!-- Olhos - Olhar marcante/intenso estilo cinema -->
+                    <!-- Olho esquerdo -->
+                    <ellipse cx="135" cy="95" rx="15" ry="10" fill="white"/>
+                    <circle cx="137" cy="95" r="7" fill="#2a1810"/>
+                    <circle cx="139" cy="93" r="2.5" fill="white"/>
+                    <path d="M120,88 Q135,82 150,88" stroke="#1a0f08" stroke-width="2.5" fill="none"/>
+                    <path d="M122,103 Q135,108 148,103" stroke="#6B3D15" stroke-width="1.5" fill="none"/>
+                    
+                    <!-- Olho direito -->
+                    <ellipse cx="185" cy="95" rx="15" ry="10" fill="white"/>
+                    <circle cx="183" cy="95" r="7" fill="#2a1810"/>
+                    <circle cx="181" cy="93" r="2.5" fill="white"/>
+                    <path d="M170,88 Q185,82 200,88" stroke="#1a0f08" stroke-width="2.5" fill="none"/>
+                    <path d="M172,103 Q185,108 198,103" stroke="#6B3D15" stroke-width="1.5" fill="none"/>
+                    
+                    <!-- Sobrancelhas expressivas -->
+                    <path d="M118,80 Q135,73 152,78" stroke="#1a0f08" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    <path d="M168,78 Q185,73 202,80" stroke="#1a0f08" stroke-width="3" fill="none" stroke-linecap="round"/>
+                    
+                    <!-- Nariz largo e marcante -->
+                    <path d="M160,95 L160,115 Q155,122 150,125 Q160,128 170,125 Q165,122 160,115" fill="#7A4A1E"/>
+                    <ellipse cx="152" cy="120" rx="6" ry="4" fill="#6B3D15" opacity="0.5"/>
+                    <ellipse cx="168" cy="120" rx="6" ry="4" fill="#6B3D15" opacity="0.5"/>
+                    
+                    <!-- Boca marcante/carnuda (estilo Alcione) -->
+                    <ellipse cx="160" cy="142" rx="22" ry="12" fill="#8B2252"/>
+                    <ellipse cx="160" cy="140" rx="18" ry="6" fill="#C04070"/>
+                    <path d="M142,142 Q160,148 178,142" stroke="#6B1840" stroke-width="1" fill="none"/>
+                    <ellipse cx="160" cy="138" rx="8" ry="2" fill="#D86090" opacity="0.6"/>
+                    
+                    <!-- Sorriso caloroso -->
+                    <path d="M145,145 Q160,155 175,145" stroke="#6B1840" stroke-width="1.5" fill="none"/>
+                    
+                    <!-- Brincos dourados -->
+                    <circle cx="95" cy="115" r="8" fill="#FFD700"/>
+                    <circle cx="95" cy="115" r="5" fill="#FFA500"/>
+                    <circle cx="225" cy="115" r="8" fill="#FFD700"/>
+                    <circle cx="225" cy="115" r="5" fill="#FFA500"/>
+                    
+                    <!-- Colar dourado -->
+                    <path d="M125,170 Q160,185 195,170" stroke="#FFD700" stroke-width="3" fill="none"/>
+                    <circle cx="160" cy="182" r="6" fill="#FFD700"/>
+                    
+                    <!-- Braços com corpo cheio -->
+                    <ellipse cx="75" cy="260" rx="25" ry="60" fill="url(#skinGrad)"/>
+                    <ellipse cx="245" cy="260" rx="25" ry="60" fill="url(#skinGrad)"/>
+                    
+                    <!-- Mãos -->
+                    <ellipse cx="75" cy="320" rx="18" ry="22" fill="url(#skinGrad)"/>
+                    <ellipse cx="245" cy="320" rx="18" ry="22" fill="url(#skinGrad)"/>
+                </svg>
+            </div>
+        </div></div>
     </div></div></section>
     <section class="stats"><div class="container"><div class="stats-grid">
         <div class="stat-item"><h3>12.847</h3><p>Profissionais transformados</p></div>
