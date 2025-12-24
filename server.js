@@ -15,14 +15,12 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve KAIA LPV landing page at root (must be before static middleware)
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
-});
+// KAIA landing page path
+const KAIA_LANDING_PAGE = path.join(__dirname, 'index.html');
 
-// Serve KAIA landing page at /app as well
-app.get('/app', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+// Serve KAIA LPV landing page at root and /app
+app.get(['/', '/app'], (req, res) => {
+  res.sendFile(KAIA_LANDING_PAGE);
 });
 
 // Serve KAIA landing page image (file is .jpg but referenced as .png in HTML)
