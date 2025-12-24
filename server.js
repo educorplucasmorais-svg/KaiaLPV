@@ -14,7 +14,24 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-app.use(express.static(path.join(__dirname, 'frontend/dist')));
+
+// Serve KAIA LPV landing page at root (must be before static middleware)
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Serve KAIA landing page image
+app.get('/image_18.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'image_18.png.jpg'));
+});
+
+// Serve frontend React app at /app path
+app.use('/app', express.static(path.join(__dirname, 'frontend/dist')));
+
+// Catch-all for SPA routing (for /app/* routes)
+app.get('/app/{*path}', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/dist/index.html'));
+});
 
 // MySQL Connection Pool
 const pool = mysql.createPool({
@@ -76,10 +93,6 @@ async function initializeDatabase() {
 // Routes
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
-});
-// Serve KAIA LPV landing page at root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.post('/api/subscribe', async (req, res) => {
