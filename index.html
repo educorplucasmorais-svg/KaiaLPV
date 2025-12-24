@@ -264,11 +264,208 @@
         .final-cta .hero-cta { display: inline-flex; }
         .final-cta .hero-guarantee { margin-top: 16px; }
         footer { padding: 40px 0; text-align: center; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.9rem; background: #020508; }
+        
+        /* KAIA Floating Sidebar Avatar */
+        .kaia-sidebar {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .kaia-sidebar:hover {
+            transform: translateY(-50%) scale(1.05);
+        }
+        .kaia-sidebar-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--primary);
+            box-shadow: 0 8px 32px rgba(37,99,235,0.4);
+            transition: all 0.3s ease;
+        }
+        .kaia-sidebar:hover .kaia-sidebar-avatar {
+            box-shadow: 0 12px 40px rgba(37,99,235,0.6);
+            border-color: var(--primary-light);
+        }
+        .kaia-sidebar-label {
+            margin-top: 12px;
+            background: var(--primary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-align: center;
+            white-space: nowrap;
+            box-shadow: 0 4px 16px rgba(37,99,235,0.3);
+        }
+        .kaia-sidebar-pulse {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.15); opacity: 0.5; }
+            100% { transform: scale(1.3); opacity: 0; }
+        }
+        
+        /* Chat Page Styles */
+        .chat-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg);
+            z-index: 2000;
+            flex-direction: column;
+        }
+        .chat-container.active {
+            display: flex;
+        }
+        .chat-header {
+            background: var(--bg-alt);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+        .chat-header-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+        .chat-header-info h3 {
+            color: var(--text);
+            font-size: 1.1rem;
+            margin-bottom: 2px;
+        }
+        .chat-header-info p {
+            color: var(--success);
+            font-size: 0.85rem;
+        }
+        .chat-close {
+            margin-left: auto;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 8px;
+            transition: color 0.2s;
+        }
+        .chat-close:hover {
+            color: var(--text);
+        }
+        .chat-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .chat-message {
+            max-width: 80%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+        .chat-message.kaia {
+            background: var(--bg-section);
+            color: var(--text);
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+        .chat-message.user {
+            background: var(--primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+        .chat-input-area {
+            padding: 16px 24px;
+            background: var(--bg-alt);
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+        .chat-input {
+            flex: 1;
+            background: var(--bg-section);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 12px 20px;
+            color: var(--text);
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+        .chat-input::placeholder {
+            color: var(--text-muted);
+        }
+        .chat-send {
+            background: var(--primary);
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .chat-send:hover {
+            background: var(--primary-dark);
+        }
+        .chat-send svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+        
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-text { max-width: 100%; }
             .hero-image { display: none; }
             .benefits-grid, .testimonials-grid { grid-template-columns: repeat(2, 1fr); }
+            .kaia-sidebar {
+                right: 10px;
+            }
+            .kaia-sidebar-avatar {
+                width: 80px;
+                height: 80px;
+            }
+            .kaia-sidebar-pulse {
+                width: 80px;
+                height: 80px;
+            }
+            .kaia-sidebar-label {
+                font-size: 0.75rem;
+                padding: 6px 12px;
+            }
         }
         @media (max-width: 768px) {
             .hero h1 { font-size: 2.4rem; }
@@ -279,6 +476,23 @@
             .problems-grid, .benefits-grid, .testimonials-grid { grid-template-columns: 1fr; }
             .pricing-card { padding: 36px 28px; }
             .final-cta h2 { font-size: 2rem; }
+            .kaia-sidebar {
+                right: 8px;
+                bottom: 20px;
+                top: auto;
+                transform: none;
+            }
+            .kaia-sidebar:hover {
+                transform: scale(1.05);
+            }
+            .kaia-sidebar-avatar {
+                width: 70px;
+                height: 70px;
+            }
+            .kaia-sidebar-pulse {
+                width: 70px;
+                height: 70px;
+            }
         }
     </style>
 </head>
@@ -308,126 +522,52 @@
         <line x1="6" y1="14" x2="16" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
         <line x1="42" y1="14" x2="32" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
     </svg>KAIA</div><a href="#planos" class="nav-cta">Quero Começar</a></div></nav>
+    
+    <!-- KAIA Floating Sidebar Avatar -->
+    <div class="kaia-sidebar" onclick="openChat()">
+        <div class="kaia-sidebar-pulse"></div>
+        <img src="./image_18.png" alt="KAIA" class="kaia-sidebar-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%233b82f6%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>K</text></svg>'">
+        <span class="kaia-sidebar-label">💬 Conversar com a Kaia</span>
+    </div>
+    
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-header">
+            <img src="./image_18.png" alt="KAIA" class="chat-header-avatar" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%233b82f6%22/><text x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22white%22 font-size=%2240%22>K</text></svg>'">
+            <div class="chat-header-info">
+                <h3>KAIA</h3>
+                <p>● Online</p>
+            </div>
+            <button class="chat-close" onclick="closeChat()">✕</button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message kaia">
+                Olá! 👋 Eu sou a KAIA, sua mentora de carreira com Inteligência Artificial. Como posso te ajudar hoje?
+            </div>
+            <div class="chat-message kaia">
+                Posso te ajudar com:
+                <br>• Mapeamento de perfil comportamental
+                <br>• Plano de desenvolvimento individual
+                <br>• Dicas de carreira personalizadas
+                <br>• Identificação de pontos fortes e áreas de melhoria
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua mensagem..." onkeypress="handleKeyPress(event)">
+            <button class="chat-send" onclick="sendMessage()">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </button>
+        </div>
+    </div>
+    
     <section class="hero"><div class="container"><div class="hero-content">
-        <div class="hero-text">
+        <div class="hero-text" style="max-width: 100%; text-align: center;">
             <div class="hero-badge">🚀 Mais de 12.000 profissionais transformados</div>
             <h1>Acelere Sua Carreira Com <span>Inteligência Artificial</span></h1>
             <p>Descubra seu verdadeiro potencial profissional com orientação personalizada por IA. Mapeamento de perfil, PDI inteligente e mentoria 24/7.</p>
             <a href="#planos" class="hero-cta">Quero Evoluir Agora →</a>
             <p class="hero-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
         </div>
-        <div class="hero-image"><div class="hero-visual">
-            <div class="avatar-container">
-                <div class="avatar-speech">
-                    <strong>Bem-vinda à KAIA!</strong><br>
-                    Eu vou cuidar de você como uma semente! 🌱<br>
-                    Vamos germinar e nós vamos crescer juntas.
-                </div>
-                <!-- Avatar Image - Using image_18.png -->
-                <!-- INSTRUCTIONS: Save your image_18.png file in the SAME folder as this index.html file -->
-                <img src="./image_18.png" alt="KAIA Avatar - Uma mulher sorrindo" style="width: 280px; height: auto; border-radius: 20px; margin-top: 10px;" onerror="this.style.display='none'; document.getElementById('avatarSvg').style.display='block';">
-                
-                <!-- Fallback SVG Avatar (shows only if image_18.png not found) -->
-                <svg width="320" height="380" viewBox="0 0 320 380" fill="none" xmlns="http://www.w3.org/2000/svg" id="avatarSvg" style="display: none;">
-                    <defs>
-                        <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#8B5A2B"/>
-                            <stop offset="50%" style="stop-color:#7A4A1E"/>
-                            <stop offset="100%" style="stop-color:#6B3D15"/>
-                        </linearGradient>
-                        <linearGradient id="dressGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" style="stop-color:#ffffff"/>
-                            <stop offset="100%" style="stop-color:#f0f0f0"/>
-                        </linearGradient>
-                        <linearGradient id="hairGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#2a1810"/>
-                            <stop offset="100%" style="stop-color:#1a0f08"/>
-                        </linearGradient>
-                        <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
-                            <feOffset dx="0" dy="2"/>
-                            <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
-                            <feColorMatrix values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.3 0"/>
-                            <feBlend in="SourceGraphic" in2="effect1_dropShadow"/>
-                        </filter>
-                    </defs>
-                    
-                    <!-- Corpo/Vestido Branco - Curvas generosas -->
-                    <path d="M100,380 L100,280 Q100,230 130,200 Q145,185 160,180 Q180,175 160,180 Q175,185 190,200 Q220,230 220,280 L220,380 Z" fill="url(#dressGrad)" filter="url(#glow)"/>
-                    <!-- Ombros largos -->
-                    <ellipse cx="160" cy="175" rx="75" ry="25" fill="url(#dressGrad)"/>
-                    <!-- Decote V elegante -->
-                    <path d="M105,175 L160,210 L215,175" stroke="#e8e8e8" stroke-width="2" fill="none"/>
-                    
-                    <!-- Pescoço -->
-                    <ellipse cx="160" cy="155" rx="22" ry="30" fill="url(#skinGrad)"/>
-                    
-                    <!-- Rosto - Formato mais redondo/cheio -->
-                    <ellipse cx="160" cy="100" rx="58" ry="65" fill="url(#skinGrad)"/>
-                    
-                    <!-- Cabelo volumoso estilo afro/cacheado -->
-                    <ellipse cx="160" cy="75" rx="70" ry="55" fill="url(#hairGrad)"/>
-                    <circle cx="100" cy="85" r="28" fill="url(#hairGrad)"/>
-                    <circle cx="220" cy="85" r="28" fill="url(#hairGrad)"/>
-                    <circle cx="115" cy="55" r="22" fill="url(#hairGrad)"/>
-                    <circle cx="205" cy="55" r="22" fill="url(#hairGrad)"/>
-                    <circle cx="160" cy="35" r="25" fill="url(#hairGrad)"/>
-                    <circle cx="130" cy="40" r="18" fill="url(#hairGrad)"/>
-                    <circle cx="190" cy="40" r="18" fill="url(#hairGrad)"/>
-                    
-                    <!-- Olhos - Olhar marcante/intenso estilo cinema -->
-                    <!-- Olho esquerdo -->
-                    <ellipse cx="135" cy="95" rx="15" ry="10" fill="white"/>
-                    <circle cx="137" cy="95" r="7" fill="#2a1810"/>
-                    <circle cx="139" cy="93" r="2.5" fill="white"/>
-                    <path d="M120,88 Q135,82 150,88" stroke="#1a0f08" stroke-width="2.5" fill="none"/>
-                    <path d="M122,103 Q135,108 148,103" stroke="#6B3D15" stroke-width="1.5" fill="none"/>
-                    
-                    <!-- Olho direito -->
-                    <ellipse cx="185" cy="95" rx="15" ry="10" fill="white"/>
-                    <circle cx="183" cy="95" r="7" fill="#2a1810"/>
-                    <circle cx="181" cy="93" r="2.5" fill="white"/>
-                    <path d="M170,88 Q185,82 200,88" stroke="#1a0f08" stroke-width="2.5" fill="none"/>
-                    <path d="M172,103 Q185,108 198,103" stroke="#6B3D15" stroke-width="1.5" fill="none"/>
-                    
-                    <!-- Sobrancelhas expressivas -->
-                    <path d="M118,80 Q135,73 152,78" stroke="#1a0f08" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    <path d="M168,78 Q185,73 202,80" stroke="#1a0f08" stroke-width="3" fill="none" stroke-linecap="round"/>
-                    
-                    <!-- Nariz largo e marcante -->
-                    <path d="M160,95 L160,115 Q155,122 150,125 Q160,128 170,125 Q165,122 160,115" fill="#7A4A1E"/>
-                    <ellipse cx="152" cy="120" rx="6" ry="4" fill="#6B3D15" opacity="0.5"/>
-                    <ellipse cx="168" cy="120" rx="6" ry="4" fill="#6B3D15" opacity="0.5"/>
-                    
-                    <!-- Boca marcante/carnuda (estilo Alcione) -->
-                    <ellipse cx="160" cy="142" rx="22" ry="12" fill="#8B2252"/>
-                    <ellipse cx="160" cy="140" rx="18" ry="6" fill="#C04070"/>
-                    <path d="M142,142 Q160,148 178,142" stroke="#6B1840" stroke-width="1" fill="none"/>
-                    <ellipse cx="160" cy="138" rx="8" ry="2" fill="#D86090" opacity="0.6"/>
-                    
-                    <!-- Sorriso caloroso -->
-                    <path d="M145,145 Q160,155 175,145" stroke="#6B1840" stroke-width="1.5" fill="none"/>
-                    
-                    <!-- Brincos dourados -->
-                    <circle cx="95" cy="115" r="8" fill="#FFD700"/>
-                    <circle cx="95" cy="115" r="5" fill="#FFA500"/>
-                    <circle cx="225" cy="115" r="8" fill="#FFD700"/>
-                    <circle cx="225" cy="115" r="5" fill="#FFA500"/>
-                    
-                    <!-- Colar dourado -->
-                    <path d="M125,170 Q160,185 195,170" stroke="#FFD700" stroke-width="3" fill="none"/>
-                    <circle cx="160" cy="182" r="6" fill="#FFD700"/>
-                    
-                    <!-- Braços com corpo cheio -->
-                    <ellipse cx="75" cy="260" rx="25" ry="60" fill="url(#skinGrad)"/>
-                    <ellipse cx="245" cy="260" rx="25" ry="60" fill="url(#skinGrad)"/>
-                    
-                    <!-- Mãos -->
-                    <ellipse cx="75" cy="320" rx="18" ry="22" fill="url(#skinGrad)"/>
-                    <ellipse cx="245" cy="320" rx="18" ry="22" fill="url(#skinGrad)"/>
-                </svg>
-            </div>
-        </div></div>
     </div></div></section>
     <section class="stats"><div class="container"><div class="stats-grid">
         <div class="stat-item"><h3>12.847</h3><p>Profissionais transformados</p></div>
@@ -866,6 +1006,58 @@
             
             // Animate progress bar to 100%
             document.getElementById('progressBar').style.width = '100%';
+        }
+        
+        // Chat Functions
+        function openChat() {
+            document.getElementById('chatContainer').classList.add('active');
+            document.getElementById('chatInput').focus();
+        }
+        
+        function closeChat() {
+            document.getElementById('chatContainer').classList.remove('active');
+        }
+        
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            const messagesContainer = document.getElementById('chatMessages');
+            const userMsg = document.createElement('div');
+            userMsg.className = 'chat-message user';
+            userMsg.textContent = message;
+            messagesContainer.appendChild(userMsg);
+            
+            input.value = '';
+            
+            // Scroll to bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Simulate KAIA response after a short delay
+            setTimeout(() => {
+                const kaiaMsg = document.createElement('div');
+                kaiaMsg.className = 'chat-message kaia';
+                
+                const responses = [
+                    'Que ótima pergunta! Para te ajudar melhor, que tal fazer nosso quiz de perfil comportamental? Assim posso te dar orientações mais personalizadas! 🎯',
+                    'Entendo sua preocupação! O autoconhecimento é o primeiro passo para o sucesso. Recomendo começar pelo nosso plano de R$59,90/mês que inclui mapeamento completo de perfil.',
+                    'Adorei sua iniciativa! Vou te ajudar a descobrir seus pontos fortes e áreas de desenvolvimento. Clique em "Quero Evoluir Agora" para começar! 🚀',
+                    'Você está no caminho certo! A mentoria 24/7 pode te ajudar com dúvidas como essa a qualquer momento. Quer conhecer nosso plano completo?'
+                ];
+                
+                kaiaMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
+                messagesContainer.appendChild(kaiaMsg);
+                messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            }, 1000);
         }
     </script>
 </body>
