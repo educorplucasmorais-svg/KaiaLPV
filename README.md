@@ -86,7 +86,25 @@ fonte-da-juventude-2.0/
 
 ##  Deployment
 
-### Vercel (Frontend)
+### Railway (Frontend - KAIA LPV) ✅ ATIVO
+```bash
+# Deploy automático via Railway CLI:
+railway login
+railway up
+
+# Configuração:
+# - Builder: Dockerfile
+# - Build Context: raiz do repositório
+# - Dockerfile: constrói frontend com pnpm e serve via `serve`
+# - PORT: 8080
+# - Health Check: /
+```
+
+**Status:** Deployado com sucesso no Railway  
+**URL:** Railway fornece URL automática após deploy  
+**Acesso:** admin / admin
+
+### Vercel (Frontend) - Alternativa
 ```bash
 # 1. Push para GitHub
 git init
@@ -102,8 +120,9 @@ git push -u origin main
 # - Output: dist
 ```
 
-### Railway (Backend)
+### Railway (Backend - Spring Boot) - Opcional
 ```bash
+# Para deploy do backend Java:
 # 1. Conectar repositório no Railway
 # 2. Adicionar variáveis de ambiente:
 SPRING_DATASOURCE_URL=jdbc:mysql://srv1099.hstgr.io:3306/u475858067_revela

@@ -92,32 +92,34 @@ const SplashPage: React.FC<SplashPageProps> = ({ onEnter }) => {
           Medicina Estética & Longevidade
         </p>
 
-        <div style={{
-          marginTop: '3rem',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: '0.5rem',
-          opacity: 0.7,
-        }}>
-          <p style={{
-            margin: 0,
-            fontSize: '1rem',
+        <button
+          style={{
+            marginTop: '3rem',
+            padding: '1rem 3rem',
+            fontSize: '1.1rem',
             fontFamily: 'Cormorant Garamond, serif',
-            color: '#8b6f47',
+            color: '#fff',
+            background: 'linear-gradient(135deg, #d4af37, #8b6f47)',
+            border: 'none',
+            borderRadius: '50px',
+            cursor: 'pointer',
             fontWeight: 600,
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
-          }}>
-            Clique para continuar
-          </p>
-          <span style={{
-            fontSize: '1.5rem',
-            color: '#d4af37',
-          }}>
-            
-          </span>
-        </div>
+            boxShadow: '0 4px 15px rgba(212, 175, 55, 0.3)',
+            transition: 'all 0.3s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.transform = 'translateY(-2px)';
+            e.currentTarget.style.boxShadow = '0 6px 20px rgba(212, 175, 55, 0.4)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 4px 15px rgba(212, 175, 55, 0.3)';
+          }}
+        >
+          Clique para continuar
+        </button>
       </div>
     </div>
   );

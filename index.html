@@ -440,8 +440,33 @@
         
         <!-- Mini Quiz Container - Complete Assessment -->
         <div class="quiz-container" id="quizContainer">
+            <!-- User Data Collection Form -->
+            <div id="userDataForm" style="display: block;">
+                <div class="section-header" style="margin-bottom: 32px;">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 12px;">Antes de começar, conte-nos sobre você</h3>
+                    <p style="font-size: 0.95rem;">Essas informações nos ajudam a personalizar seu relatório</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 20px; max-width: 500px; margin: 0 auto;">
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">Nome Completo</label>
+                        <input type="text" id="userName" placeholder="Ex: Lucas Silva" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: rgba(10, 26, 46, 0.8); color: var(--text); font-size: 1rem;" required>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">Profissão / Cargo Atual</label>
+                        <input type="text" id="userProfession" placeholder="Ex: Gerente de Projetos" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: rgba(10, 26, 46, 0.8); color: var(--text); font-size: 1rem;" required>
+                    </div>
+                    <div>
+                        <label style="display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 600; font-size: 0.9rem;">Tempo de Experiência na Área</label>
+                        <input type="text" id="userExperience" placeholder="Ex: 8 anos" style="width: 100%; padding: 14px; border-radius: 8px; border: 1px solid var(--border); background: rgba(10, 26, 46, 0.8); color: var(--text); font-size: 1rem;" required>
+                    </div>
+                    <button id="startQuizBtn" style="margin-top: 16px; padding: 16px 32px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all 0.3s ease;">
+                        Iniciar Avaliação →
+                    </button>
+                </div>
+            </div>
+
             <!-- Quiz Questions -->
-            <div class="quiz-questions" id="quizQuestions">
+            <div class="quiz-questions" id="quizQuestions" style="display: none;">
                 <div class="quiz-progress">
                     <div class="quiz-progress-bar" id="progressBar" style="width: 0%"></div>
                 </div>
@@ -713,7 +738,7 @@
                 <li><span class="check">✓</span><span>Plano de Desenvolvimento Individual</span></li>
                 <li><span class="check">✓</span><span>Suporte Prioritário</span></li>
             </ul>
-            <button class="pricing-btn" onclick="window.location.href='#checkout'">Começar Agora</button>
+            <button class="pricing-btn" id="start-now-btn">Começar Agora</button>
         </div>
     </div></section>
     <section class="faq"><div class="container">
@@ -733,8 +758,43 @@
     </div></section>
     <footer><div class="container"><p>© 2024 KAIA. Todos os direitos reservados.</p></div></footer>
     
+        <!-- Test Modal (single-use access) -->
+        <div id="test-modal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:9999;">
+            <div style="max-width:980px; width:95%; margin:40px auto; background:#fff; border-radius:8px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                <div style="display:flex; justify-content:flex-end; padding:8px 12px; border-bottom:1px solid #eee;">
+                    <button id="test-modal-close" style="background:#ff4d4f; color:#fff; border:none; border-radius:4px; padding:6px 10px; cursor:pointer;">Fechar</button>
+                </div>
+                <iframe src="https://codesandbox.io/embed/2hywyg?view=editor+%2B+preview&module=%2Fsrc%2FApp.tsx&hidenavigation=1&expanddevtools=1"
+                    style="width:100%; height: 500px; border:0; border-radius: 0; overflow:hidden;"
+                    title="Kaia"
+                    allow="accelerometer; ambient-light-sensor; camera; encrypted-media; geolocation; gyroscope; hid; microphone; midi; payment; usb; vr; xr-spatial-tracking"
+                    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+                ></iframe>
+            </div>
+        </div>
+    
     <script>
-        // Complete Assessment Quiz Logic
+        // Enhanced Assessment with User Context and Master Prompt
+        let userData = {
+            nome: "",
+            profissao: "",
+            tempoArea: "",
+            respostas: [], // [{questao: 1, escolha: 'D', contexto: 'Liderar e tomar decisões'}]
+            indices: { qp: 0, d: 0, i: 0, s: 0, c: 0 },
+            sabotadores_contagem: {
+                "Insistente": 0,
+                "Controlador": 0,
+                "Hiper-Realizador": 0,
+                "Juiz": 0,
+                "Hiper-Vigilante": 0,
+                "Inquieto": 0,
+                "Prestativo": 0,
+                "Evitador": 0,
+                "Hiper-Racional": 0,
+                "Vítima": 0
+            }
+        };
+        
         const quizData = {
             disc: { D: 0, I: 0, S: 0, C: 0 },
             sabotadores: {},
@@ -742,6 +802,130 @@
         };
         let currentStep = 1;
         const totalSteps = 9;
+        
+        // Sabotadores Mapping (Based on Shirzad Chamine's framework)
+        const sabotadoresMapeamento = {
+            1: { D: "Controlador", I: "Prestativo", S: "Evitador", C: "Insistente" },
+            2: { D: "Controlador", I: "Hiper-Realizador", S: "Prestativo", C: "Hiper-Racional" },
+            3: { D: "Juiz", I: "Inquieto", S: "Vítima", C: "Hiper-Vigilante" },
+            4: { A: "Insistente", B: "Controlador", C: "Hiper-Racional", D: "Evitador" },
+            5: { A: "Hiper-Realizador", B: "Inquieto", C: "Prestativo", D: "Vítima" },
+            6: { A: "Juiz", B: "Hiper-Vigilante", C: "Controlador", D: "Evitador" },
+            7: { A: "Insistente", B: "Hiper-Racional", C: "Hiper-Realizador", D: "Prestativo" },
+            8: { A: "Controlador", B: "Juiz", C: "Inquieto", D: "Vítima" },
+            9: { A: "Hiper-Vigilante", B: "Evitador", C: "Insistente", D: "Hiper-Racional" }
+        };
+
+        // Start Quiz Button Handler
+        document.getElementById('startQuizBtn')?.addEventListener('click', function() {
+            const nome = document.getElementById('userName').value.trim();
+            const profissao = document.getElementById('userProfession').value.trim();
+            const tempo = document.getElementById('userExperience').value.trim();
+            
+            if (!nome || !profissao || !tempo) {
+                alert('Por favor, preencha todos os campos antes de continuar.');
+                return;
+            }
+            
+            userData.nome = nome;
+            userData.profissao = profissao;
+            userData.tempoArea = tempo;
+            
+            document.getElementById('userDataForm').style.display = 'none';
+            document.getElementById('quizQuestions').style.display = 'block';
+            currentStep = 1;
+            showStep(1);
+        });
+        
+        // Register Response with Context
+        function registrarResposta(questaoNum, escolha, textoEscolha) {
+            userData.respostas.push({
+                questao: questaoNum,
+                escolha: escolha,
+                contexto: textoEscolha
+            });
+            
+            // Map to sabotador if in sabotadores questions (4-9 use A/B/C/D pattern)
+            if (questaoNum >= 4 && questaoNum <= 9) {
+                const sabotador = sabotadoresMapeamento[questaoNum]?.[escolha];
+                if (sabotador && userData.sabotadores_contagem[sabotador] !== undefined) {
+                    userData.sabotadores_contagem[sabotador]++;
+                }
+            } else if (questaoNum <= 3) {
+                // DISC questions map directly
+                const sabotador = sabotadoresMapeamento[questaoNum]?.[escolha];
+                if (sabotador && userData.sabotadores_contagem[sabotador] !== undefined) {
+                    userData.sabotadores_contagem[sabotador]++;
+                }
+            }
+        }
+        
+        // Generate Master Prompt for AI Analysis
+        function prepararPromptRelatorio() {
+            const discDominante = Object.keys(userData.indices)
+                .filter(k => k !== 'qp')
+                .reduce((a, b) => userData.indices[a] > userData.indices[b] ? a : b)
+                .toUpperCase();
+            
+            const topSabotadores = Object.entries(userData.sabotadores_contagem)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3)
+                .map(([nome, count]) => `${nome} (${count} ocorrências)`)
+                .join(", ");
+            
+            const respostasDetalhadas = userData.respostas
+                .map(r => `Questão ${r.questao}: escolheu "${r.escolha}" - ${r.contexto}`)
+                .join("\n");
+            
+            return `🧠 DOSSIÊ DE AUDITORIA COMPORTAMENTAL: KAIA 5.0
+
+Candidato: ${userData.nome} | Profissão: ${userData.profissao}
+Tempo na Área: ${userData.tempoArea} | Data da Auditoria: ${new Date().toLocaleDateString('pt-BR')}
+
+1. MENTALIDADE E QP (INTELIGÊNCIA POSITIVA)
+QP Estimado: ${userData.indices.qp}%
+Diagnóstico: ${userData.indices.qp >= 75 ? 'Acima do Ponto de Virada - Alta Resiliência' : 'Abaixo do Ponto de Virada - Modo Sobrevivência predominante'}
+
+2. RAIO-X DOS SABOTADORES
+Padrões identificados: ${topSabotadores}
+${Object.entries(userData.sabotadores_contagem)
+    .filter(([_, count]) => count > 0)
+    .map(([nome, count]) => `  - ${nome}: ${count} sinais detectados`)
+    .join('\n')}
+
+3. PERFIL DISC INTEGRADO
+Dominância: ${discDominante}
+D (Dominância): ${userData.indices.d}%
+I (Influência): ${userData.indices.i}%
+S (Estabilidade): ${userData.indices.s}%
+C (Conformidade): ${userData.indices.c}%
+
+4. ANÁLISE DETALHADA DAS ESCOLHAS
+${respostasDetalhadas}
+
+5. CONTEXTO PROFISSIONAL
+Área de Atuação: ${userData.profissao}
+Tempo de Experiência: ${userData.tempoArea}
+
+TAREFA: Gere um relatório SWOT personalizado e um Plano 5W2H focado em:
+- Metodologias Ágeis aplicadas à área de ${userData.profissao}
+- Desenvolvimento dos pontos fortes do perfil ${discDominante}
+- Estratégias para neutralizar os sabotadores: ${topSabotadores}
+- Roadmap de 21 dias com ações práticas
+
+JSON DE SAÍDA:
+{
+  "status": "Auditoria Concluída",
+  "metadata": {
+    "candidato": "${userData.nome}",
+    "profissao": "${userData.profissao}",
+    "score_qp": ${userData.indices.qp},
+    "dominante_disc": "${discDominante}"
+  },
+  "sabotadores": [${topSabotadores.split(", ").map(s => `"${s.split(" (")[0]}"`).join(", ")}],
+  "proxima_etapa": "Implementação 5W2H"
+}`;
+        }
         
         // DISC Descriptions
         const discDescriptions = {
@@ -767,22 +951,30 @@
         
         document.querySelectorAll('.quiz-option').forEach(option => {
             option.addEventListener('click', function() {
-                const question = this.dataset.question;
+                const question = parseInt(this.dataset.question);
+                const textoEscolha = this.textContent.trim();
                 
                 // Mark as selected
                 this.parentElement.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
                 this.classList.add('selected');
                 
                 // Store answer based on type
+                let escolha = '';
                 if (this.dataset.disc) {
                     quizData.disc[this.dataset.disc]++;
+                    userData.indices[this.dataset.disc.toLowerCase()] = quizData.disc[this.dataset.disc];
+                    escolha = this.dataset.disc;
+                    registrarResposta(question, escolha, textoEscolha);
                 }
                 if (this.dataset.sab) {
                     const sab = this.dataset.sab;
                     quizData.sabotadores[sab] = (quizData.sabotadores[sab] || 0) + 1;
+                    escolha = sab;
+                    registrarResposta(question, escolha, textoEscolha);
                 }
                 if (this.dataset.qp) {
                     quizData.qp += parseInt(this.dataset.qp);
+                    userData.indices.qp = Math.round((quizData.qp / 9) * 100);
                 }
                 
                 // Move to next step after a short delay
@@ -866,7 +1058,102 @@
             
             // Animate progress bar to 100%
             document.getElementById('progressBar').style.width = '100%';
+            
+            // Generate and log the Master Prompt
+            const masterPrompt = prepararPromptRelatorio();
+            console.log('=== MASTER PROMPT PARA IA ===');
+            console.log(masterPrompt);
+            console.log('=== DADOS ESTRUTURADOS ===');
+            console.log(JSON.stringify(userData, null, 2));
+            
+            // Send to backend for AI processing with Gemini
+            fetch('/api/generate-report', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ prompt: masterPrompt, userData })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    console.log('=== RELATÓRIO GERADO PELA IA ===');
+                    console.log(data.report);
+                    
+                    // Display report in a modal or section
+                    const reportSection = document.createElement('div');
+                    reportSection.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; overflow:auto; padding:40px;';
+                    reportSection.innerHTML = `
+                        <div style="max-width:900px; margin:0 auto; background:#0f2238; padding:40px; border-radius:16px; color:#f1f5f9;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+                                <h2 style="color:#3b82f6; margin:0;">Seu Relatório Completo - KAIA 5.0</h2>
+                                <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background:#ef4444; color:white; border:none; padding:8px 16px; border-radius:8px; cursor:pointer; font-weight:600;">Fechar</button>
+                            </div>
+                            <div style="white-space:pre-wrap; line-height:1.8; font-size:0.95rem;">${data.report}</div>
+                            <div style="margin-top:32px; padding-top:24px; border-top:1px solid rgba(59,130,246,0.3);">
+                                <a href="#planos" onclick="this.closest('[style*=fixed]').remove()" style="display:inline-block; background:#2563eb; color:white; padding:16px 32px; border-radius:10px; text-decoration:none; font-weight:700;">Desbloquear Plano Completo →</a>
+                            </div>
+                        </div>
+                    `;
+                    document.body.appendChild(reportSection);
+                } else {
+                    console.error('Erro ao gerar relatório:', data.error);
+                    alert('Erro ao gerar relatório. Verifique o console.');
+                }
+            })
+            .catch(error => {
+                console.error('Erro na requisição:', error);
+                alert('Erro ao conectar com o servidor. Tente novamente.');
+            });
         }
-    </script>
+        </script>
+        <script>
+            // Single-use test access: validate token, open modal with iframe
+            (function() {
+                const startBtn = document.getElementById('start-now-btn');
+                const modal = document.getElementById('test-modal');
+                const closeBtn = document.getElementById('test-modal-close');
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
+
+                async function tryOpenTest() {
+                    if (token) {
+                        try {
+                            const res = await fetch('/api/consume-token', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ token })
+                            });
+                            if (res.ok) {
+                                modal.style.display = 'block';
+                                return;
+                            } else {
+                                const data = await res.json().catch(() => ({}));
+                                alert(data.error || 'Link inválido ou já utilizado.');
+                            }
+                        } catch (e) {
+                            alert('Erro ao validar o acesso. Tente novamente.');
+                        }
+                    }
+                    // Fallback: go to checkout if no valid token
+                    window.location.href = '#checkout';
+                }
+
+                if (startBtn) {
+                    startBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        tryOpenTest();
+                    });
+                }
+                if (closeBtn) {
+                    closeBtn.addEventListener('click', function() {
+                        modal.style.display = 'none';
+                    });
+                }
+
+                // Optional: auto-open when arriving via exclusive link
+                if (token) {
+                    setTimeout(tryOpenTest, 300);
+                }
+            })();
+        </script>
 </body>
 </html>

@@ -62,7 +62,7 @@ $env:PATH = 'C:\maven\maven-3.9.11\bin;' + $env:PATH
 mvn clean package -DskipTests
 ```
 
-JAR gerado em: `target/fonte-da-juventude-2.0-0.0.1-SNAPSHOT.jar`
+JAR gerado em: `target/kaia-0.0.1-SNAPSHOT.jar`
 
 #### Upload FTP:
 1. Use FileZilla ou painel Hostinger
