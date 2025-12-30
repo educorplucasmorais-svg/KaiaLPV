@@ -402,25 +402,28 @@
     <!-- Login Section -->
     <section class="login-section" id="loginSection">
         <div class="login-card">
-            <h2>🔐 Autenticação</h2>
+            <h2>🌐 KAIA 5.0 | GLOBAL ASSESSMENT</h2>
+            <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
+                Versão Alpha Control - Acesso Restrito
+            </p>
             
             <div id="errorMessage" class="error-message"></div>
             <div id="successMessage" class="success-message"></div>
             
             <form id="loginForm">
                 <div class="form-group">
-                    <label for="userName">Nome Completo</label>
+                    <label for="userName">Nome Completo / Full Name</label>
                     <input type="text" id="userName" placeholder="Digite seu nome completo" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="userEmail">E-mail Corporativo</label>
+                    <label for="userEmail">E-mail Corporativo / Corporate Email</label>
                     <input type="email" id="userEmail" placeholder="seu@email.com" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="userToken">Token de Acesso</label>
-                    <input type="number" id="userToken" placeholder="Ex: 1, 2, 3..." required min="1">
+                    <label for="userToken">Token de Acesso Alpha / Access Token</label>
+                    <input type="text" id="userToken" placeholder="Digite seu token de acesso" required>
                 </div>
                 
                 <button type="submit" class="submit-btn" id="submitBtn">
@@ -439,7 +442,11 @@
         <div class="container">
             <!-- Progress Bar -->
             <div class="progress-bar">
-                <div class="progress-step active" id="step-disc">
+                <div class="progress-step active" id="step-idioma">
+                    <span class="step-dot"></span>
+                    🌐 Idioma
+                </div>
+                <div class="progress-step" id="step-disc">
                     <span class="step-dot"></span>
                     DISC
                 </div>
@@ -453,15 +460,15 @@
                 </div>
                 <div class="progress-step" id="step-report">
                     <span class="step-dot"></span>
-                    Relatório
+                    PDI
                 </div>
             </div>
             
             <!-- Chat Container -->
             <div class="chat-header">
-                <div class="chat-avatar">🤖</div>
+                <div class="chat-avatar">🌐</div>
                 <div class="chat-info">
-                    <h3>KAIA 5.0</h3>
+                    <h3>KAIA 5.0 | Global Alpha</h3>
                     <p>● Online</p>
                 </div>
             </div>
@@ -523,13 +530,13 @@
             
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = '🔄 Validando...';
+            submitBtn.textContent = '🔄 Validando credenciais...';
             
             try {
                 const response = await fetch('/api/kaia/validate-token', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ token: parseInt(token), email, name })
+                    body: JSON.stringify({ token, email, name })
                 });
                 
                 const data = await response.json();
@@ -538,6 +545,7 @@
                     sessionState.sessionId = data.sessionId;
                     sessionState.userName = name;
                     sessionState.userEmail = email;
+                    sessionState.isAlphaAccess = data.isAlphaAccess || false;
                     
                     showSuccess(data.message);
                     
@@ -560,26 +568,33 @@
         
         // Start the test
         async function startTest() {
-            const welcomeMessage = `🔐 **KAIA 5.0 - Sistema de Auditoria Comportamental**
+            // Show onboarding panel with language selection
+            const welcomeMessage = `🌐 **KAIA 5.0 | GLOBAL ASSESSMENT SYSTEM**
+Versão Alpha Control - Sessão Autorizada
 
-✅ Acesso Autorizado. Bem-vindo(a), ${sessionState.userName}!
+✅ Bem-vindo(a), **${sessionState.userName}**!
 
-Vamos iniciar sua avaliação comportamental completa. O teste é dividido em 3 fases:
+📝 **Pré-requisitos concluídos:**
+• Nome: ${sessionState.userName}
+• E-mail: ${sessionState.userEmail}
+• Token: Validado ✓
 
-📊 **Fase 1 - DISC**: 10 perguntas sobre seu perfil comportamental
-🎭 **Fase 2 - Sabotadores**: 10 afirmações sobre padrões limitantes  
-💡 **Fase 3 - QP**: 10 cenários sobre inteligência positiva
+O teste é dividido em 3 fases + Laudo Final:
+📊 **DISC**: 10 perguntas comportamentais
+🎭 **Sabotadores**: 10 afirmações sobre padrões limitantes  
+💡 **QP**: 10 cenários de inteligência positiva
+📄 **PDI**: Plano de Desenvolvimento Individual (ABNT)
 
-Ao final, você receberá um **Dossiê Completo** com análise DISC, identificação de sabotadores, e um Plano de Ação personalizado.
+---
 
-Vamos começar?`;
+**STEP 1: SELECT YOUR LANGUAGE / SELECIONE SEU IDIOMA**
+
+🇧🇷 Digite **1** para Português (PT-BR)
+🇺🇸 Type **2** for English (EN)
+🇪🇸 Escriba **3** para Español (ES)`;
             
             addMessage(welcomeMessage, 'kaia');
-            
-            // Auto-start first question after welcome
-            setTimeout(() => {
-                sendToKaia('Vamos começar o teste DISC!');
-            }, 2000);
+            setActiveStep('idioma');
         }
         
         // Send message to KAIA AI
@@ -674,30 +689,34 @@ Vamos começar?`;
         function updateProgress(response) {
             const lower = response.toLowerCase();
             
-            if (lower.includes('fase disc') || lower.includes('perfil comportamental')) {
+            if (lower.includes('select your language') || lower.includes('selecione seu idioma')) {
+                setActiveStep('idioma');
+            } else if (lower.includes('fase disc') || lower.includes('disc phase') || lower.includes('perfil comportamental')) {
                 setActiveStep('disc');
-            } else if (lower.includes('sabotadores') || lower.includes('inimigos internos')) {
+            } else if (lower.includes('sabotadores') || lower.includes('saboteur') || lower.includes('inimigos internos')) {
                 setActiveStep('sabotadores');
-            } else if (lower.includes('inteligência positiva') || lower.includes('qp')) {
+            } else if (lower.includes('inteligência positiva') || lower.includes('positive intelligence') || lower.includes('qp')) {
                 setActiveStep('qp');
-            } else if (lower.includes('dossiê') || lower.includes('relatório final')) {
+            } else if (lower.includes('dossiê') || lower.includes('pdi') || lower.includes('relatório final') || lower.includes('laudo')) {
                 setActiveStep('report');
             }
         }
         
         // Set active progress step
         function setActiveStep(stepId) {
-            const steps = ['disc', 'sabotadores', 'qp', 'report'];
+            const steps = ['idioma', 'disc', 'sabotadores', 'qp', 'report'];
             const currentIndex = steps.indexOf(stepId);
             
             steps.forEach((step, index) => {
                 const el = document.getElementById(`step-${step}`);
-                el.classList.remove('active', 'completed');
-                
-                if (index < currentIndex) {
-                    el.classList.add('completed');
-                } else if (index === currentIndex) {
-                    el.classList.add('active');
+                if (el) {
+                    el.classList.remove('active', 'completed');
+                    
+                    if (index < currentIndex) {
+                        el.classList.add('completed');
+                    } else if (index === currentIndex) {
+                        el.classList.add('active');
+                    }
                 }
             });
             
