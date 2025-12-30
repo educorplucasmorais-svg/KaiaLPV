@@ -18,16 +18,27 @@ app.use(cors({
 app.use(express.json());
 
 // KAIA landing page path
-const KAIA_LANDING_PAGE = path.join(__dirname, 'index.html');
+const KAIA_LANDING_PAGE = path.resolve(__dirname, 'index.html');
+const KAIA_TEST_PAGE = path.resolve(__dirname, 'kaia-test.html');
 
 // Serve KAIA LPV landing page at root and /app
 app.get(['/', '/app'], (req, res) => {
-  res.sendFile(KAIA_LANDING_PAGE);
+  res.sendFile(KAIA_LANDING_PAGE, (err) => {
+    if (err) {
+      console.error('Error serving index.html:', err.message);
+      res.status(500).send('Error loading page');
+    }
+  });
 });
 
 // Serve KAIA landing page image (file is .jpg but referenced as .png in HTML)
 app.get('/image_18.png', (req, res) => {
-  res.sendFile(path.join(__dirname, 'image_18.png.jpg'));
+  res.sendFile(path.resolve(__dirname, 'image_18.png.jpg'), (err) => {
+    if (err) {
+      console.error('Error serving image:', err.message);
+      res.status(404).send('Image not found');
+    }
+  });
 });
 
 // MySQL Connection Pool
@@ -939,7 +950,12 @@ app.get('/api/kaia/session/:sessionId', async (req, res) => {
 
 // Serve KAIA 5.0 test page
 app.get('/teste-kaia', (req, res) => {
-  res.sendFile(path.join(__dirname, 'kaia-test.html'));
+  res.sendFile(KAIA_TEST_PAGE, (err) => {
+    if (err) {
+      console.error('Error serving kaia-test.html:', err.message);
+      res.status(500).send('Error loading test page. Please ensure kaia-test.html exists.');
+    }
+  });
 });
 
 // ============================================
