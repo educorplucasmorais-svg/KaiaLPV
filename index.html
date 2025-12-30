@@ -600,7 +600,7 @@
         <line x1="24" y1="4" x2="24" y2="16" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
         <line x1="6" y1="14" x2="16" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
         <line x1="42" y1="14" x2="32" y2="20" stroke="#dbeafe" stroke-width="1.5" opacity="0.6"/>
-    </svg>KAIA</div><a href="#planos" class="nav-cta">Quero Começar</a></div></nav>
+    </svg>KAIA</div><a href="/teste-kaia" class="nav-cta">Quero Começar</a></div></nav>
     
     <!-- KAIA Floating Sidebar Avatar -->
     <div class="kaia-sidebar" onclick="openChat()">
@@ -644,7 +644,7 @@
             <div class="hero-badge">🚀 Mais de 12.000 profissionais transformados</div>
             <h1>Acelere Sua Carreira Com <span>Inteligência Artificial</span></h1>
             <p>Descubra seu verdadeiro potencial profissional com orientação personalizada por IA. Mapeamento de perfil, PDI inteligente e mentoria 24/7.</p>
-            <a href="#planos" class="hero-cta">Quero Evoluir Agora →</a>
+            <a href="/teste-kaia" class="hero-cta">Quero Evoluir Agora →</a>
             <p class="hero-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
             <div class="scroll-indicator" aria-hidden="true">
                 <span>Role para ver mais</span>
@@ -1026,7 +1026,7 @@
                 <li><span class="check">✓</span><span>Plano de Desenvolvimento Individual</span></li>
                 <li><span class="check">✓</span><span>Suporte Prioritário</span></li>
             </ul>
-            <button class="pricing-btn" id="start-now-btn">Começar Agora</button>
+            <a href="/teste-kaia" class="pricing-btn" id="start-now-btn" style="display: inline-block; text-decoration: none; text-align: center;">Começar Agora</a>
         </div>
     </div></section>
     <section class="faq"><div class="container">
@@ -1041,7 +1041,7 @@
     <section class="final-cta"><div class="container">
         <h2>Pronto para transformar sua carreira?</h2>
         <p>Junte-se a mais de 12.000 profissionais que já estão evoluindo com KAIA</p>
-        <a href="#planos" class="hero-cta">Começar Minha Evolução →</a>
+        <a href="/teste-kaia" class="hero-cta">Começar Minha Evolução →</a>
         <p class="hero-guarantee">✓ 7 dias de garantia • Cancele quando quiser</p>
     </div></section>
     <footer><div class="container"><p>© 2024 KAIA. Todos os direitos reservados.</p></div></footer>
@@ -1523,52 +1523,14 @@ JSON DE SAÍDA:
         }
     </script>
     <script>
-        // Single-use test access: validate token, open modal with iframe
+        // Handle token in URL - auto-redirect to test page with token
         (function() {
-            const startBtn = document.getElementById('start-now-btn');
-            const modal = document.getElementById('test-modal');
-            const closeBtn = document.getElementById('test-modal-close');
             const urlParams = new URLSearchParams(window.location.search);
             const token = urlParams.get('token');
-
-            async function tryOpenTest() {
-                if (token) {
-                    try {
-                        const res = await fetch('/api/consume-token', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ token })
-                        });
-                        if (res.ok) {
-                            modal.style.display = 'block';
-                            return;
-                        } else {
-                            const data = await res.json().catch(() => ({}));
-                            alert(data.error || 'Link inválido ou já utilizado.');
-                        }
-                    } catch (e) {
-                        alert('Erro ao validar o acesso. Tente novamente.');
-                    }
-                }
-                // Fallback: go to checkout if no valid token
-                window.location.href = '#checkout';
-            }
-
-            if (startBtn) {
-                startBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    tryOpenTest();
-                });
-            }
-            if (closeBtn) {
-                closeBtn.addEventListener('click', function() {
-                    modal.style.display = 'none';
-                });
-            }
-
-            // Optional: auto-open when arriving via exclusive link
+            
+            // If token in URL, redirect to test page with token pre-filled
             if (token) {
-                setTimeout(tryOpenTest, 300);
+                window.location.href = '/teste-kaia?token=' + encodeURIComponent(token);
             }
         })();
     </script>
