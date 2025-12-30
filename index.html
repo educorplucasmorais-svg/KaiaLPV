@@ -904,7 +904,7 @@
                 <!-- CTA -->
                 <div class="quiz-cta-box">
                     <p class="quiz-cta-text">🔓 Desbloqueie seu relatório completo com análise detalhada!</p>
-                    <a href="#planos" class="quiz-cta-btn">Desbloquear por R$59,90 →</a>
+                    <button class="quiz-cta-btn" id="unlockBtn" onclick="handleCheckout()" style="background: var(--primary); color: white; padding: 18px 36px; border-radius: 12px; font-weight: 700; font-size: 1.1rem; cursor: pointer; border: none; transition: all 0.3s ease; box-shadow: 0 4px 20px rgba(37,99,235,0.35); text-decoration: none; display: inline-block;">Desbloquear por R$59,90 →</button>
                     <p class="quiz-guarantee">✓ Relatório completo + PDI personalizado + Mentoria 24/7</p>
                 </div>
             </div>
@@ -1520,6 +1520,60 @@ JSON DE SAÍDA:
                 messagesContainer.appendChild(kaiaMsg);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }, 1000);
+        }
+    </script>
+    <script>
+        // Handle token in URL - auto-redirect to test page with token
+        (function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            
+            // If token in URL, redirect to test page with token pre-filled
+            if (token) {
+                window.location.href = '/teste-kaia?token=' + encodeURIComponent(token);
+            }
+        })();
+        
+        // Checkout Handler
+        async function handleCheckout() {
+            const unlockBtn = document.getElementById('unlockBtn');
+            unlockBtn.disabled = true;
+            unlockBtn.textContent = 'Processando...';
+            
+            try {
+                const response = await fetch('/api/checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        nome: userData.nome,
+                        email: userData.nome + '@example.com', // Placeholder, usar email real
+                        profissao: userData.profissao,
+                        plano: 'completo',
+                        valor: 59.90,
+                        userData: userData
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success && data.checkout_url) {
+                    // Redirect to checkout
+                    window.location.href = data.checkout_url;
+                } else if (data.error) {
+                    showToast('Erro: ' + data.error);
+                    unlockBtn.disabled = false;
+                    unlockBtn.textContent = 'Desbloquear por R$59,90 →';
+                } else {
+                    showToast('Erro ao processar. Tente novamente.');
+                    unlockBtn.disabled = false;
+                    unlockBtn.textContent = 'Desbloquear por R$59,90 →';
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                showToast('Erro de conexão. Tente novamente.');
+                unlockBtn.disabled = false;
+                unlockBtn.textContent = 'Desbloquear por R$59,90 →';
+            }
         }
     </script>
     <script>
