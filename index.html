@@ -64,6 +64,12 @@
         }
         .hero-cta:hover { background: linear-gradient(135deg, #1d4ed8 0%, #2563eb 50%, #3b82f6 100%); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(37,99,235,0.45); }
         .hero-guarantee { margin-top: 16px; color: var(--success); font-size: 0.9rem; font-weight: 500; }
+        .scroll-indicator { margin-top: 28px; display: inline-flex; flex-direction: column; align-items: center; gap: 6px; color: var(--text-muted); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.01em; }
+        .scroll-indicator .chevron { width: 14px; height: 14px; border-left: 2px solid var(--primary-light); border-bottom: 2px solid var(--primary-light); transform: rotate(-45deg); animation: scroll-bounce 1.2s ease-in-out infinite; }
+        @keyframes scroll-bounce {
+            0%, 100% { transform: translateY(0) rotate(-45deg); opacity: 0.9; }
+            50% { transform: translateY(6px) rotate(-45deg); opacity: 0.6; }
+        }
         .hero-image { display: flex; justify-content: center; align-items: center; }
         .hero-visual {
             width: 100%; max-width: 480px; height: 480px;
@@ -625,6 +631,10 @@
             <p>Descubra seu verdadeiro potencial profissional com orientação personalizada por IA. Mapeamento de perfil, PDI inteligente e mentoria 24/7.</p>
             <a href="#planos" class="hero-cta">Quero Evoluir Agora →</a>
             <p class="hero-guarantee">✓ Garantia de 7 dias ou seu dinheiro de volta</p>
+            <div class="scroll-indicator" aria-hidden="true">
+                <span>Role para ver mais</span>
+                <span class="chevron"></span>
+            </div>
         </div>
     </div></div></section>
     <section class="stats"><div class="container"><div class="stats-grid">
