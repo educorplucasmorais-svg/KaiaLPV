@@ -149,6 +149,28 @@
             transform: none;
         }
         
+        .free-test-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .free-test-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+        
+        .token-group {
+            display: none;
+        }
+        
         .error-message {
             background: rgba(239, 68, 68, 0.15);
             border: 1px solid var(--error);
@@ -913,18 +935,28 @@
                     <input type="email" id="userEmail" placeholder="seu@email.com" required>
                 </div>
                 
-                <div class="form-group">
-                    <label for="userToken">Token de Acesso Alpha / Access Token</label>
-                    <input type="text" id="userToken" placeholder="Digite seu token de acesso" required>
+                <div class="form-group token-group" id="tokenGroup">
+                    <label for="userToken">Token de Acesso / Access Token</label>
+                    <input type="text" id="userToken" placeholder="Token preenchido automaticamente" required>
                 </div>
                 
                 <button type="submit" class="submit-btn" id="submitBtn">
-                    🚀 Validar e Iniciar Teste
+                    🚀 Iniciar Meu Teste
+                </button>
+                
+                <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
+                    <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+                    <span style="color: var(--text-muted); font-size: 0.85rem;">ou</span>
+                    <hr style="flex: 1; border: none; border-top: 1px solid var(--border);">
+                </div>
+                
+                <button type="button" class="free-test-btn" id="freeTestBtn" onclick="startFreeTest()">
+                    🎁 Teste Gratuito - Começar Agora
                 </button>
             </form>
             
             <p style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.85rem;">
-                Não possui um token? <a href="/" style="color: var(--primary-light);">Adquira aqui</a>
+                ✅ Primeiro teste é gratuito • Resultados profissionais completos
             </p>
         </div>
     </section>
@@ -987,6 +1019,9 @@
     </footer>
     
     <script>
+        // Master Token for Alpha Access
+        const ALPHA_TOKEN = 'Revelagrupo01testecontrole';
+        
         // State management
         let sessionState = {
             sessionId: null,
@@ -1007,16 +1042,40 @@
         const errorMessage = document.getElementById('errorMessage');
         const successMessage = document.getElementById('successMessage');
         
+        // Start Free Test - Skip payment, use Alpha token
+        function startFreeTest() {
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            
+            if (!name || !email) {
+                showError('Por favor, preencha seu nome e email para continuar.');
+                return;
+            }
+            
+            // Auto-fill the token and submit
+            document.getElementById('userToken').value = ALPHA_TOKEN;
+            
+            // Trigger the form submission
+            const event = new Event('submit', { cancelable: true });
+            loginForm.dispatchEvent(event);
+        }
+        
         // Handle login form submission
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const name = document.getElementById('userName').value.trim();
             const email = document.getElementById('userEmail').value.trim();
-            const token = document.getElementById('userToken').value.trim();
+            let token = document.getElementById('userToken').value.trim();
             
-            if (!name || !email || !token) {
-                showError('Por favor, preencha todos os campos.');
+            // Auto-use Alpha token if not provided
+            if (!token) {
+                token = ALPHA_TOKEN;
+                document.getElementById('userToken').value = token;
+            }
+            
+            if (!name || !email) {
+                showError('Por favor, preencha seu nome e email.');
                 return;
             }
             
