@@ -948,12 +948,28 @@ app.get('/api/kaia/session/:sessionId', async (req, res) => {
   }
 });
 
-// Serve KAIA 5.0 test page
-app.get('/teste-kaia', (req, res) => {
+// Serve KAIA 5.0 test page (multiple routes for flexibility)
+app.get(['/teste-kaia', '/kaia', '/test'], (req, res) => {
+  console.log(`📋 Request: ${req.path} - Serving kaia-test.html`);
   res.sendFile(KAIA_TEST_PAGE, (err) => {
     if (err) {
-      console.error('Error serving kaia-test.html:', err.message);
-      res.status(500).send('Error loading test page. Please ensure kaia-test.html exists.');
+      console.error('Error serving kaia-test.html:', err);
+      res.status(500).send(`
+        <html>
+        <head><title>Erro - KAIA 5.0</title></head>
+        <body style="font-family: Arial; padding: 40px; background: #0a1628; color: white;">
+          <h1>Erro ao carregar KAIA 5.0</h1>
+          <p>O arquivo kaia-test.html não foi encontrado.</p>
+          <p><strong>Solução:</strong></p>
+          <ol>
+            <li>Execute: <code>git pull origin copilot/complete-sync-implementation</code></li>
+            <li>Verifique se existe o arquivo: <code>kaia-test.html</code></li>
+            <li>Reinicie o servidor: <code>node server.js</code></li>
+          </ol>
+          <a href="/" style="color: #3b82f6;">← Voltar para a Home</a>
+        </body>
+        </html>
+      `);
     }
   });
 });
@@ -1358,6 +1374,8 @@ app.listen(PORT, async () => {
   console.log('  ├─ GET  /health                    - Health check');
   console.log('  ├─ GET  /                          - Landing page');
   console.log('  ├─ GET  /teste-kaia               - KAIA 5.0 test page');
+  console.log('  ├─ GET  /kaia                     - KAIA 5.0 test page (alias)');
+  console.log('  ├─ GET  /test                     - KAIA 5.0 test page (alias)');
   console.log('  ├─ POST /api/kaia/validate-token  - Validate token');
   console.log('  ├─ POST /api/kaia/chat            - Chat with KAIA');
   console.log('  ├─ POST /api/payments/webhook     - Payment webhook');
