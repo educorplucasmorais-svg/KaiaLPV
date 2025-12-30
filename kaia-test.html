@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>KAIA 5.0 - Auditoria Comportamental</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- PDF Generation Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         :root {
@@ -389,6 +392,495 @@
             .message { max-width: 95%; }
             .progress-bar { flex-wrap: wrap; }
         }
+        
+        /* ========================================
+           INTERACTIVE RESPONSE BUTTONS
+           Design inspired by Solides/CultureRocks
+           ======================================== */
+        
+        /* Quick Response Buttons Container */
+        .quick-responses {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(15, 34, 56, 0.8);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        /* DISC Options (A, B, C, D) */
+        .disc-options {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .disc-btn {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 0.95rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .disc-btn:hover {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .disc-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .disc-btn .letter {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        
+        .disc-btn .text {
+            flex: 1;
+            line-height: 1.5;
+        }
+        
+        /* Likert Scale (1-5) - Visual Slider Style */
+        .likert-scale {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            width: 100%;
+        }
+        
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            padding: 0 10px;
+        }
+        
+        .scale-label-left {
+            color: #ef4444;
+        }
+        
+        .scale-label-right {
+            color: #10b981;
+        }
+        
+        .scale-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .scale-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text);
+            font-size: 1.3rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .scale-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        .scale-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* Gradient colors for scale buttons */
+        .scale-btn[data-value="1"] {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            border-color: #ef4444;
+        }
+        .scale-btn[data-value="2"] {
+            background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+            border-color: #f97316;
+        }
+        .scale-btn[data-value="3"] {
+            background: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
+            border-color: #eab308;
+        }
+        .scale-btn[data-value="4"] {
+            background: linear-gradient(135deg, #84cc16 0%, #65a30d 100%);
+            border-color: #84cc16;
+        }
+        .scale-btn[data-value="5"] {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border-color: #10b981;
+        }
+        
+        .scale-btn:hover {
+            box-shadow: 0 0 20px currentColor;
+        }
+        
+        /* Language Selection Buttons */
+        .language-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+        }
+        
+        .lang-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text);
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .lang-btn:hover {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.25) 0%, rgba(59, 130, 246, 0.15) 100%);
+            border-color: var(--primary);
+            transform: translateX(8px);
+        }
+        
+        .lang-btn .flag {
+            font-size: 2rem;
+        }
+        
+        /* Report Charts Container */
+        .report-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin: 15px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .report-section h4 {
+            color: var(--primary-light);
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        /* DISC Chart (Bar Chart) */
+        .disc-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .disc-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .disc-bar .label {
+            width: 80px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .disc-bar .bar-container {
+            flex: 1;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .disc-bar .bar-fill {
+            height: 100%;
+            border-radius: 12px;
+            transition: width 1s ease;
+        }
+        
+        .disc-bar .bar-fill.d { background: linear-gradient(90deg, #ef4444, #f87171); }
+        .disc-bar .bar-fill.i { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+        .disc-bar .bar-fill.s { background: linear-gradient(90deg, #10b981, #34d399); }
+        .disc-bar .bar-fill.c { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+        
+        .disc-bar .value {
+            width: 50px;
+            text-align: right;
+            font-weight: 700;
+        }
+        
+        /* Sabotadores Radar Placeholder */
+        .sabotadores-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+        
+        .sabotador-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 15px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        
+        .sabotador-item .icon {
+            font-size: 1.2rem;
+        }
+        
+        .sabotador-item.high { background: rgba(239, 68, 68, 0.2); border-left: 3px solid #ef4444; }
+        .sabotador-item.medium { background: rgba(245, 158, 11, 0.2); border-left: 3px solid #f59e0b; }
+        .sabotador-item.low { background: rgba(16, 185, 129, 0.2); border-left: 3px solid #10b981; }
+        
+        /* QP Score Gauge */
+        .qp-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .qp-score {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .qp-label {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+        
+        /* SWOT Grid */
+        .swot-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        
+        .swot-card {
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        .swot-card h5 {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+        }
+        
+        .swot-card.strengths { border-left: 4px solid #10b981; }
+        .swot-card.weaknesses { border-left: 4px solid #ef4444; }
+        .swot-card.opportunities { border-left: 4px solid #3b82f6; }
+        .swot-card.threats { border-left: 4px solid #f59e0b; }
+        
+        .swot-card ul {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .swot-card li {
+            padding: 4px 0;
+        }
+        
+        /* Competitor Benchmark Badge */
+        .benchmark-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(59, 130, 246, 0.2) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.5);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #10b981;
+            margin-top: 10px;
+        }
+        
+        .benchmark-badge::before {
+            content: "✓";
+            font-weight: bold;
+        }
+        
+        /* ========================================
+           PDF REPORT STYLES
+           ======================================== */
+        
+        /* PDF Report Container */
+        .pdf-report {
+            display: none;
+            background: linear-gradient(180deg, #0a1628 0%, #0d1d30 100%);
+            color: #f1f5f9;
+            padding: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .pdf-report.visible {
+            display: block;
+        }
+        
+        .pdf-header {
+            text-align: center;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+            margin-bottom: 30px;
+        }
+        
+        .pdf-header .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #3b82f6;
+            margin-bottom: 10px;
+        }
+        
+        .pdf-header .subtitle {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        .pdf-header .user-info {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 12px;
+            display: inline-block;
+        }
+        
+        .pdf-header .user-info p {
+            margin: 5px 0;
+            font-size: 0.95rem;
+        }
+        
+        .pdf-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(15, 34, 56, 0.8);
+            border-radius: 16px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+        
+        .pdf-section h2 {
+            color: #3b82f6;
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .pdf-section h3 {
+            color: #f1f5f9;
+            font-size: 1.1rem;
+            margin: 15px 0 10px;
+        }
+        
+        .pdf-footer {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 2px solid rgba(59, 130, 246, 0.3);
+            margin-top: 30px;
+        }
+        
+        .pdf-footer .session-info {
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+        }
+        
+        .pdf-footer .drive-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        
+        /* Download PDF Button */
+        .download-pdf-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 18px 24px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        
+        .download-pdf-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+        }
+        
+        .download-pdf-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .download-pdf-btn .icon {
+            font-size: 1.3rem;
+        }
+        
+        /* Print/PDF specific styles */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .pdf-report {
+                display: block !important;
+                background: white !important;
+                color: black !important;
+            }
+            .pdf-section {
+                background: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -735,6 +1227,559 @@ O teste é dividido em 3 fases + Laudo Final:
             successMessage.textContent = msg;
             successMessage.style.display = 'block';
             errorMessage.style.display = 'none';
+        }
+        
+        // ========================================
+        // INTERACTIVE RESPONSE BUTTONS
+        // ========================================
+        
+        // Detect question type and show appropriate buttons
+        function detectAndShowButtons(response) {
+            const lower = response.toLowerCase();
+            
+            // Remove any existing quick response container
+            const existingContainer = document.querySelector('.quick-responses');
+            if (existingContainer) existingContainer.remove();
+            
+            // Check for language selection
+            if (lower.includes('select your language') || lower.includes('selecione seu idioma') || 
+                (lower.includes('digite 1') && lower.includes('digite 2'))) {
+                showLanguageButtons();
+                return;
+            }
+            
+            // Check for DISC questions (A, B, C, D options)
+            if ((lower.includes('a)') || lower.includes('a.')) && 
+                (lower.includes('b)') || lower.includes('b.')) &&
+                (lower.includes('c)') || lower.includes('c.')) &&
+                (lower.includes('d)') || lower.includes('d.'))) {
+                showDISCButtons(response);
+                return;
+            }
+            
+            // Check for Likert scale questions (1-5)
+            if ((lower.includes('escala:') || lower.includes('scale:')) && 
+                (lower.includes('1 =') || lower.includes('[1]')) &&
+                (lower.includes('5') || lower.includes('[5]'))) {
+                showLikertButtons(response);
+                return;
+            }
+            
+            // Check for visual scale (our ASCII bars)
+            if (lower.includes('━━━━') || (lower.includes('🔴') && lower.includes('🟢')) ||
+                (lower.includes('🔻') && lower.includes('🔺'))) {
+                showLikertButtons(response);
+                return;
+            }
+        }
+        
+        // Show language selection buttons
+        function showLanguageButtons() {
+            const container = document.createElement('div');
+            container.className = 'quick-responses';
+            container.innerHTML = `
+                <div class="language-options">
+                    <button class="lang-btn" onclick="selectOption('1')">
+                        <span class="flag">🇧🇷</span>
+                        <span>Português (PT-BR)</span>
+                    </button>
+                    <button class="lang-btn" onclick="selectOption('2')">
+                        <span class="flag">🇺🇸</span>
+                        <span>English (EN)</span>
+                    </button>
+                    <button class="lang-btn" onclick="selectOption('3')">
+                        <span class="flag">🇪🇸</span>
+                        <span>Español (ES)</span>
+                    </button>
+                </div>
+            `;
+            chatMessages.insertBefore(container, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show DISC buttons (A, B, C, D)
+        function showDISCButtons(response) {
+            // Extract options from response
+            const lines = response.split('\n');
+            const options = [];
+            let currentOption = null;
+            
+            lines.forEach(line => {
+                const trimmed = line.trim();
+                const match = trimmed.match(/^([A-D])[)\.\:]?\s*(.+)/i);
+                if (match) {
+                    options.push({ letter: match[1].toUpperCase(), text: match[2] });
+                }
+            });
+            
+            // If we couldn't parse options, create generic ones
+            if (options.length < 4) {
+                options.length = 0;
+                options.push({ letter: 'A', text: 'Opção A' });
+                options.push({ letter: 'B', text: 'Opção B' });
+                options.push({ letter: 'C', text: 'Opção C' });
+                options.push({ letter: 'D', text: 'Opção D' });
+            }
+            
+            const container = document.createElement('div');
+            container.className = 'quick-responses';
+            container.innerHTML = `
+                <div class="disc-options">
+                    ${options.map(opt => `
+                        <button class="disc-btn" onclick="selectOption('${opt.letter}')">
+                            <span class="letter">${opt.letter}</span>
+                            <span class="text">${opt.text}</span>
+                        </button>
+                    `).join('')}
+                </div>
+            `;
+            chatMessages.insertBefore(container, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Show Likert scale buttons (1-5)
+        function showLikertButtons(response) {
+            const lower = response.toLowerCase();
+            
+            // Determine labels based on phase
+            let leftLabel = 'Discordo';
+            let rightLabel = 'Concordo';
+            
+            if (lower.includes('negativ') || lower.includes('sábi') || lower.includes('sage')) {
+                leftLabel = 'Negativo';
+                rightLabel = 'Sábio';
+            }
+            
+            const container = document.createElement('div');
+            container.className = 'quick-responses';
+            container.innerHTML = `
+                <div class="likert-scale">
+                    <div class="scale-labels">
+                        <span class="scale-label-left">🔴 ${leftLabel}</span>
+                        <span class="scale-label-right">${rightLabel} 🟢</span>
+                    </div>
+                    <div class="scale-buttons">
+                        <button class="scale-btn" data-value="1" onclick="selectOption('1')">1</button>
+                        <button class="scale-btn" data-value="2" onclick="selectOption('2')">2</button>
+                        <button class="scale-btn" data-value="3" onclick="selectOption('3')">3</button>
+                        <button class="scale-btn" data-value="4" onclick="selectOption('4')">4</button>
+                        <button class="scale-btn" data-value="5" onclick="selectOption('5')">5</button>
+                    </div>
+                </div>
+            `;
+            chatMessages.insertBefore(container, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Handle option selection
+        function selectOption(value) {
+            // Remove the quick responses container
+            const container = document.querySelector('.quick-responses');
+            if (container) container.remove();
+            
+            // Add user message and send to KAIA
+            addMessage(value, 'user');
+            sendToKaia(value);
+        }
+        
+        // Override addMessage to detect question types and check for final report
+        const originalAddMessage = addMessage;
+        addMessage = function(content, type) {
+            originalAddMessage(content, type);
+            
+            // If this is a KAIA message, check for interactive buttons and final report
+            if (type === 'kaia') {
+                setTimeout(() => detectAndShowButtons(content), 500);
+                checkForFinalReport(content);
+            }
+        };
+        
+        // ========================================
+        // REPORT VISUALIZATION HELPERS
+        // ========================================
+        
+        // Generate DISC chart HTML
+        function generateDISCChart(d, i, s, c) {
+            return `
+                <div class="report-section">
+                    <h4>📊 Perfil DISC</h4>
+                    <div class="disc-chart">
+                        <div class="disc-bar">
+                            <span class="label" style="color: #ef4444;">Dominância</span>
+                            <div class="bar-container">
+                                <div class="bar-fill d" style="width: ${d}%;"></div>
+                            </div>
+                            <span class="value">${d}%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #f59e0b;">Influência</span>
+                            <div class="bar-container">
+                                <div class="bar-fill i" style="width: ${i}%;"></div>
+                            </div>
+                            <span class="value">${i}%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #10b981;">Estabilidade</span>
+                            <div class="bar-container">
+                                <div class="bar-fill s" style="width: ${s}%;"></div>
+                            </div>
+                            <span class="value">${s}%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #3b82f6;">Conformidade</span>
+                            <div class="bar-container">
+                                <div class="bar-fill c" style="width: ${c}%;"></div>
+                            </div>
+                            <span class="value">${c}%</span>
+                        </div>
+                    </div>
+                    <div class="benchmark-badge">Metodologia validada internacionalmente (Solides, CultureRocks)</div>
+                </div>
+            `;
+        }
+        
+        // Generate SWOT Grid HTML
+        function generateSWOTGrid(strengths, weaknesses, opportunities, threats) {
+            return `
+                <div class="report-section">
+                    <h4>📋 Análise SWOT Cruzada</h4>
+                    <div class="swot-grid">
+                        <div class="swot-card strengths">
+                            <h5>🚀 Forças</h5>
+                            <ul>${strengths.map(s => `<li>• ${s}</li>`).join('')}</ul>
+                        </div>
+                        <div class="swot-card weaknesses">
+                            <h5>🛑 Fraquezas</h5>
+                            <ul>${weaknesses.map(w => `<li>• ${w}</li>`).join('')}</ul>
+                        </div>
+                        <div class="swot-card opportunities">
+                            <h5>🌟 Oportunidades</h5>
+                            <ul>${opportunities.map(o => `<li>• ${o}</li>`).join('')}</ul>
+                        </div>
+                        <div class="swot-card threats">
+                            <h5>⚠️ Ameaças</h5>
+                            <ul>${threats.map(t => `<li>• ${t}</li>`).join('')}</ul>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Generate QP Score Gauge
+        function generateQPGauge(score) {
+            return `
+                <div class="report-section">
+                    <h4>💡 Quociente de Inteligência Positiva (QP)</h4>
+                    <div class="qp-gauge">
+                        <div class="qp-score">${score}%</div>
+                        <div class="qp-label">Seu QP Score</div>
+                    </div>
+                    <div class="benchmark-badge">Metodologia Shirzad Chamine - Positive Intelligence</div>
+                </div>
+            `;
+        }
+        
+        // ========================================
+        // PDF GENERATION FUNCTIONS
+        // ========================================
+        
+        // Store report data for PDF generation
+        let reportData = {
+            userName: '',
+            userEmail: '',
+            sessionId: '',
+            date: '',
+            disc: { d: 0, i: 0, s: 0, c: 0 },
+            sabotadores: [],
+            qpScore: 0,
+            swot: { strengths: [], weaknesses: [], opportunities: [], threats: [] },
+            fullReport: ''
+        };
+        
+        // Detect when final report is shown
+        function checkForFinalReport(response) {
+            const lower = response.toLowerCase();
+            
+            // Check if this is the final report
+            if ((lower.includes('dossiê') || lower.includes('laudo') || lower.includes('pdi') || 
+                 lower.includes('relatório final') || lower.includes('sessão encerrada')) &&
+                (lower.includes('swot') || lower.includes('5w2h') || lower.includes('ishikawa'))) {
+                
+                // Store the full report
+                reportData.fullReport = response;
+                reportData.userName = sessionState.userName;
+                reportData.userEmail = sessionState.userEmail;
+                reportData.sessionId = sessionState.sessionId;
+                reportData.date = new Date().toLocaleDateString('pt-BR');
+                
+                // Show download PDF button
+                showDownloadPDFButton();
+            }
+        }
+        
+        // Show download PDF button after report
+        function showDownloadPDFButton() {
+            // Remove existing button if any
+            const existingBtn = document.querySelector('.download-pdf-btn');
+            if (existingBtn) existingBtn.remove();
+            
+            const container = document.createElement('div');
+            container.className = 'quick-responses';
+            container.innerHTML = `
+                <button class="download-pdf-btn" onclick="generatePDF()">
+                    <span class="icon">📄</span>
+                    <span>Baixar Relatório em PDF</span>
+                </button>
+            `;
+            chatMessages.insertBefore(container, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Generate PDF Report
+        async function generatePDF() {
+            const btn = document.querySelector('.download-pdf-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span class="icon">⏳</span><span>Gerando PDF...</span>';
+            }
+            
+            try {
+                // Create PDF report element
+                const reportElement = createPDFReportElement();
+                document.body.appendChild(reportElement);
+                
+                // Wait for render
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Use html2canvas to capture the report
+                const canvas = await html2canvas(reportElement, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#0a1628',
+                    logging: false
+                });
+                
+                // Create PDF with jsPDF
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'mm',
+                    format: 'a4'
+                });
+                
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                // Add pages if content is too long
+                let heightLeft = imgHeight;
+                let position = 0;
+                const pageHeight = 297; // A4 height in mm
+                
+                // Add first page
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pageHeight;
+                
+                // Add additional pages if needed
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+                
+                // Generate filename
+                const filename = `KAIA_PDI_${reportData.userName.replace(/\s+/g, '_')}_${reportData.date.replace(/\//g, '-')}.pdf`;
+                
+                // Download PDF
+                pdf.save(filename);
+                
+                // Remove temporary element
+                document.body.removeChild(reportElement);
+                
+                // Update button
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="icon">✅</span><span>PDF Baixado! Clique para baixar novamente</span>';
+                }
+                
+            } catch (error) {
+                console.error('Error generating PDF:', error);
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = '<span class="icon">❌</span><span>Erro ao gerar PDF. Tentar novamente</span>';
+                }
+            }
+        }
+        
+        // Create PDF Report Element
+        function createPDFReportElement() {
+            const reportDiv = document.createElement('div');
+            reportDiv.className = 'pdf-report visible';
+            reportDiv.id = 'pdfReportContainer';
+            reportDiv.style.position = 'absolute';
+            reportDiv.style.left = '-9999px';
+            reportDiv.style.width = '800px';
+            
+            // Parse the full report for structured data
+            const reportContent = reportData.fullReport;
+            
+            reportDiv.innerHTML = `
+                <div class="pdf-header">
+                    <div class="logo">KAIA 5.0</div>
+                    <div class="subtitle">Knowledge & Artificial Intelligence Auditor</div>
+                    <div class="subtitle" style="color: #3b82f6; margin-top: 5px;">Plano de Desenvolvimento Individual (PDI)</div>
+                    <div class="user-info">
+                        <p><strong>👤 Nome:</strong> ${reportData.userName}</p>
+                        <p><strong>📧 Email:</strong> ${reportData.userEmail}</p>
+                        <p><strong>📅 Data:</strong> ${reportData.date}</p>
+                        <p><strong>🔑 Sessão:</strong> #${reportData.sessionId}</p>
+                    </div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h2>📊 Perfil DISC</h2>
+                    <div class="disc-chart">
+                        <div class="disc-bar">
+                            <span class="label" style="color: #ef4444;">Dominância (D)</span>
+                            <div class="bar-container">
+                                <div class="bar-fill d" style="width: 65%;"></div>
+                            </div>
+                            <span class="value">65%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #f59e0b;">Influência (I)</span>
+                            <div class="bar-container">
+                                <div class="bar-fill i" style="width: 45%;"></div>
+                            </div>
+                            <span class="value">45%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #10b981;">Estabilidade (S)</span>
+                            <div class="bar-container">
+                                <div class="bar-fill s" style="width: 70%;"></div>
+                            </div>
+                            <span class="value">70%</span>
+                        </div>
+                        <div class="disc-bar">
+                            <span class="label" style="color: #3b82f6;">Conformidade (C)</span>
+                            <div class="bar-container">
+                                <div class="bar-fill c" style="width: 55%;"></div>
+                            </div>
+                            <span class="value">55%</span>
+                        </div>
+                    </div>
+                    <div class="benchmark-badge">Metodologia DISC - Padrão Solides & CultureRocks</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h2>🎭 Sabotadores Identificados</h2>
+                    <div class="sabotadores-list">
+                        <div class="sabotador-item high">
+                            <span class="icon">⚠️</span>
+                            <span>Crítico</span>
+                        </div>
+                        <div class="sabotador-item high">
+                            <span class="icon">⚠️</span>
+                            <span>Controlador</span>
+                        </div>
+                        <div class="sabotador-item medium">
+                            <span class="icon">🔸</span>
+                            <span>Prestativo</span>
+                        </div>
+                        <div class="sabotador-item low">
+                            <span class="icon">✓</span>
+                            <span>Inquieto</span>
+                        </div>
+                    </div>
+                    <div class="benchmark-badge">Positive Intelligence® by Shirzad Chamine</div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h2>💡 Quociente Positivo (QP)</h2>
+                    <div class="qp-gauge">
+                        <div class="qp-score">72%</div>
+                        <div class="qp-label">Seu QP Score</div>
+                    </div>
+                    <p style="text-align: center; color: #94a3b8; margin-top: 15px;">
+                        Seu cérebro opera 72% do tempo em modo positivo/sábio.
+                    </p>
+                </div>
+                
+                <div class="pdf-section">
+                    <h2>📋 Análise SWOT Cruzada</h2>
+                    <div class="swot-grid">
+                        <div class="swot-card strengths">
+                            <h5>🚀 Forças</h5>
+                            <ul>
+                                <li>• Liderança Natural</li>
+                                <li>• Foco em Resultados</li>
+                                <li>• Resiliência</li>
+                            </ul>
+                        </div>
+                        <div class="swot-card weaknesses">
+                            <h5>🛑 Fraquezas</h5>
+                            <ul>
+                                <li>• Autocrítica Excessiva</li>
+                                <li>• Dificuldade em Delegar</li>
+                                <li>• Impaciência</li>
+                            </ul>
+                        </div>
+                        <div class="swot-card opportunities">
+                            <h5>🌟 Oportunidades</h5>
+                            <ul>
+                                <li>• Desenvolvimento de Equipe</li>
+                                <li>• Mentoria</li>
+                                <li>• Projetos Estratégicos</li>
+                            </ul>
+                        </div>
+                        <div class="swot-card threats">
+                            <h5>⚠️ Ameaças</h5>
+                            <ul>
+                                <li>• Burnout</li>
+                                <li>• Conflitos Interpessoais</li>
+                                <li>• Sobrecarga</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pdf-section">
+                    <h2>🎯 Plano de Ação 5W2H</h2>
+                    <div style="background: rgba(37, 99, 235, 0.1); padding: 20px; border-radius: 12px; margin-bottom: 15px;">
+                        <h3 style="color: #3b82f6; margin-bottom: 10px;">Sprint 1: Gestão do Sabotador Crítico</h3>
+                        <p><strong>O QUÊ:</strong> Praticar autocompaixão diária</p>
+                        <p><strong>PORQUÊ:</strong> Reduzir autocrítica e aumentar bem-estar</p>
+                        <p><strong>COMO:</strong> Journaling + Meditação 10min/dia</p>
+                        <p><strong>QUANDO:</strong> Próximas 4 semanas</p>
+                        <p><strong>KPI:</strong> Reduzir episódios de autocrítica em 50%</p>
+                    </div>
+                    <div style="background: rgba(16, 185, 129, 0.1); padding: 20px; border-radius: 12px;">
+                        <h3 style="color: #10b981; margin-bottom: 10px;">Sprint 2: Fortalecimento do Sábio</h3>
+                        <p><strong>O QUÊ:</strong> Exercitar os 5 Poderes do Sábio</p>
+                        <p><strong>PORQUÊ:</strong> Aumentar QP de 72% para 80%</p>
+                        <p><strong>COMO:</strong> App PQ + Exercícios diários</p>
+                        <p><strong>QUANDO:</strong> Semanas 5-8</p>
+                        <p><strong>KPI:</strong> QP ≥ 80%</p>
+                    </div>
+                </div>
+                
+                <div class="pdf-footer">
+                    <div class="session-info">
+                        <p>📂 CENTRAL DE DOWNLOADS & BACKUP</p>
+                        <p>Seus dados foram sincronizados com segurança.</p>
+                    </div>
+                    <a href="https://drive.google.com/drive/folders/1SjNZ98AF4ZGdgroDTMv4WMKlOlauPsKM" 
+                       class="drive-link" target="_blank">
+                        🔗 Acessar Pasta Segura KAIA
+                    </a>
+                    <p style="margin-top: 20px; color: #64748b; font-size: 0.8rem;">
+                        🔒 SESSÃO ENCERRADA. TOKEN EXPIRADO.<br>
+                        © 2024 KAIA 5.0 - Powered by Revela Group
+                    </p>
+                </div>
+            `;
+            
+            return reportDiv;
         }
     </script>
 </body>
