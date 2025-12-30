@@ -509,6 +509,21 @@
             height: 20px;
             fill: white;
         }
+        .chat-test-link {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 8px;
+            transition: all 0.2s ease;
+        }
+        .chat-test-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
         
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
@@ -1388,11 +1403,28 @@ JSON DE SAÍDA:
             document.getElementById('chatContainer').classList.remove('active');
         }
         
+        function goToFreeTest() {
+            closeChat();
+            // Use requestAnimationFrame to ensure chat closes before scrolling
+            requestAnimationFrame(() => {
+                const quizContainer = document.getElementById('quizContainer');
+                if (quizContainer) {
+                    quizContainer.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        }
+        
         function handleKeyPress(event) {
             if (event.key === 'Enter') {
                 sendMessage();
             }
         }
+        
+        // Track conversation state
+        let chatState = {
+            askedAboutTest: false,
+            messageCount: 0
+        };
         
         function sendMessage() {
             const input = document.getElementById('chatInput');
@@ -1408,23 +1440,61 @@ JSON DE SAÍDA:
             messagesContainer.appendChild(userMsg);
             
             input.value = '';
+            chatState.messageCount++;
             
             // Scroll to bottom
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            // Check if user is responding to test offer using word boundaries
+            const lowerMessage = message.toLowerCase();
+            const affirmativeWords = ['sim', 'quero', 'ok', 'claro', 'pode ser', 'bora', 'vamos', 'yes', 'aceito', 'topa', 'topei', 'vou fazer'];
+            const negativeWords = ['não', 'nao', 'agora não', 'depois', 'talvez'];
+            
+            // Use word boundary regex for more accurate matching
+            const isAffirmative = affirmativeWords.some(word => {
+                const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+                return regex.test(lowerMessage);
+            });
+            const isNegative = negativeWords.some(word => {
+                const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+                return regex.test(lowerMessage);
+            });
             
             // Simulate KAIA response after a short delay
             setTimeout(() => {
                 const kaiaMsg = document.createElement('div');
                 kaiaMsg.className = 'chat-message kaia';
                 
-                const responses = [
-                    'Que ótima pergunta! Para te ajudar melhor, que tal fazer nosso quiz de perfil comportamental? Assim posso te dar orientações mais personalizadas! 🎯',
-                    'Entendo sua preocupação! O autoconhecimento é o primeiro passo para o sucesso. Recomendo começar pelo nosso plano de R$59,90/mês que inclui mapeamento completo de perfil.',
-                    'Adorei sua iniciativa! Vou te ajudar a descobrir seus pontos fortes e áreas de desenvolvimento. Clique em "Quero Evoluir Agora" para começar! 🚀',
-                    'Você está no caminho certo! A mentoria 24/7 pode te ajudar com dúvidas como essa a qualquer momento. Quer conhecer nosso plano completo?'
-                ];
+                // If user said yes to test offer
+                if (chatState.askedAboutTest && isAffirmative) {
+                    kaiaMsg.innerHTML = `Perfeito! 🎉 Vou te levar direto para o teste gratuito!<br><br>
+                        <a href="#quizContainer" onclick="goToFreeTest()" class="chat-test-link">
+                            🚀 Fazer Teste Gratuito Agora
+                        </a>`;
+                    chatState.askedAboutTest = false;
+                }
+                // If user said no to test offer
+                else if (chatState.askedAboutTest && isNegative) {
+                    kaiaMsg.textContent = 'Sem problemas! Estou aqui quando você quiser. Posso te ajudar com alguma outra dúvida sobre sua carreira? 😊';
+                    chatState.askedAboutTest = false;
+                }
+                // After 2 messages, offer the free test
+                else if (chatState.messageCount >= 2 && !chatState.askedAboutTest) {
+                    kaiaMsg.textContent = '💡 Sabia que você pode fazer um teste gratuito de perfil comportamental? Em apenas 9 perguntas, descubro seu perfil DISC, seus sabotadores e seu Quociente Positivo! Quer fazer agora? 🎯';
+                    chatState.askedAboutTest = true;
+                }
+                // Regular responses
+                else {
+                    const responses = [
+                        'Que ótima pergunta! Fico feliz em te ajudar com sua jornada profissional. Me conta mais sobre o que você busca? 🎯',
+                        'Entendo sua preocupação! O autoconhecimento é o primeiro passo para o sucesso. Continue me contando sobre você!',
+                        'Adorei sua iniciativa! Vou te ajudar a descobrir seus pontos fortes e áreas de desenvolvimento. 🚀',
+                        'Você está no caminho certo! A mentoria 24/7 pode te ajudar com dúvidas como essa a qualquer momento.'
+                    ];
+                    
+                    kaiaMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
+                }
                 
-                kaiaMsg.textContent = responses[Math.floor(Math.random() * responses.length)];
                 messagesContainer.appendChild(kaiaMsg);
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }, 1000);
