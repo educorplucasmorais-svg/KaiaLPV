@@ -1,157 +1,154 @@
-﻿#  Fonte da Juventude - Sistema de Gestão
+﻿#  KAIA LPV - Sistema Inteligente com IA Generativa
 
-Sistema completo para clínica de dermatologia e estética, desenvolvido com React 19 + Spring Boot 3.2 + Java 21 LTS.
+Sistema completo de landing page e teste interativo de KAIA 5.0, com backend robusto em Node.js + Express, integrado com Google Generative AI.
 
-##  Funcionalidades
+##  🚀 Funcionalidades Principais
 
--  **Autenticação**: Login com credenciais master (admin/admin)
--  **Dashboard**: Visão geral de pacientes e planos
--  **Cadastro de Pacientes**: Gestão completa de clientes
--  **Planos de Tratamento**: Seleção de 30+ tratamentos com marcação de essenciais ()
--  **Geração de PDF**: Documentos profissionais com 2 colunas e campos de pagamento
--  **Banco de Dados**: Visualização e download de planos salvos
--  **Configurações**: Painel administrativo
+-  **Landing Page Responsiva**: Homepage profissional (/)
+-  **KAIA 5.0 Test Page**: Interface interativa para teste do sistema (4 rotas disponíveis)
+-  **Google Generative AI**: Integração com Gemini para respostas inteligentes
+-  **Backend Escalável**: API RESTful com Express.js
+-  **Múltiplas Rotas de Acesso**: `/`, `/app`, `/teste-kaia`, `/kaia`, `/test`
+-  **Banco de Dados MySQL**: Estrutura completa para usuários, planos e sessões
+-  **API Admin**: Endpoints seguros para administração
 
-##  Quick Start
+##  ⚡ Quick Start
 
-### Frontend (Desenvolvimento)
+### Rodar Localmente (Desenvolvimento)
 ```bash
-cd frontend
+# 1. Instalar dependências
 npm install
-npm run dev
-# Acesse: http://localhost:5173
+
+# 2. Configurar variáveis de ambiente (.env)
+PORT=3001
+DB_HOST=localhost
+DB_USER=root
+DB_PASSWORD=
+DB_NAME=kaia
+GEMINI_API_KEY=sua_chave_aqui
+
+# 3. Iniciar servidor
+npm start
+# Acesse: http://localhost:3001
 ```
 
-### Build de Produção
-```bash
-cd frontend
-npm run build
-# Arquivos gerados em: dist/
-```
+### Rotas Disponíveis
+| Rota | Descrição |
+|------|-----------|
+| `http://localhost:3001/` | Landing page principal |
+| `http://localhost:3001/app` | Alias para landing page |
+| `http://localhost:3001/teste-kaia` | Página de teste KAIA 5.0 |
+| `http://localhost:3001/kaia` | Alias curto para teste |
+| `http://localhost:3001/test` | Alias alternativo |
 
-##  Credenciais
+##  🔐 Credenciais Padrão
 
-**Login Master:**
-- Email: `admin`
+**Admin Panel:**
+- Email: `admin@admin.com`
 - Senha: `admin`
+- Key: `admin@admin.com`
 
-##  Stack Tecnológica
+##  📚 Stack Tecnológica
 
 ### Frontend
-- **React 19.2.0** - UI framework
-- **TypeScript** - Type safety
-- **Vite 7.2.4** - Build tool
-- **Wouter** - SPA routing
-- **Sonner** - Toast notifications
-- **TailwindCSS** - Inline styling
+- **HTML5 / CSS3** - Markup e styling
+- **JavaScript Vanilla** - Interatividade
+- **Responsive Design** - Mobile-first approach
 
 ### Backend
-- **Java 21 LTS** (Microsoft build)
-- **Spring Boot 3.2.0** (Web, Security, JPA)
-- **MySQL 8** - Database
-- **Maven 3.9.11** - Build tool
+- **Node.js 18+** - JavaScript runtime
+- **Express.js 4** - Web framework
+- **MySQL 8** - Banco de dados relacional
+- **Google Generative AI** - IA integrada
+- **Axios** - HTTP client
+- **CORS** - Cross-origin requests
+- **Dotenv** - Variáveis de ambiente
 
-### Design
-- **Cores**: Bege (#e8e0d5), Dourado (#d4af37), Taupe (#8F7169)
-- **Fontes**: Cormorant Garamond, Cinzel, Georgia
-- **Logos**: Componentes reutilizáveis LogoCG e LogoFJ
-
-##  Estrutura do Projeto
+##  📁 Estrutura do Projeto
 
 ```
-fonte-da-juventude-2.0/
- frontend/
-    src/
-       components/     # LogoCG.tsx, LogoFJ.tsx
-       pages/          # 8 páginas principais
-       App.tsx         # Routing e layout
-       App.css         # Luxury theme
-    dist/               # Build de produção 
-    vercel.json         # Config Vercel
-    package.json
- src/main/
-    java/
-       controller/     # REST endpoints
-       model/          # Entities (User, Patient, Plan)
-       service/        # Business logic
-       config/         # Security config
-    resources/
-        application.properties
- target/                 # JAR compilado
- pom.xml                 # Maven config (Java 21)
+KaiaLPV/
+ index.html              # Landing page principal
+ kaia-test.html          # Página de teste KAIA 5.0
+ server.js               # Backend Express.js
+ package.json            # Dependências e scripts
+ vercel.json             # Config Vercel
  railway.toml            # Config Railway
- DEPLOY-GUIDE.md         #  Guia completo de deployment
- README.md               # Este arquivo
+ DATABASE.md             # Documentação do banco de dados
+ DEPLOY-GUIDE.md         # Guia completo de deployment
+ .env.example            # Template variáveis de ambiente
 ```
 
-##  Deployment
+##  🚀 Deployment
 
-### Railway (Frontend - KAIA LPV) ✅ ATIVO
+### Vercel (Recomendado para Production)
 ```bash
-# Deploy automático via Railway CLI:
+# 1. Instalar Vercel CLI
+npm install -g vercel
+
+# 2. Deploy automático
+vercel deploy
+
+# 3. Variáveis de Ambiente na Vercel:
+# - NODE_ENV=production
+# - PORT=3001
+# - DB_HOST, DB_USER, DB_PASSWORD, DB_NAME
+# - GEMINI_API_KEY
+```
+
+**Status:** ✅ Pronto para Vercel  
+**Arquivo Config:** `vercel.json` (configurado)
+
+### Railway (Alternativa)
+```bash
+# 1. Instalar Railway CLI
+npm install -g @railway/cli
+
+# 2. Login e deploy
 railway login
+railway init
 railway up
 
-# Configuração:
-# - Builder: Dockerfile
-# - Build Context: raiz do repositório
-# - Dockerfile: constrói frontend com pnpm e serve via `serve`
-# - PORT: 8080
-# - Health Check: /
+# 3. Configurar variáveis no painel Railway
 ```
 
-**Status:** Deployado com sucesso no Railway  
-**URL:** Railway fornece URL automática após deploy  
-**Acesso:** admin / admin
+**Configuração:**
+- Builder: Dockerfile
+- Health Check: /
+- Port: 3001
 
-### Vercel (Frontend) - Alternativa
+### Localhost (Desenvolvimento)
 ```bash
-# 1. Push para GitHub
-git init
-git add .
-git commit -m "Deploy Fonte da Juventude"
-git remote add origin SEU_REPO
-git push -u origin main
-
-# 2. Importar na Vercel
-# - Framework: Vite
-# - Root: frontend
-# - Build: npm run build
-# - Output: dist
+npm start
+# Acesse: http://localhost:3001
 ```
 
-### Railway (Backend - Spring Boot) - Opcional
-```bash
-# Para deploy do backend Java:
-# 1. Conectar repositório no Railway
-# 2. Adicionar variáveis de ambiente:
-SPRING_DATASOURCE_URL=jdbc:mysql://srv1099.hstgr.io:3306/u475858067_revela
-SPRING_DATASOURCE_USERNAME=u475858067_revela
-SPRING_DATASOURCE_PASSWORD=Admin_123456
-```
+##  ✅ Checklist de Status
 
-**Ver guia completo:** `DEPLOY-GUIDE.md`
+- [x] Landing page responsiva
+- [x] Página de teste KAIA 5.0
+- [x] Backend Node.js + Express
+- [x] API RESTful funcional
+- [x] Integração Google Generative AI
+- [x] Banco de dados MySQL estruturado
+- [x] Múltiplas rotas de acesso
+- [x] Configuração Vercel pronta
+- [x] Configuração Railway pronta
+- [x] GitHub sincronizado (main branch)
 
-##  Status do Projeto
+**PRONTO PARA PRODUCTION! 🎉**
 
-- [x] Frontend 100% funcional
-- [x] Build de produção OK
-- [x] Componentes de logo reutilizáveis
-- [x] PDF generation com print nativo
-- [x] Autenticação localStorage
-- [x] 30+ tratamentos catalogados
-- [x] Marcação de essenciais ()
-- [x] Backend Spring Boot estruturado
-- [x] Configuração deployment
+##  📖 Documentação Adicional
 
-** PRONTO PARA PRODUCTION!**
+- [DATABASE.md](./DATABASE.md) - Schema e queries do banco
+- [DEPLOY-GUIDE.md](./DEPLOY-GUIDE.md) - Instruções detalhadas de deploy
+- [vercel.json](./vercel.json) - Configuração Vercel
+- [railway.toml](./railway.toml) - Configuração Railway
 
-##  Suporte
+##  🤝 Suporte
 
-Para mais informações, consulte:
-- `DEPLOY-GUIDE.md` - Guia detalhado de deployment
-- `DEPLOYMENT.md` - Instruções técnicas
+Para questões técnicas, consulte a documentação ou abra uma issue no GitHub.
 
 ---
 
-**Desenvolvido com  para Dra. Cybele Guedes - Dermatologia**
+**Desenvolvido com ❤️ para KAIA 5.0 - Solução Inteligente**
