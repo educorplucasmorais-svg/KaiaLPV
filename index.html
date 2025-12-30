@@ -1450,6 +1450,18 @@ JSON DE SAÍDA:
             const affirmativeWords = ['sim', 'quero', 'ok', 'claro', 'pode ser', 'bora', 'vamos', 'yes', 'aceito', 'topa', 'topei', 'vou fazer'];
             const negativeWords = ['não', 'nao', 'agora não', 'depois', 'talvez'];
             
+            // Detect offensive/aggressive language to respond calmly (using word boundaries for accuracy)
+            const offensiveWords = [
+                'idiota', 'burro', 'burra', 'estupido', 'estupida', 'imbecil', 'merda', 'porra', 'caralho', 
+                'fodase', 'puta', 'vadia', 'desgraça', 'desgraca', 'maldito', 'maldita', 'inferno', 'droga', 
+                'bosta', 'cuzao', 'cuzão', 'otario', 'otário', 'babaca', 'retardado', 'retardada', 
+                'lixo', 'nojento', 'nojenta', 'odeio', 'fuck', 'shit', 'damn', 'stupid', 'idiot', 'hate', 'dumb'
+            ];
+            const isOffensive = offensiveWords.some(word => {
+                const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+                return regex.test(lowerMessage);
+            });
+            
             // Use word boundary regex for more accurate matching
             const isAffirmative = affirmativeWords.some(word => {
                 const regex = new RegExp('\\b' + word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
@@ -1465,8 +1477,18 @@ JSON DE SAÍDA:
                 const kaiaMsg = document.createElement('div');
                 kaiaMsg.className = 'chat-message kaia';
                 
+                // Priority 1: Handle offensive/aggressive messages with calm, friendly response
+                if (isOffensive) {
+                    const calmResponses = [
+                        'Ei, estou aqui para te ajudar! 💙 Entendo que às vezes ficamos frustrados, mas vamos conversar com calma. Como posso te apoiar hoje?',
+                        'Percebo que você pode estar passando por um momento difícil. Estou aqui para te ouvir e ajudar no que precisar. 🤗',
+                        'Vamos com calma! 😊 Meu objetivo é te ajudar da melhor forma possível. Me conta o que está te preocupando?',
+                        'Entendo que nem sempre é fácil. Estou aqui para te apoiar! Vamos conversar sobre como posso te ajudar com sua carreira? 💪'
+                    ];
+                    kaiaMsg.textContent = calmResponses[Math.floor(Math.random() * calmResponses.length)];
+                }
                 // If user said yes to test offer
-                if (chatState.askedAboutTest && isAffirmative) {
+                else if (chatState.askedAboutTest && isAffirmative) {
                     kaiaMsg.innerHTML = `Perfeito! 🎉 Vou te levar direto para o teste gratuito!<br><br>
                         <a href="#quizContainer" onclick="goToFreeTest()" class="chat-test-link">
                             🚀 Fazer Teste Gratuito Agora
