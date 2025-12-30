@@ -41,46 +41,140 @@ const pool = mysql.createPool({
   queueLimit: 0,
 });
 
-// Initialize database tables
+// Initialize database tables - Complete Schema
 async function initializeDatabase() {
   try {
     const connection = await pool.getConnection();
     
-    // Create users table
+    // =============================================
+    // 1. USERS TABLE - Complete user management with authentication
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS users (
         id INT AUTO_INCREMENT PRIMARY KEY,
         email VARCHAR(255) UNIQUE NOT NULL,
-        name VARCHAR(255),
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        name VARCHAR(255) NOT NULL,
+        password_hash VARCHAR(255),
+        phone VARCHAR(20),
+        company VARCHAR(255),
+        role ENUM('user','admin','super_admin') DEFAULT 'user',
+        status ENUM('active','inactive','suspended','pending') DEFAULT 'pending',
+        email_verified BOOLEAN DEFAULT FALSE,
+        verification_token VARCHAR(64),
+        reset_token VARCHAR(64),
+        reset_token_expires TIMESTAMP NULL,
+        last_login TIMESTAMP NULL,
+        login_count INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        INDEX idx_email (email),
+        INDEX idx_status (status)
       )
     `);
     
-    // Create subscriptions table
+    // =============================================
+    // 2. USER PROFILES - Extended profile information
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS user_profiles (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT UNIQUE NOT NULL,
+        avatar_url VARCHAR(500),
+        bio TEXT,
+        linkedin_url VARCHAR(500),
+        position VARCHAR(255),
+        department VARCHAR(255),
+        experience_years INT,
+        education VARCHAR(255),
+        skills JSON,
+        preferences JSON,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+      )
+    `);
+
+    // =============================================
+    // 3. PLANS TABLE - Subscription plans
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS plans (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        slug VARCHAR(50) UNIQUE NOT NULL,
+        description TEXT,
+        price DECIMAL(10, 2) NOT NULL,
+        currency VARCHAR(3) DEFAULT 'BRL',
+        interval_type ENUM('one_time','monthly','quarterly','yearly') DEFAULT 'one_time',
+        features JSON,
+        tests_included INT DEFAULT 1,
+        is_active BOOLEAN DEFAULT TRUE,
+        sort_order INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // =============================================
+    // 4. SUBSCRIPTIONS TABLE - User subscriptions
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS subscriptions (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
-        plan VARCHAR(50),
-        status VARCHAR(50),
+        plan_id INT NOT NULL,
+        status ENUM('active','paused','cancelled','expired','pending') DEFAULT 'pending',
+        starts_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        expires_at TIMESTAMP NULL,
+        cancelled_at TIMESTAMP NULL,
+        cancel_reason TEXT,
+        tests_remaining INT DEFAULT 1,
+        auto_renew BOOLEAN DEFAULT FALSE,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (plan_id) REFERENCES plans(id),
+        INDEX idx_user_status (user_id, status),
+        INDEX idx_expires (expires_at)
       )
     `);
     
-    // Create payments table
+    // =============================================
+    // 5. PAYMENTS TABLE - Complete payment history
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS payments (
         id INT AUTO_INCREMENT PRIMARY KEY,
         user_id INT NOT NULL,
-        amount DECIMAL(10, 2),
-        status VARCHAR(50),
+        subscription_id INT,
+        amount DECIMAL(10, 2) NOT NULL,
+        currency VARCHAR(3) DEFAULT 'BRL',
+        status ENUM('pending','processing','completed','failed','refunded','cancelled') DEFAULT 'pending',
+        payment_method ENUM('credit_card','debit_card','pix','boleto','paypal','stripe') DEFAULT 'pix',
+        gateway VARCHAR(50),
+        gateway_payment_id VARCHAR(255),
+        gateway_response JSON,
+        description VARCHAR(500),
+        invoice_url VARCHAR(500),
+        receipt_url VARCHAR(500),
+        paid_at TIMESTAMP NULL,
+        refunded_at TIMESTAMP NULL,
+        refund_amount DECIMAL(10, 2),
+        refund_reason TEXT,
+        metadata JSON,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (subscription_id) REFERENCES subscriptions(id) ON DELETE SET NULL,
+        INDEX idx_user_payments (user_id),
+        INDEX idx_status (status),
+        INDEX idx_gateway (gateway, gateway_payment_id)
       )
     `);
 
-    // Create single-use test tokens table
+    // =============================================
+    // 6. SINGLE-USE TEST TOKENS (Legacy)
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS test_tokens (
         id INT AUTO_INCREMENT PRIMARY KEY,
@@ -88,55 +182,193 @@ async function initializeDatabase() {
         email VARCHAR(255),
         status ENUM('unused','used') DEFAULT 'unused',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        used_at TIMESTAMP NULL
+        used_at TIMESTAMP NULL,
+        INDEX idx_token (token),
+        INDEX idx_status (status)
       )
     `);
 
-    // Create KAIA 5.0 sequential tokens table
+    // =============================================
+    // 7. KAIA TOKENS - Sequential tokens for test access
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS kaia_tokens (
         id INT AUTO_INCREMENT PRIMARY KEY,
         sequential_number INT UNIQUE NOT NULL,
+        user_id INT,
         email VARCHAR(255),
         name VARCHAR(255),
-        status ENUM('available','assigned','used','expired') DEFAULT 'available',
+        payment_id INT,
+        status ENUM('available','assigned','used','expired','revoked') DEFAULT 'available',
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         assigned_at TIMESTAMP NULL,
-        used_at TIMESTAMP NULL
+        used_at TIMESTAMP NULL,
+        expires_at TIMESTAMP NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE SET NULL,
+        INDEX idx_sequential (sequential_number),
+        INDEX idx_status (status),
+        INDEX idx_user (user_id)
       )
     `);
 
-    // Create KAIA 5.0 test sessions table
+    // =============================================
+    // 8. KAIA SESSIONS - Test sessions with full data
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS kaia_sessions (
         id INT AUTO_INCREMENT PRIMARY KEY,
-        token_id INT NOT NULL,
+        token_id INT,
+        user_id INT,
         user_name VARCHAR(255),
         user_email VARCHAR(255),
-        current_state ENUM('auth','disc','sabotadores','qp','report') DEFAULT 'auth',
+        language ENUM('pt-br','en','es') DEFAULT 'pt-br',
+        current_state ENUM('idioma','auth','disc','sabotadores','qp','report','completed') DEFAULT 'idioma',
         disc_answers JSON,
+        disc_scores JSON,
         sabotadores_answers JSON,
+        sabotadores_scores JSON,
         qp_answers JSON,
+        qp_score DECIMAL(5,2),
         final_report LONGTEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        report_pdf_url VARCHAR(500),
+        conversation_history JSON,
+        started_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         completed_at TIMESTAMP NULL,
-        FOREIGN KEY (token_id) REFERENCES kaia_tokens(id)
+        duration_minutes INT,
+        ip_address VARCHAR(45),
+        user_agent VARCHAR(500),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        FOREIGN KEY (token_id) REFERENCES kaia_tokens(id) ON DELETE SET NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        INDEX idx_user (user_id),
+        INDEX idx_state (current_state),
+        INDEX idx_completed (completed_at)
       )
     `);
 
-    // Create reports table
+    // =============================================
+    // 9. REPORTS TABLE - Generated reports
+    // =============================================
     await connection.execute(`
       CREATE TABLE IF NOT EXISTS reports (
         id INT AUTO_INCREMENT PRIMARY KEY,
+        session_id INT,
+        user_id INT,
         user_name VARCHAR(255),
+        user_email VARCHAR(255),
         profession VARCHAR(255),
+        report_type ENUM('disc','sabotadores','qp','full','custom') DEFAULT 'full',
         report_text LONGTEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        report_data JSON,
+        pdf_url VARCHAR(500),
+        share_token VARCHAR(64) UNIQUE,
+        is_public BOOLEAN DEFAULT FALSE,
+        view_count INT DEFAULT 0,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (session_id) REFERENCES kaia_sessions(id) ON DELETE SET NULL,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        INDEX idx_user (user_id),
+        INDEX idx_share (share_token)
       )
     `);
-    
+
+    // =============================================
+    // 10. WEBHOOKS LOG - Payment gateway webhooks
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS webhook_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        gateway VARCHAR(50) NOT NULL,
+        event_type VARCHAR(100),
+        event_id VARCHAR(255),
+        payload JSON,
+        processed BOOLEAN DEFAULT FALSE,
+        processed_at TIMESTAMP NULL,
+        error_message TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_gateway_event (gateway, event_type),
+        INDEX idx_processed (processed)
+      )
+    `);
+
+    // =============================================
+    // 11. AUDIT LOG - Track all important actions
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS audit_logs (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT,
+        action VARCHAR(100) NOT NULL,
+        entity_type VARCHAR(50),
+        entity_id INT,
+        old_values JSON,
+        new_values JSON,
+        ip_address VARCHAR(45),
+        user_agent VARCHAR(500),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL,
+        INDEX idx_user (user_id),
+        INDEX idx_action (action),
+        INDEX idx_entity (entity_type, entity_id)
+      )
+    `);
+
+    // =============================================
+    // 12. COUPONS - Discount coupons
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS coupons (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        code VARCHAR(50) UNIQUE NOT NULL,
+        description VARCHAR(255),
+        discount_type ENUM('percentage','fixed') DEFAULT 'percentage',
+        discount_value DECIMAL(10,2) NOT NULL,
+        max_uses INT,
+        used_count INT DEFAULT 0,
+        min_purchase DECIMAL(10,2) DEFAULT 0,
+        valid_from TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        valid_until TIMESTAMP NULL,
+        is_active BOOLEAN DEFAULT TRUE,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        INDEX idx_code (code),
+        INDEX idx_active (is_active)
+      )
+    `);
+
+    // =============================================
+    // 13. COUPON USAGE - Track coupon usage
+    // =============================================
+    await connection.execute(`
+      CREATE TABLE IF NOT EXISTS coupon_usage (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        coupon_id INT NOT NULL,
+        user_id INT NOT NULL,
+        payment_id INT,
+        discount_applied DECIMAL(10,2),
+        used_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (coupon_id) REFERENCES coupons(id) ON DELETE CASCADE,
+        FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+        FOREIGN KEY (payment_id) REFERENCES payments(id) ON DELETE SET NULL,
+        UNIQUE KEY unique_coupon_user (coupon_id, user_id)
+      )
+    `);
+
+    // =============================================
+    // Insert default plan if not exists
+    // =============================================
+    await connection.execute(`
+      INSERT IGNORE INTO plans (name, slug, description, price, interval_type, tests_included, features) VALUES
+      ('Autoconhecimento Total', 'autoconhecimento-total', 'Plano completo com DISC, Sabotadores e QP', 59.90, 'one_time', 1, 
+       '{"disc": true, "sabotadores": true, "qp": true, "pdi": true, "support": true}')
+    `);
+
     connection.release();
-    console.log('✓ Tabelas base garantidas (users/subscriptions/payments/reports/kaia_tokens/kaia_sessions)');
+    console.log('✓ Database schema initialized successfully');
+    console.log('  └─ Tables: users, user_profiles, plans, subscriptions, payments');
+    console.log('  └─ Tables: kaia_tokens, kaia_sessions, reports');
+    console.log('  └─ Tables: webhook_logs, audit_logs, coupons, coupon_usage');
   } catch (error) {
     console.error('Erro ao inicializar banco de dados:', error.message);
   }
@@ -710,6 +942,394 @@ app.get('/teste-kaia', (req, res) => {
   res.sendFile(path.join(__dirname, 'kaia-test.html'));
 });
 
+// ============================================
+// ADMIN API ENDPOINTS
+// ============================================
+
+// Admin authentication middleware
+const adminAuth = (req, res, next) => {
+  const adminKey = req.headers['x-admin-key'] || req.body.adminKey;
+  const expectedKey = process.env.KAIA_ADMIN_KEY || 'kaia-admin-2024';
+  
+  if (adminKey !== expectedKey) {
+    return res.status(403).json({ success: false, error: 'Unauthorized' });
+  }
+  next();
+};
+
+// =============================================
+// USER MANAGEMENT ENDPOINTS
+// =============================================
+
+// List all users (Admin)
+app.get('/api/admin/users', adminAuth, async (req, res) => {
+  const { page = 1, limit = 50, status, search } = req.query;
+  const offset = (page - 1) * limit;
+  
+  try {
+    const connection = await pool.getConnection();
+    let query = 'SELECT id, email, name, role, status, email_verified, last_login, login_count, created_at FROM users';
+    const params = [];
+    const conditions = [];
+    
+    if (status) {
+      conditions.push('status = ?');
+      params.push(status);
+    }
+    if (search) {
+      conditions.push('(name LIKE ? OR email LIKE ?)');
+      params.push(`%${search}%`, `%${search}%`);
+    }
+    
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), offset);
+    
+    const [users] = await connection.execute(query, params);
+    const [countResult] = await connection.execute('SELECT COUNT(*) as total FROM users');
+    
+    connection.release();
+    res.json({
+      success: true,
+      users,
+      pagination: {
+        page: parseInt(page),
+        limit: parseInt(limit),
+        total: countResult[0].total
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get user details (Admin)
+app.get('/api/admin/users/:id', adminAuth, async (req, res) => {
+  try {
+    const connection = await pool.getConnection();
+    
+    const [users] = await connection.execute(
+      'SELECT * FROM users WHERE id = ?',
+      [req.params.id]
+    );
+    
+    if (users.length === 0) {
+      connection.release();
+      return res.status(404).json({ success: false, error: 'User not found' });
+    }
+    
+    // Get user's payments
+    const [payments] = await connection.execute(
+      'SELECT * FROM payments WHERE user_id = ? ORDER BY created_at DESC LIMIT 10',
+      [req.params.id]
+    );
+    
+    // Get user's sessions
+    const [sessions] = await connection.execute(
+      'SELECT * FROM kaia_sessions WHERE user_id = ? OR user_email = ? ORDER BY created_at DESC LIMIT 10',
+      [req.params.id, users[0].email]
+    );
+    
+    // Get user's subscriptions
+    const [subscriptions] = await connection.execute(
+      'SELECT s.*, p.name as plan_name FROM subscriptions s LEFT JOIN plans p ON s.plan_id = p.id WHERE s.user_id = ?',
+      [req.params.id]
+    );
+    
+    connection.release();
+    
+    const user = users[0];
+    delete user.password_hash;
+    
+    res.json({
+      success: true,
+      user,
+      payments,
+      sessions,
+      subscriptions
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// =============================================
+// PAYMENT MANAGEMENT ENDPOINTS
+// =============================================
+
+// List all payments (Admin)
+app.get('/api/admin/payments', adminAuth, async (req, res) => {
+  const { page = 1, limit = 50, status, gateway } = req.query;
+  const offset = (page - 1) * limit;
+  
+  try {
+    const connection = await pool.getConnection();
+    let query = `
+      SELECT p.*, u.name as user_name, u.email as user_email 
+      FROM payments p 
+      LEFT JOIN users u ON p.user_id = u.id
+    `;
+    const params = [];
+    const conditions = [];
+    
+    if (status) {
+      conditions.push('p.status = ?');
+      params.push(status);
+    }
+    if (gateway) {
+      conditions.push('p.gateway = ?');
+      params.push(gateway);
+    }
+    
+    if (conditions.length > 0) {
+      query += ' WHERE ' + conditions.join(' AND ');
+    }
+    query += ' ORDER BY p.created_at DESC LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), offset);
+    
+    const [payments] = await connection.execute(query, params);
+    const [stats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_payments,
+        SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END) as total_revenue,
+        SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) as pending_revenue
+      FROM payments
+    `);
+    
+    connection.release();
+    res.json({
+      success: true,
+      payments,
+      stats: stats[0],
+      pagination: { page: parseInt(page), limit: parseInt(limit) }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Process payment webhook (from payment gateway)
+app.post('/api/payments/webhook', async (req, res) => {
+  const { gateway, event, payment_id, status, amount, email, metadata } = req.body;
+  
+  try {
+    const connection = await pool.getConnection();
+    
+    // Log webhook
+    await connection.execute(
+      'INSERT INTO webhook_logs (gateway, event_type, event_id, payload) VALUES (?, ?, ?, ?)',
+      [gateway || 'unknown', event || 'payment', payment_id, JSON.stringify(req.body)]
+    );
+    
+    if (status === 'completed' || status === 'approved') {
+      // Find or create user
+      let [users] = await connection.execute('SELECT id FROM users WHERE email = ?', [email]);
+      let userId;
+      
+      if (users.length === 0) {
+        const [result] = await connection.execute(
+          'INSERT INTO users (email, name, status) VALUES (?, ?, ?)',
+          [email, metadata?.name || email.split('@')[0], 'active']
+        );
+        userId = result.insertId;
+      } else {
+        userId = users[0].id;
+      }
+      
+      // Create payment record
+      const [paymentResult] = await connection.execute(
+        `INSERT INTO payments (user_id, amount, status, gateway, gateway_payment_id, gateway_response, paid_at) 
+         VALUES (?, ?, 'completed', ?, ?, ?, NOW())`,
+        [userId, amount || 59.90, gateway, payment_id, JSON.stringify(req.body)]
+      );
+      
+      // Assign KAIA token
+      const [available] = await connection.execute(
+        'SELECT id, sequential_number FROM kaia_tokens WHERE status = ? ORDER BY sequential_number ASC LIMIT 1',
+        ['available']
+      );
+      
+      if (available.length > 0) {
+        await connection.execute(
+          'UPDATE kaia_tokens SET user_id = ?, email = ?, name = ?, payment_id = ?, status = ?, assigned_at = NOW() WHERE id = ?',
+          [userId, email, metadata?.name, paymentResult.insertId, 'assigned', available[0].id]
+        );
+        
+        // TODO: Send email with token to user
+        console.log(`Token ${available[0].sequential_number} assigned to ${email}`);
+      }
+      
+      // Update webhook as processed
+      await connection.execute(
+        'UPDATE webhook_logs SET processed = TRUE, processed_at = NOW() WHERE event_id = ?',
+        [payment_id]
+      );
+    }
+    
+    connection.release();
+    res.json({ success: true, received: true });
+  } catch (error) {
+    console.error('Webhook error:', error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// =============================================
+// KAIA SESSIONS/TESTS MANAGEMENT
+// =============================================
+
+// List all test sessions (Admin)
+app.get('/api/admin/sessions', adminAuth, async (req, res) => {
+  const { page = 1, limit = 50, state } = req.query;
+  const offset = (page - 1) * limit;
+  
+  try {
+    const connection = await pool.getConnection();
+    let query = 'SELECT * FROM kaia_sessions';
+    const params = [];
+    
+    if (state) {
+      query += ' WHERE current_state = ?';
+      params.push(state);
+    }
+    query += ' ORDER BY created_at DESC LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), offset);
+    
+    const [sessions] = await connection.execute(query, params);
+    const [stats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_sessions,
+        SUM(CASE WHEN current_state = 'completed' THEN 1 ELSE 0 END) as completed,
+        SUM(CASE WHEN current_state != 'completed' THEN 1 ELSE 0 END) as in_progress
+      FROM kaia_sessions
+    `);
+    
+    connection.release();
+    res.json({ success: true, sessions, stats: stats[0] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// =============================================
+// TOKENS MANAGEMENT
+// =============================================
+
+// List all tokens (Admin)
+app.get('/api/admin/tokens', adminAuth, async (req, res) => {
+  const { status, page = 1, limit = 100 } = req.query;
+  const offset = (page - 1) * limit;
+  
+  try {
+    const connection = await pool.getConnection();
+    let query = 'SELECT * FROM kaia_tokens';
+    const params = [];
+    
+    if (status) {
+      query += ' WHERE status = ?';
+      params.push(status);
+    }
+    query += ' ORDER BY sequential_number DESC LIMIT ? OFFSET ?';
+    params.push(parseInt(limit), offset);
+    
+    const [tokens] = await connection.execute(query, params);
+    const [stats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total,
+        SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END) as available,
+        SUM(CASE WHEN status = 'assigned' THEN 1 ELSE 0 END) as assigned,
+        SUM(CASE WHEN status = 'used' THEN 1 ELSE 0 END) as used
+      FROM kaia_tokens
+    `);
+    
+    connection.release();
+    res.json({ success: true, tokens, stats: stats[0] });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// =============================================
+// DASHBOARD STATS
+// =============================================
+
+// Get dashboard statistics (Admin)
+app.get('/api/admin/dashboard', adminAuth, async (req, res) => {
+  try {
+    const connection = await pool.getConnection();
+    
+    const [userStats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_users,
+        SUM(CASE WHEN status = 'active' THEN 1 ELSE 0 END) as active_users,
+        SUM(CASE WHEN created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY) THEN 1 ELSE 0 END) as new_users_7d
+      FROM users
+    `);
+    
+    const [paymentStats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_payments,
+        SUM(CASE WHEN status = 'completed' THEN amount ELSE 0 END) as total_revenue,
+        SUM(CASE WHEN status = 'completed' AND paid_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) THEN amount ELSE 0 END) as revenue_30d
+      FROM payments
+    `);
+    
+    const [tokenStats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_tokens,
+        SUM(CASE WHEN status = 'available' THEN 1 ELSE 0 END) as available_tokens,
+        SUM(CASE WHEN status = 'used' THEN 1 ELSE 0 END) as used_tokens
+      FROM kaia_tokens
+    `);
+    
+    const [sessionStats] = await connection.execute(`
+      SELECT 
+        COUNT(*) as total_sessions,
+        SUM(CASE WHEN current_state = 'completed' THEN 1 ELSE 0 END) as completed_sessions,
+        AVG(duration_minutes) as avg_duration
+      FROM kaia_sessions
+    `);
+    
+    connection.release();
+    
+    res.json({
+      success: true,
+      dashboard: {
+        users: userStats[0],
+        payments: paymentStats[0],
+        tokens: tokenStats[0],
+        sessions: sessionStats[0]
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// =============================================
+// REPORTS MANAGEMENT
+// =============================================
+
+// List all reports (Admin)
+app.get('/api/admin/reports', adminAuth, async (req, res) => {
+  const { page = 1, limit = 50 } = req.query;
+  const offset = (page - 1) * limit;
+  
+  try {
+    const connection = await pool.getConnection();
+    const [reports] = await connection.execute(
+      'SELECT id, session_id, user_name, user_email, profession, report_type, is_public, view_count, created_at FROM reports ORDER BY created_at DESC LIMIT ? OFFSET ?',
+      [parseInt(limit), offset]
+    );
+    connection.release();
+    res.json({ success: true, reports });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 // Start server
 app.listen(PORT, async () => {
   console.log(`✓ Servidor KAIA rodando em http://localhost:${PORT}`);
@@ -717,4 +1337,13 @@ app.listen(PORT, async () => {
   
   await initializeDatabase();
   console.log('✓ Conectado ao MySQL');
+  console.log('');
+  console.log('📊 ENDPOINTS DISPONÍVEIS:');
+  console.log('  ├─ GET  /health                    - Health check');
+  console.log('  ├─ GET  /                          - Landing page');
+  console.log('  ├─ GET  /teste-kaia               - KAIA 5.0 test page');
+  console.log('  ├─ POST /api/kaia/validate-token  - Validate token');
+  console.log('  ├─ POST /api/kaia/chat            - Chat with KAIA');
+  console.log('  ├─ POST /api/payments/webhook     - Payment webhook');
+  console.log('  └─ GET  /api/admin/*              - Admin endpoints (require X-Admin-Key header)');
 });
