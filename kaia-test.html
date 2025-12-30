@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KAIA 5.0 - Auditoria Comportamental</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #3b82f6;
+            --bg: #0a1628;
+            --bg-alt: #0d1d30;
+            --bg-card: #0f2238;
+            --text: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border: rgba(59, 130, 246, 0.3);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            width: 100%;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary-light);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        /* Login Form */
+        .login-section {
+            padding: 60px 20px;
+        }
+        
+        .login-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+        }
+        
+        .login-card h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--text);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(10, 26, 46, 0.8);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .error-message {
+            background: rgba(239, 68, 68, 0.15);
+            border: 1px solid var(--error);
+            color: var(--error);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message {
+            background: rgba(16, 185, 129, 0.15);
+            border: 1px solid var(--success);
+            color: var(--success);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        /* Chat Section */
+        .chat-section {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding: 20px;
+            max-height: calc(100vh - 100px);
+        }
+        
+        .chat-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 16px 16px 0 0;
+            border: 1px solid var(--border);
+            border-bottom: none;
+        }
+        
+        .chat-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        
+        .chat-info h3 {
+            font-size: 1.2rem;
+            color: var(--text);
+        }
+        
+        .chat-info p {
+            font-size: 0.85rem;
+            color: var(--success);
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: var(--bg-alt);
+            border: 1px solid var(--border);
+            border-top: none;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            min-height: 400px;
+            max-height: 500px;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 16px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+        
+        .message.kaia {
+            align-self: flex-start;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text);
+        }
+        
+        .message.user {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+        
+        .message.system {
+            align-self: center;
+            background: rgba(245, 158, 11, 0.15);
+            border: 1px solid var(--warning);
+            color: var(--warning);
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            padding: 14px 18px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1.4s infinite both;
+        }
+        
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-8px); }
+        }
+        
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 0 0 16px 16px;
+            border: 1px solid var(--border);
+            border-top: none;
+        }
+        
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--bg);
+            color: var(--text);
+            font-size: 1rem;
+            resize: none;
+        }
+        
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .send-btn {
+            padding: 14px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .send-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Progress Indicator */
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            padding: 15px 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        .progress-step.active {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        .progress-step.completed {
+            color: var(--success);
+        }
+        
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--text-muted);
+        }
+        
+        .progress-step.active .step-dot {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .progress-step.completed .step-dot {
+            background: var(--success);
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* Responsive */
+        @media (max-width: 600px) {
+            .header h1 { font-size: 1.8rem; }
+            .login-card { padding: 25px; }
+            .message { max-width: 95%; }
+            .progress-bar { flex-wrap: wrap; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <span class="badge">🔒 Sistema Seguro</span>
+        <h1>KAIA 5.0</h1>
+        <p>Knowledge & Artificial Intelligence Auditor</p>
+    </header>
+    
+    <!-- Login Section -->
+    <section class="login-section" id="loginSection">
+        <div class="login-card">
+            <h2>🔐 Autenticação</h2>
+            
+            <div id="errorMessage" class="error-message"></div>
+            <div id="successMessage" class="success-message"></div>
+            
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="userName">Nome Completo</label>
+                    <input type="text" id="userName" placeholder="Digite seu nome completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userEmail">E-mail Corporativo</label>
+                    <input type="email" id="userEmail" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userToken">Token de Acesso</label>
+                    <input type="number" id="userToken" placeholder="Ex: 1, 2, 3..." required min="1">
+                </div>
+                
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    🚀 Validar e Iniciar Teste
+                </button>
+            </form>
+            
+            <p style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.85rem;">
+                Não possui um token? <a href="/" style="color: var(--primary-light);">Adquira aqui</a>
+            </p>
+        </div>
+    </section>
+    
+    <!-- Chat Section -->
+    <section class="chat-section" id="chatSection">
+        <div class="container">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" id="step-disc">
+                    <span class="step-dot"></span>
+                    DISC
+                </div>
+                <div class="progress-step" id="step-sabotadores">
+                    <span class="step-dot"></span>
+                    Sabotadores
+                </div>
+                <div class="progress-step" id="step-qp">
+                    <span class="step-dot"></span>
+                    QP
+                </div>
+                <div class="progress-step" id="step-report">
+                    <span class="step-dot"></span>
+                    Relatório
+                </div>
+            </div>
+            
+            <!-- Chat Container -->
+            <div class="chat-header">
+                <div class="chat-avatar">🤖</div>
+                <div class="chat-info">
+                    <h3>KAIA 5.0</h3>
+                    <p>● Online</p>
+                </div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- Messages will appear here -->
+                <div class="typing-indicator" id="typingIndicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="chatInput" placeholder="Digite sua resposta..." />
+                <button class="send-btn" id="sendBtn">Enviar</button>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <p>© 2024 KAIA 5.0 - Knowledge & Artificial Intelligence Auditor</p>
+    </footer>
+    
+    <script>
+        // State management
+        let sessionState = {
+            sessionId: null,
+            userName: '',
+            userEmail: '',
+            conversationHistory: [],
+            currentPhase: 'disc',
+            questionCount: { disc: 0, sabotadores: 0, qp: 0 }
+        };
+        
+        // DOM Elements
+        const loginSection = document.getElementById('loginSection');
+        const chatSection = document.getElementById('chatSection');
+        const loginForm = document.getElementById('loginForm');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const typingIndicator = document.getElementById('typingIndicator');
+        const errorMessage = document.getElementById('errorMessage');
+        const successMessage = document.getElementById('successMessage');
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            const token = document.getElementById('userToken').value.trim();
+            
+            if (!name || !email || !token) {
+                showError('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🔄 Validando...';
+            
+            try {
+                const response = await fetch('/api/kaia/validate-token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: parseInt(token), email, name })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    sessionState.sessionId = data.sessionId;
+                    sessionState.userName = name;
+                    sessionState.userEmail = email;
+                    
+                    showSuccess(data.message);
+                    
+                    setTimeout(() => {
+                        loginSection.style.display = 'none';
+                        chatSection.style.display = 'flex';
+                        startTest();
+                    }, 1500);
+                } else {
+                    showError(data.error || 'Erro na validação do token.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = '🚀 Validar e Iniciar Teste';
+                }
+            } catch (error) {
+                showError('Erro de conexão. Tente novamente.');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🚀 Validar e Iniciar Teste';
+            }
+        });
+        
+        // Start the test
+        async function startTest() {
+            const welcomeMessage = `🔐 **KAIA 5.0 - Sistema de Auditoria Comportamental**
+
+✅ Acesso Autorizado. Bem-vindo(a), ${sessionState.userName}!
+
+Vamos iniciar sua avaliação comportamental completa. O teste é dividido em 3 fases:
+
+📊 **Fase 1 - DISC**: 10 perguntas sobre seu perfil comportamental
+🎭 **Fase 2 - Sabotadores**: 10 afirmações sobre padrões limitantes  
+💡 **Fase 3 - QP**: 10 cenários sobre inteligência positiva
+
+Ao final, você receberá um **Dossiê Completo** com análise DISC, identificação de sabotadores, e um Plano de Ação personalizado.
+
+Vamos começar?`;
+            
+            addMessage(welcomeMessage, 'kaia');
+            
+            // Auto-start first question after welcome
+            setTimeout(() => {
+                sendToKaia('Vamos começar o teste DISC!');
+            }, 2000);
+        }
+        
+        // Send message to KAIA AI
+        async function sendToKaia(message) {
+            showTyping(true);
+            
+            sessionState.conversationHistory.push({
+                role: 'user',
+                content: message
+            });
+            
+            try {
+                const response = await fetch('/api/kaia/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        sessionId: sessionState.sessionId,
+                        message: message,
+                        conversationHistory: sessionState.conversationHistory
+                    })
+                });
+                
+                const data = await response.json();
+                
+                showTyping(false);
+                
+                if (data.success) {
+                    sessionState.conversationHistory.push({
+                        role: 'assistant',
+                        content: data.response
+                    });
+                    
+                    addMessage(data.response, 'kaia');
+                    updateProgress(data.response);
+                } else {
+                    addMessage('⚠️ Erro ao processar resposta. Tente novamente.', 'system');
+                }
+            } catch (error) {
+                showTyping(false);
+                addMessage('⚠️ Erro de conexão. Tente novamente.', 'system');
+            }
+        }
+        
+        // Send message from user
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+            if (!message) return;
+            
+            chatInput.value = '';
+            addMessage(message, 'user');
+            
+            await sendToKaia(message);
+        }
+        
+        // Handle Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // Handle Send button click
+        document.getElementById('sendBtn').addEventListener('click', sendMessage);
+        
+        // Add message to chat
+        function addMessage(content, type) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            messageDiv.innerHTML = formatMessage(content);
+            
+            // Insert before typing indicator
+            chatMessages.insertBefore(messageDiv, typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Format message (basic markdown)
+        function formatMessage(text) {
+            return text
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/\n/g, '<br>');
+        }
+        
+        // Show/hide typing indicator
+        function showTyping(show) {
+            typingIndicator.style.display = show ? 'block' : 'none';
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        // Update progress based on response content
+        function updateProgress(response) {
+            const lower = response.toLowerCase();
+            
+            if (lower.includes('fase disc') || lower.includes('perfil comportamental')) {
+                setActiveStep('disc');
+            } else if (lower.includes('sabotadores') || lower.includes('inimigos internos')) {
+                setActiveStep('sabotadores');
+            } else if (lower.includes('inteligência positiva') || lower.includes('qp')) {
+                setActiveStep('qp');
+            } else if (lower.includes('dossiê') || lower.includes('relatório final')) {
+                setActiveStep('report');
+            }
+        }
+        
+        // Set active progress step
+        function setActiveStep(stepId) {
+            const steps = ['disc', 'sabotadores', 'qp', 'report'];
+            const currentIndex = steps.indexOf(stepId);
+            
+            steps.forEach((step, index) => {
+                const el = document.getElementById(`step-${step}`);
+                el.classList.remove('active', 'completed');
+                
+                if (index < currentIndex) {
+                    el.classList.add('completed');
+                } else if (index === currentIndex) {
+                    el.classList.add('active');
+                }
+            });
+            
+            sessionState.currentPhase = stepId;
+        }
+        
+        // Show error message
+        function showError(msg) {
+            errorMessage.textContent = msg;
+            errorMessage.style.display = 'block';
+            successMessage.style.display = 'none';
+        }
+        
+        // Show success message
+        function showSuccess(msg) {
+            successMessage.textContent = msg;
+            successMessage.style.display = 'block';
+            errorMessage.style.display = 'none';
+        }
+    </script>
+</body>
+</html>
