@@ -1377,59 +1377,6 @@ JSON DE SAÍDA:
                 alert('Erro ao conectar com o servidor. Tente novamente.');
             });
         }
-<<<<<<< HEAD
-        </script>
-        <script>
-            // Single-use test access: validate token, open modal with iframe
-            (function() {
-                const startBtn = document.getElementById('start-now-btn');
-                const modal = document.getElementById('test-modal');
-                const closeBtn = document.getElementById('test-modal-close');
-                const urlParams = new URLSearchParams(window.location.search);
-                const token = urlParams.get('token');
-
-                async function tryOpenTest() {
-                    if (token) {
-                        try {
-                            const res = await fetch('/api/consume-token', {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ token })
-                            });
-                            if (res.ok) {
-                                modal.style.display = 'block';
-                                return;
-                            } else {
-                                const data = await res.json().catch(() => ({}));
-                                alert(data.error || 'Link inválido ou já utilizado.');
-                            }
-                        } catch (e) {
-                            alert('Erro ao validar o acesso. Tente novamente.');
-                        }
-                    }
-                    // Fallback: go to checkout if no valid token
-                    window.location.href = '#checkout';
-                }
-
-                if (startBtn) {
-                    startBtn.addEventListener('click', function(e) {
-                        e.preventDefault();
-                        tryOpenTest();
-                    });
-                }
-                if (closeBtn) {
-                    closeBtn.addEventListener('click', function() {
-                        modal.style.display = 'none';
-                    });
-                }
-
-                // Optional: auto-open when arriving via exclusive link
-                if (token) {
-                    setTimeout(tryOpenTest, 300);
-                }
-            })();
-        </script>
-=======
         
         // Chat Functions
         function openChat() {
@@ -1483,6 +1430,55 @@ JSON DE SAÍDA:
             }, 1000);
         }
     </script>
->>>>>>> copilot/sync-complete-page-update
+    <script>
+        // Single-use test access: validate token, open modal with iframe
+        (function() {
+            const startBtn = document.getElementById('start-now-btn');
+            const modal = document.getElementById('test-modal');
+            const closeBtn = document.getElementById('test-modal-close');
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+
+            async function tryOpenTest() {
+                if (token) {
+                    try {
+                        const res = await fetch('/api/consume-token', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ token })
+                        });
+                        if (res.ok) {
+                            modal.style.display = 'block';
+                            return;
+                        } else {
+                            const data = await res.json().catch(() => ({}));
+                            alert(data.error || 'Link inválido ou já utilizado.');
+                        }
+                    } catch (e) {
+                        alert('Erro ao validar o acesso. Tente novamente.');
+                    }
+                }
+                // Fallback: go to checkout if no valid token
+                window.location.href = '#checkout';
+            }
+
+            if (startBtn) {
+                startBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    tryOpenTest();
+                });
+            }
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function() {
+                    modal.style.display = 'none';
+                });
+            }
+
+            // Optional: auto-open when arriving via exclusive link
+            if (token) {
+                setTimeout(tryOpenTest, 300);
+            }
+        })();
+    </script>
 </body>
 </html>
