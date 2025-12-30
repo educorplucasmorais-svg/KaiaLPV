@@ -16,8 +16,19 @@ app.use(cors({
   credentials: true
 }));
 app.use(express.json());
-// Serve SPA assets under /app to avoid overriding the root landing page
-app.use('/app', express.static(path.join(__dirname, 'frontend/dist')));
+
+// KAIA landing page path
+const KAIA_LANDING_PAGE = path.join(__dirname, 'index.html');
+
+// Serve KAIA LPV landing page at root and /app
+app.get(['/', '/app'], (req, res) => {
+  res.sendFile(KAIA_LANDING_PAGE);
+});
+
+// Serve KAIA landing page image (file is .jpg but referenced as .png in HTML)
+app.get('/image_18.png', (req, res) => {
+  res.sendFile(path.join(__dirname, 'image_18.png.jpg'));
+});
 
 // MySQL Connection Pool
 const pool = mysql.createPool({
@@ -102,10 +113,6 @@ async function initializeDatabase() {
 // Routes
 app.get('/health', (req, res) => {
   res.json({ status: 'OK', timestamp: new Date() });
-});
-// Serve KAIA LPV landing page at root
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // SPA fallback for frontend/dist when navigating client-side routes
