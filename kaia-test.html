@@ -916,9 +916,9 @@
     <!-- Login Section -->
     <section class="login-section" id="loginSection">
         <div class="login-card">
-            <h2>🌐 KAIA 5.0 | GLOBAL ASSESSMENT</h2>
+            <h2>🔐 Autenticação</h2>
             <p style="text-align: center; color: var(--text-muted); margin-bottom: 25px; font-size: 0.95rem;">
-                Versão Alpha Control - Acesso Restrito
+                KAIA 5.0 | Global Assessment System
             </p>
             
             <div id="errorMessage" class="error-message"></div>
@@ -941,7 +941,7 @@
                 </div>
                 
                 <button type="submit" class="submit-btn" id="submitBtn">
-                    🚀 Iniciar Meu Teste
+                    🚀 Validar e Iniciar Teste
                 </button>
                 
                 <div style="display: flex; align-items: center; gap: 10px; margin: 15px 0;">
@@ -953,10 +953,13 @@
                 <button type="button" class="free-test-btn" id="freeTestBtn" onclick="startFreeTest()">
                     🎁 Teste Gratuito - Começar Agora
                 </button>
+                <p style="text-align: center; margin-top: 8px; color: var(--success); font-size: 0.85rem;">
+                    ✅ Primeiro teste é gratuito • Resultados profissionais
+                </p>
             </form>
             
             <p style="text-align: center; margin-top: 20px; color: var(--text-muted); font-size: 0.85rem;">
-                ✅ Primeiro teste é gratuito • Resultados profissionais completos
+                🔐 Token Alpha: <strong>Revelagrupo01testecontrole</strong>
             </p>
         </div>
     </section>
@@ -1047,41 +1050,49 @@
             const name = document.getElementById('userName').value.trim();
             const email = document.getElementById('userEmail').value.trim();
             
-            if (!name || !email) {
-                showError('Por favor, preencha seu nome e email para continuar.');
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            if (!name) {
+                showError('Por favor, preencha seu nome completo.');
+                document.getElementById('userName').focus();
+                return;
+            }
+            
+            if (!email) {
+                showError('Por favor, preencha seu e-mail corporativo.');
+                document.getElementById('userEmail').focus();
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Por favor, insira um e-mail válido.');
+                document.getElementById('userEmail').focus();
                 return;
             }
             
             // Auto-fill the token and submit
             document.getElementById('userToken').value = ALPHA_TOKEN;
             
+            // Change button state
+            const freeBtn = document.getElementById('freeTestBtn');
+            freeBtn.disabled = true;
+            freeBtn.innerHTML = '🔄 Validando cadastro...';
+            
             // Trigger the form submission
-            const event = new Event('submit', { cancelable: true });
-            loginForm.dispatchEvent(event);
+            validateAndStartTest(name, email, ALPHA_TOKEN);
         }
         
-        // Handle login form submission
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
-            const name = document.getElementById('userName').value.trim();
-            const email = document.getElementById('userEmail').value.trim();
-            let token = document.getElementById('userToken').value.trim();
-            
-            // Auto-use Alpha token if not provided
-            if (!token) {
-                token = ALPHA_TOKEN;
-                document.getElementById('userToken').value = token;
-            }
-            
-            if (!name || !email) {
-                showError('Por favor, preencha seu nome e email.');
-                return;
-            }
-            
+        // Validate and start test function
+        async function validateAndStartTest(name, email, token) {
             const submitBtn = document.getElementById('submitBtn');
+            const freeBtn = document.getElementById('freeTestBtn');
+            
             submitBtn.disabled = true;
-            submitBtn.textContent = '🔄 Validando credenciais...';
+            freeBtn.disabled = true;
             
             try {
                 const response = await fetch('/api/kaia/validate-token', {
@@ -1098,7 +1109,7 @@
                     sessionState.userEmail = email;
                     sessionState.isAlphaAccess = data.isAlphaAccess || false;
                     
-                    showSuccess(data.message);
+                    showSuccess('✅ ' + (data.message || 'Acesso Autorizado! Bem-vindo(a), ' + name));
                     
                     setTimeout(() => {
                         loginSection.style.display = 'none';
@@ -1106,15 +1117,66 @@
                         startTest();
                     }, 1500);
                 } else {
-                    showError(data.error || 'Erro na validação do token.');
+                    showError(data.error || '⛔ Token inválido. Tente novamente.');
                     submitBtn.disabled = false;
+                    freeBtn.disabled = false;
                     submitBtn.textContent = '🚀 Validar e Iniciar Teste';
+                    freeBtn.innerHTML = '🎁 Teste Gratuito - Começar Agora';
                 }
             } catch (error) {
-                showError('Erro de conexão. Tente novamente.');
+                console.error('Validation error:', error);
+                showError('Erro de conexão. Verifique sua internet e tente novamente.');
                 submitBtn.disabled = false;
+                freeBtn.disabled = false;
                 submitBtn.textContent = '🚀 Validar e Iniciar Teste';
+                freeBtn.innerHTML = '🎁 Teste Gratuito - Começar Agora';
             }
+        }
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('userName').value.trim();
+            const email = document.getElementById('userEmail').value.trim();
+            let token = document.getElementById('userToken').value.trim();
+            
+            // Clear previous messages
+            errorMessage.style.display = 'none';
+            successMessage.style.display = 'none';
+            
+            if (!name) {
+                showError('Por favor, preencha seu nome completo.');
+                document.getElementById('userName').focus();
+                return;
+            }
+            
+            if (!email) {
+                showError('Por favor, preencha seu e-mail corporativo.');
+                document.getElementById('userEmail').focus();
+                return;
+            }
+            
+            // Validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showError('Por favor, insira um e-mail válido.');
+                document.getElementById('userEmail').focus();
+                return;
+            }
+            
+            // Auto-use Alpha token if not provided
+            if (!token) {
+                token = ALPHA_TOKEN;
+                document.getElementById('userToken').value = token;
+            }
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '🔄 Validando credenciais...';
+            
+            // Use the shared validation function
+            validateAndStartTest(name, email, token);
         });
         
         // Start the test
