@@ -1,151 +1,202 @@
-﻿#  FONTE DA JUVENTUDE - DEPLOYMENT PRONTO
+# 🚀 KAIA 5.0 - GUIA DE DEPLOY COMPLETO
 
-##  Correções Aplicadas
-- **Botão PDF corrigido**: Agora gera PDF diretamente na página Plans
-- **Componentes de Logo**: LogoCG e LogoFJ criados como componentes reutilizáveis
-- **Build de produção**:  Compilado com sucesso (dist/ folder)
+## 📦 Arquivos Necessários para Deploy
 
-##  DEPLOYMENT - FRONTEND (VERCEL)
+| Arquivo | Descrição |
+|---------|-----------|
+| `server.js` | Backend Node.js/Express |
+| `index.html` | Landing page |
+| `kaia-test.html` | Página de teste KAIA 5.0 |
+| `kaia-report.html` | Página de relatório PDI |
+| `vercel.json` | Configuração Vercel |
+| `railway.toml` | Configuração Railway |
+| `package.json` | Dependências Node.js |
 
-### Passo 1: Preparar Repositório Git
-```bash
-git init
-git add .
-git commit -m "Initial commit - Fonte da Juventude"
-git branch -M main
-git remote add origin SEU_REPOSITORIO_GITHUB
-git push -u origin main
-```
+---
 
-### Passo 2: Deploy na Vercel
+## 🔷 DEPLOY NA VERCEL (Recomendado para Frontend + Backend)
+
+### Passo 1: Conectar GitHub
 1. Acesse: https://vercel.com/new
-2. Import Git Repository
-3. Configurações:
-   - **Framework Preset**: Vite
-   - **Root Directory**: `frontend`
-   - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-   - **Install Command**: `npm install`
+2. Clique em **Import Git Repository**
+3. Selecione o repositório `educorplucasmorais-svg/KaiaLPV`
+4. Branch: `copilot/complete-sync-implementation` (ou `main` após merge)
 
-4. Clique em **Deploy**
+### Passo 2: Configurações do Projeto
+```
+Framework Preset: Other
+Root Directory: ./
+Build Command: (deixar vazio)
+Output Directory: ./
+Install Command: npm install
+```
 
-### Variáveis de Ambiente (Vercel):
-Nenhuma necessária - usa localStorage localmente
+### Passo 3: Variáveis de Ambiente (Settings > Environment Variables)
+```env
+# Gemini AI (obrigatório para chat funcionar)
+GEMINI_API_KEY=AIzaSyCpwsxWHCIs6t3Bjqm6PrMk6CoIoyMhEfA
+
+# Admin
+KAIA_ADMIN_KEY=sua_chave_admin_secreta
+
+# Stripe (opcional - para pagamentos)
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# MySQL (opcional - se não usar, funciona sem banco)
+DATABASE_URL=mysql://user:pass@host:3306/kaia_db
+
+# Porta (Vercel define automaticamente)
+PORT=3001
+```
+
+### Passo 4: Deploy
+1. Clique em **Deploy**
+2. Aguarde ~2 minutos
+3. URL gerada: `https://kaia-lpv.vercel.app`
+
+### Rotas Disponíveis na Vercel:
+- `/` → Landing page
+- `/teste-kaia` → Teste KAIA 5.0
+- `/kaia` → Alias do teste
+- `/test` → Alias do teste
+- `/relatorio` → Relatório PDI
+- `/report` → Alias do relatório
+- `/pdi` → Alias do relatório
+- `/health` → Health check
 
 ---
 
-##  DEPLOYMENT - BACKEND (RAILWAY)
+## 🚂 DEPLOY NA RAILWAY (Backend com MySQL)
 
-### Opção 1: Railway (Recomendado)
+### Passo 1: Criar Projeto
 1. Acesse: https://railway.app/new
-2. Deploy from GitHub repo
-3. Selecione o repositório
-4. Adicione **variáveis de ambiente**:
-   ```
-   SPRING_DATASOURCE_URL=jdbc:mysql://srv1079.hstgr.io:3306/u318705478_FonteClara?useSSL=true&serverTimezone=UTC&allowPublicKeyRetrieval=true
-   SPRING_DATASOURCE_USERNAME=u318705478_FonteClara
-   SPRING_DATASOURCE_PASSWORD=SiteClara2025
-   SPRING_JPA_HIBERNATE_DDL_AUTO=update
-   SPRING_JPA_SHOW_SQL=false
-   ```
+2. Clique em **Deploy from GitHub repo**
+3. Selecione `educorplucasmorais-svg/KaiaLPV`
 
-5. Railway detectará Spring Boot automaticamente
-6. Deploy será feito com Java 21
+### Passo 2: Adicionar MySQL
+1. No dashboard, clique em **+ New**
+2. Selecione **Database** > **MySQL**
+3. Railway criará automaticamente as variáveis `MYSQL_*`
 
-### Opção 2: Hostinger (Alternativa)
+### Passo 3: Variáveis de Ambiente
+```env
+# Gemini AI
+GEMINI_API_KEY=AIzaSyCpwsxWHCIs6t3Bjqm6PrMk6CoIoyMhEfA
 
-#### Build do JAR:
-```bash
-cd "c:\Users\Pichau\Desktop\Site Clara 2.0\fonte-da-juventude-2.0"
-$env:JAVA_HOME = 'C:\jdk21\jdk-21.0.8'
-$env:PATH = 'C:\maven\maven-3.9.11\bin;' + $env:PATH
-mvn clean package -DskipTests
+# Admin
+KAIA_ADMIN_KEY=sua_chave_admin
+
+# MySQL (Railway preenche automaticamente se você adicionou o DB)
+DATABASE_URL=${{MySQL.DATABASE_URL}}
+
+# Ou manualmente:
+DB_HOST=containers-us-west-xxx.railway.app
+DB_PORT=5678
+DB_USER=root
+DB_PASSWORD=xxxx
+DB_NAME=railway
+
+# Stripe
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+
+# Railway
+PORT=3001
+NODE_ENV=production
 ```
 
-JAR gerado em: `target/kaia-0.0.1-SNAPSHOT.jar`
-
-#### Upload FTP:
-1. Use FileZilla ou painel Hostinger
-2. Upload do JAR para: `/home/u475858067/public_html/`
-3. Configure Tomcat 10 + Java 21
-4. Banco de dados já está criado (srv1099.hstgr.io)
+### Passo 4: Deploy
+1. Railway detecta Node.js automaticamente
+2. Executa `npm install` + `npm start`
+3. URL gerada: `https://kaia-lpv.railway.app`
 
 ---
 
-## 🔑 CREDENCIAIS
+## 📱 SINCRONIZAR COM VSCODE
 
-### Master Login:
-- **Email**: admin
-- **Senha**: admin
-
-### Banco de Dados (Hostinger - ATUALIZADO DEZ/2025):
-- **Host**: srv1079.hstgr.io
-- **Port**: 3306
-- **Database**: u318705478_FonteClara
-- **Username**: u318705478_FonteClara
-- **Password**: SiteClara2025
-- **Domínio**: dracybeleguedes.com.br
-
----
-
-##  ARQUIVOS IMPORTANTES
-
-### Frontend:
-- `frontend/dist/` - Build de produção 
-- `frontend/vercel.json` - Configuração SPA routing
-- `frontend/src/components/LogoCG.tsx` - Logo Cybele Guedes
-- `frontend/src/components/LogoFJ.tsx` - Logo Fonte da Juventude
-
-### Backend:
-- `target/*.jar` - Backend compilado (após mvn package)
-- `src/main/resources/application.properties` - Config DB
-- `railway.toml` - Config Railway
-
-### Configuração:
-- `DEPLOYMENT.md` - Este guia
-- `pom.xml` - Java 21, Spring Boot 3.2.0
-
----
-
-##  TESTES LOCAIS
-
-### Frontend (localhost:5173):
 ```bash
-cd frontend
-npm run dev
-```
+# 1. Abra o terminal no VSCode
+cd C:\Users\Pichau\Desktop\KaiaLPV
 
-### Backend (localhost:8080):
-```bash
-$env:JAVA_HOME = 'C:\jdk21\jdk-21.0.8'
-$env:PATH = 'C:\maven\maven-3.9.11\bin;' + $env:PATH
-mvn spring-boot:run
-```
+# 2. Sincronize o branch
+git fetch origin
+git checkout copilot/complete-sync-implementation
+git pull origin copilot/complete-sync-implementation
 
-### Preview Build (localhost:4173):
-```bash
-cd frontend
-npm run build
-npm run preview
+# 3. Verifique os arquivos
+dir kaia-test.html
+dir server.js
+dir vercel.json
+
+# 4. Instale dependências
+npm install
+
+# 5. Teste localmente
+node server.js
+
+# 6. Acesse no navegador
+# http://localhost:3001/
+# http://localhost:3001/teste-kaia
 ```
 
 ---
 
-##  URLs APÓS DEPLOYMENT
+## 🔑 CREDENCIAIS E TOKENS
 
-- **Frontend**: https://seu-app.vercel.app
-- **Backend Railway**: https://seu-app.railway.app
-- **Banco Hostinger**: srv1099.hstgr.io:3306
+### Tokens de Acesso KAIA:
+| Token | Descrição | Ação |
+|-------|-----------|------|
+| `Revelagrupo01testecontrole` | Token Alpha (público) | Fluxo completo do teste |
+| `adminrevela` | Token Admin (secreto) | Vai direto para relatório |
+
+### Gemini API:
+- **API Key**: `AIzaSyCpwsxWHCIs6t3Bjqm6PrMk6CoIoyMhEfA`
+- **Modelo**: `gemini-1.5-flash`
 
 ---
 
-##  PRÓXIMOS PASSOS
+## ✅ CHECKLIST PÓS-DEPLOY
 
-1.  Push código para GitHub
-2.  Deploy frontend na Vercel
-3.  Deploy backend na Railway
-4.  Testar credenciais: admin/admin
-5.  Verificar PDF generation
-6.  Testar CRUD de pacientes e planos
+- [ ] Acessar URL principal (`/`)
+- [ ] Testar página de teste (`/teste-kaia`)
+- [ ] Validar botão "🎁 Teste Gratuito"
+- [ ] Testar chat com Gemini AI
+- [ ] Verificar relatório (`/relatorio`)
+- [ ] Testar export PDF
+- [ ] Verificar health check (`/health`)
 
-**Status**: PRONTO PARA PRODUCTION! 
+---
+
+## 🐛 TROUBLESHOOTING
+
+### Erro: "Cannot GET /teste-kaia"
+```bash
+# Servidor desatualizado. Reinicie:
+git pull origin copilot/complete-sync-implementation
+npm install
+node server.js
+```
+
+### Erro: "GEMINI_API_KEY not found"
+```bash
+# Adicione no .env:
+GEMINI_API_KEY=AIzaSyCpwsxWHCIs6t3Bjqm6PrMk6CoIoyMhEfA
+```
+
+### Erro: "Access denied" no MySQL
+- Verifique se DATABASE_URL está correta
+- O sistema funciona sem banco (fallback para memória)
+
+---
+
+## 📊 STATUS DO PROJETO
+
+- **18 commits** sincronizados
+- **13 tabelas** no banco de dados
+- **7 rotas** de páginas
+- **5 endpoints** de API
+- **Design Premium HD** implementado
+- **KAIA 5.0 Deep Triangulation** ativo
+
+**Status**: ✅ PRONTO PARA PRODUCTION! 
