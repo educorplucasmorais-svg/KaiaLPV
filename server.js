@@ -20,6 +20,7 @@ app.use(express.json());
 // KAIA landing page path
 const KAIA_LANDING_PAGE = path.resolve(__dirname, 'index.html');
 const KAIA_TEST_PAGE = path.resolve(__dirname, 'kaia-test.html');
+const KAIA_REPORT_PAGE = path.resolve(__dirname, 'kaia-report.html');
 
 // Serve KAIA LPV landing page at root and /app
 app.get(['/', '/app'], (req, res) => {
@@ -1077,6 +1078,26 @@ app.get(['/teste-kaia', '/kaia', '/test'], (req, res) => {
   });
 });
 
+// Serve KAIA 5.0 PDI Report page
+app.get(['/relatorio', '/report', '/pdi'], (req, res) => {
+  console.log(`📋 Request: ${req.path} - Serving kaia-report.html`);
+  res.sendFile(KAIA_REPORT_PAGE, (err) => {
+    if (err) {
+      console.error('Error serving kaia-report.html:', err);
+      res.status(500).send(`
+        <html>
+        <head><title>Erro - KAIA 5.0 PDI</title></head>
+        <body style="font-family: Arial; padding: 40px; background: #0a1628; color: white;">
+          <h1>Erro ao carregar Relatório PDI</h1>
+          <p>O arquivo kaia-report.html não foi encontrado.</p>
+          <a href="/teste-kaia" style="color: #3b82f6;">← Voltar para o Teste</a>
+        </body>
+        </html>
+      `);
+    }
+  });
+});
+
 // ============================================
 // ADMIN API ENDPOINTS
 // ============================================
@@ -1479,6 +1500,9 @@ app.listen(PORT, async () => {
   console.log('  ├─ GET  /teste-kaia               - KAIA 5.0 test page');
   console.log('  ├─ GET  /kaia                     - KAIA 5.0 test page (alias)');
   console.log('  ├─ GET  /test                     - KAIA 5.0 test page (alias)');
+  console.log('  ├─ GET  /relatorio                - PDI Report page');
+  console.log('  ├─ GET  /report                   - PDI Report page (alias)');
+  console.log('  ├─ GET  /pdi                      - PDI Report page (alias)');
   console.log('  ├─ POST /api/kaia/validate-token  - Validate token');
   console.log('  ├─ POST /api/kaia/chat            - Chat with KAIA');
   console.log('  ├─ POST /api/payments/webhook     - Payment webhook');
